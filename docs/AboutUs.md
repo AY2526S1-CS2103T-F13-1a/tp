@@ -23,7 +23,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/he-yue-svg.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/he-yue-svg)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Team Lead
