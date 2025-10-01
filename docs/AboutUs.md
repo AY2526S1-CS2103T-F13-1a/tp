@@ -15,7 +15,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](https://github.com/ravichandran-gokool)]
 
-* Role: Team Member
+* Role: Developer
 * Responsibilities: UI + Certain Features
 
 ### Seah He Yue
