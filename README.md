@@ -1,6 +1,5 @@
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
-
-![Ui](docs/images/Ui.png)
+[![CI Status](https://github.com/AY2526S1-CS2103T-F13-1a/tp/actions/workflows/gradle.yml/badge.svg)](https://github.com/AY2526S1-CS2103T-F13-1a/tp/actions)
+[![codecov](https://codecov.io/gh/AY2526S1-CS2103T-F13-1a/tp/branch/master/graph/badge.svg)](https://codecov.io/gh/AY2526S1-CS2103T-F13-1a/tp)
 
 * UniContactsPro is a desktop application **Command Line Interface (CLI)** and a simple GUI.
 * It is designed for university students to manage and organize their contacts. It helps students keep track of peers, professors, mentors and CCA members in one place, with features for searching and categorising contacts
