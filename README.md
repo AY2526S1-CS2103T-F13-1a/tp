@@ -2,7 +2,7 @@
 
 ![Ui](docs/images/Ui.png)
 
-* UniAddressBook is a desktop application **Command Line Interface (CLI)** and a simple GUI.
+* UniContactsPro is a desktop application **Command Line Interface (CLI)** and a simple GUI.
 * It is designed for university students to manage and organize their contacts. It helps students keep track of peers, professors, mentors and CCA members in one place, with features for searching and categorising contacts
 * The project simulates an ongoing software project for a desktop application (called _AddressBook_) used for managing contact details.
   * It is **written in OOP fashion**. It provides a **reasonably well-written** code base **bigger** (around 6 KLoC) than what students usually write in beginner-level SE modules, without being overwhelmingly big.
