@@ -78,9 +78,6 @@ public class PersonCard extends UiPart<Region> {
         Image image;
         java.nio.file.Path p = java.nio.file.Paths.get(System.getProperty("user.dir"),
                 "docs", "images", profilePicturePath);
-        if (!java.nio.file.Files.exists(p)) {
-            throw new java.io.IOException("Image not found in docs/images: " + profilePicturePath);
-        }
         image = new Image(p.toUri().toString());
         avatar.setImage(image);
         Tooltip.uninstall(avatar, null);

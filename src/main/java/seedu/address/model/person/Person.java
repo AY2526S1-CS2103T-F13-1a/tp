@@ -36,6 +36,7 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.profilePicture = "";
     }
 
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, String profilePicture) {
@@ -45,7 +46,7 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
-        this.profilePicture = profilePicture;
+        this.profilePicture = profilePicture == null ? "" : profilePicture;
     }
 
     public Name getName() {
@@ -127,7 +128,6 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
-                .add("profilePicture", profilePicture)
                 .toString();
     }
 
