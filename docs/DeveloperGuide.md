@@ -267,37 +267,54 @@ _{Explain here how the data archiving feature will be implemented}_
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
+* undergraduate student
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: It helps undergraduates keep track of school contacts, making it easier to remember acquaintances they don’t interact with often. The app acts like a personalized contact book designed for students, ensuring connections are organized and accessible when needed.
 
 
 ### User stories
 
-Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
+Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
+| Priority | As a …           | I want to …                                                        | So that I can …                                                     |
+|----------|------------------|--------------------------------------------------------------------|----------------------------------------------------------------------|
+| * * *    | user             | search for a contact by name or tag                                | quickly find the contact I need                                     |
+| * * *    | user             | view the contact list                                              | see all my contacts at a glance                                     |
+| * * *    | user             | add a contact                                                      | keep new people I meet in my address book                           |
+| * * *    | user             | delete a contact                                                   | remove entries I no longer need                                     |
+| * * *    | user             | edit a contact                                                     | keep contact details up to date                                     |
+| * *      | user             | filter my contacts by tag                                          | find people in specific groups easily                               |
+| * *      | user             | create a new tag                                                   | categorize my contacts the way I want                               |
+| * *      | user             | delete an existing tag                                             | clean up tags I no longer use                                       |
+| * *      | student          | search for coursemates in the same tutorial                        | find group mates for a project                                      |
+| * *      | user             | sort in alphabetical order and search by first letter of name      | find my friends quicker                                             |
+| * *      | user             | merge duplicate contacts                                           | organize my list by combining duplicates                            |
+| * *      | user             | assign multiple tags to each contact                               | find them via multiple categories                                   |
+| *        | new user         | view the user guide easily                                         | learn more about the product whenever I need                        |
+| *        | experienced user | pin important contacts to the top of my address book               | access them quickly                                                 |
+| *        | student          | add a profile picture to my profile or another contact's profile   | recognize and recall people more easily                             |
+| *        | user             | add notes about a person                                           | remember details about where and when I met them                    |
+| *        | user             | indicate how close a person is to me                               | make efforts to contact closer friends more regularly               |
+| *        | user             | log interactions with a contact                                    | keep track of how often I connect with them                         |
+| *        | user             | sort my contacts by date added                                     | catch up with old or new friends                                    |
+| *        | user             | import contacts from my phone and email                            | avoid typing them manually                                          |
+| *        | user             | export (filtered) contact list as a CSV file                       | share and store it externally                                       |
+| *        | user             | be reminded to maintain connections                                | catch up with friends I haven’t talked to for ~2 months             |
+| *        | user             | create and switch between custom themes                            | customize the app’s appearance to my liking                         |
 
-*{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `UniContactsPro` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Delete a contact**
 
 **MSS**
 
 1.  User requests to list persons
-2.  AddressBook shows a list of persons
+2.  UniContactsPro shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  UniContactsPro deletes the person
 
     Use case ends.
 
@@ -313,20 +330,79 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
-*{More to be added}*
+**Use case: Add a contact**
+
+**MSS**
+
+1.  User requests to create a person based on their name, phone number, email address, date, profile picture (optional)
+2.  UniContactsPro adds a person
+3.  UniContactsPro displays the updated list of contacts
+    Use case ends.
+
+**Extensions**
+
+* 2a. The command does not follow the command format
+
+  * 2a1. UniContactsPro shows an error message
+
+    Use case ends.
+
+**Use case: List all contacts**
+
+**MSS**
+
+1.  User requests to list all contacts in UniContactsPro at that point in time.
+2.  UniContactsPro displays current list of contacts.
+
+**Extensions**
+
+* 2a. The command does not follow the command format
+
+    * 2a1. UniContactsPro shows an error message
+
+      Use case ends.
+
+**Use case: Exit**
+
+**MSS**
+
+1.  User requests to exit UniContactsPro
+2. UniContactsPro exits
+
+**Extensions**
+
+* 2a. The command does not follow the command format
+
+    * 2a1. UniContactsPro shows an error message
+
+      Use case ends.
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. Should work on any mainstream OS with Java 17+.
+2. Should store up to 1000+ contacts with tags without sluggishness.
+3. A student with above-average typing speed should be able to manage contacts faster via CLI than GUI.
+4. Should load the contact list within 2 seconds for up to 1000 entries.
+5. Should persist data locally so that contacts are not lost after application shutdown.
+6. Should have a consistent and intuitive command syntax (e.g., `add`, `delete`, `list`).
+7. Should prevent accidental data corruption by validating input before saving.
+8. Should allow undo/redo of recent commands for error recovery.
+9. Should not require an internet connection for core features (offline-first).
+10. Should allow exporting data (e.g., CSV) in under 3 seconds for 500 contacts.
+11. Should provide error messages that are clear and easy for students to understand.
+12. Should be maintainable by new developers, with clear documentation and modular design.
+13. Should be extensible to add new features (e.g., reminders, themes) without major refactoring. 
+14. Should ensure tags/categories remain consistent (no duplicates unless explicitly allowed). 
+15. Should recover gracefully from corrupted storage files (e.g., reset to last known good state). 
+16. Should support basic accessibility, e.g., adjustable font size in the GUI. 
+17. Should consume no more than 200MB of RAM during typical usage with 1000 contacts.
 
-*{More to be added}*
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
+* **CLI (Command Line Interface)**: A text-based interface where users type commands (e.g., `add`, `list`, `delete`) to interact with the app.
+* **Contact**: An individual entry in the address book, typically containing a name, phone number, email, and optional tags.
 
 --------------------------------------------------------------------------------------------------------------------
 

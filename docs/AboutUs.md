@@ -9,51 +9,41 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Ravichandran Gokul
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/ravichandran-gokool.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/ravichandran-gokool)]
 
-* Role: Project Advisor
+* Role: Developer
+* Responsibilities: UI + Certain Features
 
-### Jane Doe
+### Seah He Yue
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/he-yue-svg.png" width="200px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/he-yue-svg)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Team Lead
 * Responsibilities: UI
 
-### Johnny Doe
+### Fang ZhengHao
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/darzizalol.png" width="200px">
 
-[[github](http://github.com/johndoe)] [[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: Data
-
-### Jean Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+[[github](https://github.com/darzizalol)]
 
 * Role: Developer
-* Responsibilities: Dev Ops + Threading
+* Responsibilities: Develop software
 
-### James Doe
 
-<img src="images/johndoe.png" width="200px">
+### Max Lim
 
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
+<img src="images/fifamobilegems.png" width="200px">
+
+[[github](http://github.com/fifamobilegems)]
+[[portfolio](www.youtube.com)]
 
 * Role: Developer
-* Responsibilities: UI
+* Responsibilities: Edit AboutUS.md

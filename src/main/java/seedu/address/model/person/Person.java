@@ -25,6 +25,7 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final Remark remark;
+    private String profilePicture;
 
     /**
      * Every field must be present and not null.
@@ -36,7 +37,20 @@ public class Person {
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
-        this.remark = remark;
+        this.profilePicture = "";
+    }
+
+    /**
+     * Constructor for Person with profile picture.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, String profilePicture) {
+        requireAllNonNull(name, phone, email, address, tags);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.profilePicture = profilePicture == null ? "" : profilePicture;
     }
 
     public Name getName() {
@@ -57,6 +71,9 @@ public class Person {
 
     public Remark getRemark() {
         return remark;
+      
+    public String getProfilePicture() {
+        return profilePicture;
     }
 
     /**
@@ -102,12 +119,13 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && remark.equals(otherPerson.remark);
+                && profilePicture.equals(otherPerson.profilePicture);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, remark);
+        return Objects.hash(name, phone, email, address, tags, profilePicture);
     }
 
     @Override
