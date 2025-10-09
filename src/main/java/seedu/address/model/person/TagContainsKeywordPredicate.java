@@ -4,6 +4,9 @@ import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
+/**
+ * Tests that a {@code Person}'s {@code Tag} matches the keyword given.
+ */
 public class TagContainsKeywordPredicate implements Predicate<Person> {
     private final String keyword;
 
