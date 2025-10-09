@@ -44,7 +44,8 @@ public class Person {
     /**
      * Constructor for Person with profile picture.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle, String profilePicture) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle,
+                  String profilePicture) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
