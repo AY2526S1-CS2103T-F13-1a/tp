@@ -95,8 +95,6 @@ public class DeleteCommand extends Command {
 
         switch (mode) {
         case BY_TAG -> {
-
-            // fill matches list with persons with target tag
             List<Person> visible = model.getFilteredPersonList();
             List<Person> matches = new ArrayList<>();
             for (Person p : visible) {
@@ -109,12 +107,10 @@ public class DeleteCommand extends Command {
                 throw new CommandException(String.format(NO_PERSONS_FOUND_WITH_TAG, targetTag.tagName));
             }
 
-            // iterate through list of matches and delete each match
             for (Person p : matches) {
                 model.deletePerson(p);
             }
 
-            // print success message with list of contacts deleted
             String matchingList = matches.stream().map(Messages::format).collect(Collectors.joining("\n"));
             return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, matches.size(), matchingList));
         }
@@ -127,7 +123,6 @@ public class DeleteCommand extends Command {
                 }
             }
 
-            // remove dupes
             List<Person> toDelete = targetIndexes.stream()
                     .sorted((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()))
                     .map(i -> lastShownList.get(i.getZeroBased()))
