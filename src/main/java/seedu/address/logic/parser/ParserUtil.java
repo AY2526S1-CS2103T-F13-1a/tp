@@ -9,10 +9,7 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Address;
-import seedu.address.model.person.Email;
-import seedu.address.model.person.Name;
-import seedu.address.model.person.Phone;
+import seedu.address.model.person.*;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -43,11 +40,31 @@ public class ParserUtil {
      */
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
-        String trimmedName = name.trim();
-        if (!Name.isValidName(trimmedName)) {
+        String formattedName = normaliseAndFormat(name);
+        if (!Name.isValidName(formattedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
-        return new Name(trimmedName);
+        return new Name(formattedName);
+    }
+
+    private static String normaliseAndFormat(String name) {
+        if (name == null || name.isBlank()) {
+            return "";
+        }
+        // Trim leading/trailing spaces, collapse multiple spaces to one
+        String normalised = name.trim().replaceAll("\\s+", " ");
+        // Split into words
+        String[] words = normalised.split(" ");
+
+        // Capitalise the first letter of each word
+        for (int i = 0; i < words.length; i++) {
+            // substring(0, 1) takes the substring starting at index 0,
+            // up to but not including index 1
+            words[i] = words[i].substring(0, 1).toUpperCase()
+                        + words[i].substring(1).toLowerCase();
+        }
+        // Join words back together with a single space
+        return String.join(" ", words);
     }
 
     /**
@@ -120,5 +137,20 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Parses a {@code String handle} into a {@code Handle}
+     * Leading and trailing whitespaces will be trimmed
+     * @throws ParseException if the given {@code String handle} is invalid
+     */
+    public static Handle parseHandle(String handle) throws ParseException {
+        requireNonNull(handle);
+        String trimmedHandle = handle.trim(); // trims the trailing white space
+        // tells the user she/he entered the wrong input
+        if (!Handle.isValidHandle(trimmedHandle)) {
+            throw new ParseException(Handle.MESSAGE_CONSTRAINTS);
+        }
+        return new Handle(trimmedHandle);
     }
 }
