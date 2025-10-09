@@ -31,12 +31,23 @@ public class AddProfilePicCommand extends Command {
     private final Index index;
     private final String profilePicture;
 
+    /**
+     * Creates an AddProfilePicCommand to add/update the profile picture of the person at the given index.
+     * @param index
+     * @param profilePicture
+     */
     public AddProfilePicCommand(Index index, String profilePicture) {
         requireNonNull(index);
         this.index = index;
         this.profilePicture = profilePicture == null ? "" : profilePicture;
     }
 
+    /**
+     * Executes the AddProfilePicCommand and returns the result message.
+     * @param model {@code Model} which the command should operate on.
+     * @return feedback message of the operation result for display
+     * @throws CommandException if an error occurs during execution.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -64,6 +75,11 @@ public class AddProfilePicCommand extends Command {
         return new CommandResult(String.format(MESSAGE_SUCCESS, edited.getName().fullName));
     }
 
+    /**
+     * Returns true if both AddProfilePicCommands have the same index and profile picture.
+     * @param other the other object to compare with.
+     * @return true if both AddProfilePicCommands have the same index and profile picture, false otherwise.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
