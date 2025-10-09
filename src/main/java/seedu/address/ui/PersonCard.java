@@ -4,9 +4,13 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.control.Tooltip;
+import seedu.address.commons.util.AppUtil;
 import seedu.address.model.person.Person;
 
 /**
@@ -40,6 +44,8 @@ public class PersonCard extends UiPart<Region> {
     private Label email;
     @FXML
     private FlowPane tags;
+    @FXML
+    private ImageView avatar;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -52,8 +58,31 @@ public class PersonCard extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
+        loadProfileImage(person.getProfilePicture());
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    /**
+     * Loads the profile image from docs/images for the given filename, sets a default error image on failure,
+     * and shows a tooltip with a user-visible error message when loading fails.
+     */
+    private void loadProfileImage(String profilePicturePath) {
+        if (profilePicturePath == null || profilePicturePath.isEmpty()) {
+            avatar.setImage(null);
+            Tooltip.uninstall(avatar, null);
+            return;
+        }
+
+        Image image;
+        java.nio.file.Path p = java.nio.file.Paths.get(System.getProperty("user.dir"),
+                "docs", "images", profilePicturePath);
+        if (!java.nio.file.Files.exists(p)) {
+            throw new java.io.IOException("Image not found in docs/images: " + profilePicturePath);
+        }
+        image = new Image(p.toUri().toString());
+        avatar.setImage(image);
+        Tooltip.uninstall(avatar, null);
     }
 }
