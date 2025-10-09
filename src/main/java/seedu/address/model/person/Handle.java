@@ -2,7 +2,10 @@ package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
-
+/**
+ * Represents a Person's telegram handle in the address book.
+ * Guarantees: immutable; is valid as declared in {@link #isValidHandle(String)}
+ */
 public class Handle {
     public static final String MESSAGE_CONSTRAINTS =
             "Telegram handles should only contain alphanumeric characters, should contain between 5 to 32 characters "
