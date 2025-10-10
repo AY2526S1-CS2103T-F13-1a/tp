@@ -42,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label handle;
+    @FXML
     private FlowPane tags;
     @FXML
     private ImageView avatar;
@@ -61,6 +63,7 @@ public class PersonCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        handle.setText(person.getHandle().teleHandle);
     }
 
     /**

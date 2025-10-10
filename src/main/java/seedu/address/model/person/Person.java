@@ -20,6 +20,7 @@ public class Person {
     private final Name name;
     private final Phone phone;
     private final Email email;
+    private final Handle handle;
 
     // Data fields
     private final Address address;
@@ -29,26 +30,29 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle) {
+        requireAllNonNull(name, phone, email, address, tags, handle);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.handle = handle;
         this.profilePicture = "";
     }
 
     /**
      * Constructor for Person with profile picture.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, String profilePicture) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle,
+                  String profilePicture) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.handle = handle;
         this.profilePicture = profilePicture == null ? "" : profilePicture;
     }
 
@@ -79,9 +83,12 @@ public class Person {
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
     }
+    public Handle getHandle() {
+        return handle;
+    }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both persons have the same handle, email or phone number
      * This defines a weaker notion of equality between two persons.
      */
     public boolean isSamePerson(Person otherPerson) {
@@ -90,7 +97,9 @@ public class Person {
         }
 
         return otherPerson != null
-                && otherPerson.getName().equals(getName());
+                && (otherPerson.getHandle().equals(this.getHandle())
+            || otherPerson.getEmail().equals(this.getEmail())
+            || otherPerson.getPhone().equals(this.getPhone()));
     }
 
     /**
@@ -114,13 +123,14 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && profilePicture.equals(otherPerson.profilePicture);
+                && profilePicture.equals(otherPerson.profilePicture)
+                && handle.equals(otherPerson.handle);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, profilePicture);
+        return Objects.hash(name, phone, email, address, tags, handle, profilePicture);
     }
 
     @Override
@@ -131,6 +141,7 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("handle", handle)
                 .toString();
     }
 

@@ -11,6 +11,7 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -64,10 +65,11 @@ public class AddProfilePicCommand extends Command {
         Email email = personToEdit.getEmail();
         Address address = personToEdit.getAddress();
         java.util.Set<Tag> tags = personToEdit.getTags();
+        Handle handle = personToEdit.getHandle();
 
         Person edited = profilePicture.isEmpty()
-                ? new Person(name, phone, email, address, tags)
-                : new Person(name, phone, email, address, tags, profilePicture);
+                ? new Person(name, phone, email, address, tags, handle)
+                : new Person(name, phone, email, address, tags, handle, profilePicture);
 
         model.setPerson(personToEdit, edited);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
