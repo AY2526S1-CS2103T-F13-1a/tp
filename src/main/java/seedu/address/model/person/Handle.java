@@ -24,8 +24,6 @@ public class Handle {
      */
     public Handle(String handle) {
         requireNonNull(handle);
-        // throws an IllegalArgumentException with error message here
-        // checks if the developer misused the class
         checkArgument(isValidHandle(handle), MESSAGE_CONSTRAINTS);
         this.teleHandle = handle;
     }
@@ -46,8 +44,6 @@ public class Handle {
         if (other == this) {
             return true;
         }
-
-        // instanceof handles nulls
         if (!(other instanceof Handle)) {
             return false;
         }
