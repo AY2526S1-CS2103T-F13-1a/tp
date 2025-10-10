@@ -88,63 +88,106 @@ public class DeleteCommand extends Command {
         this.targetTag = targetTag;
     }
 
-
+    /**
+     * Executes the delete command against the provided {@link Model}.
+     *
+     * Dispatches to the appropriate deletion strategy based on {@link #mode}:
+     * - {@link Mode#BY_INDEX}: delete one or more people by their displayed indices
+     * - {@link Mode#BY_TAG}: delete all displayed people that contain the specified tag
+     *
+     * @param model The model containing the filtered person list and mutation methods.
+     * @return A {@link CommandResult} describing the outcome.
+     * @throws CommandException If indices are invalid or no persons match the given tag.
+     * @throws AssertionError If an unknown mode is encountered.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        return switch (mode) {
+            case BY_TAG -> executeByTag(model);
+            case BY_INDEX -> executeByIndex(model);
+            default -> throw new AssertionError("Unknown mode " + mode);
+        };
+    }
 
-        switch (mode) {
-        case BY_TAG -> {
-            List<Person> visible = model.getFilteredPersonList();
-            List<Person> matches = new ArrayList<>();
-            for (Person p : visible) {
-                if (p.getTags().contains(targetTag)) {
-                    matches.add(p);
-                }
+    /**
+     * Deletes all currently displayed {@link Person}s that contain {@link #targetTag}.
+     *
+     * If no displayed person contains the tag, a {@link CommandException} is thrown.
+     * On success, all matching persons are removed from the model and a summary
+     * listing the deleted persons is returned.
+     *
+     * @param model The model providing access to the filtered list and delete operation.
+     * @return A {@link CommandResult} indicating how many persons were deleted and listing them.
+     * @throws CommandException If no persons with the specified tag are found in the displayed list.
+     */
+    private CommandResult executeByTag(Model model) throws CommandException {
+        List<Person> visible = model.getFilteredPersonList();
+        List<Person> matches = new ArrayList<>();
+        for (Person p : visible) {
+            if (p.getTags().contains(targetTag)) {
+                matches.add(p);
             }
-
-            if (matches.isEmpty()) {
-                throw new CommandException(String.format(NO_PERSONS_FOUND_WITH_TAG, targetTag.tagName));
-            }
-
-            for (Person p : matches) {
-                model.deletePerson(p);
-            }
-
-            String matchingList = matches.stream().map(Messages::format).collect(Collectors.joining("\n"));
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, matches.size(), matchingList));
         }
-        case BY_INDEX -> {
-            List<Person> lastShownList = model.getFilteredPersonList();
 
-            for (Index id : targetIndexes) {
-                if (id.getZeroBased() >= lastShownList.size()) {
-                    throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-                }
-            }
-
-            List<Person> toDelete = targetIndexes.stream()
-                    .sorted((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()))
-                    .map(i -> lastShownList.get(i.getZeroBased()))
-                    .distinct()
-                    .toList();
-
-            for (Person p : toDelete) {
-                model.deletePerson(p);
-            }
-
-            if (toDelete.size() == 1) {
-                return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
-                        Messages.format(toDelete.get(0))));
-            }
-            String deletedPersons = toDelete.stream().map(Messages :: format)
-                    .collect(Collectors.joining("\n"));
-            return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, toDelete.size(), deletedPersons));
+        if (matches.isEmpty()) {
+            throw new CommandException(String.format(NO_PERSONS_FOUND_WITH_TAG, targetTag.tagName));
         }
-        default -> {
-            throw new AssertionError("Unknown mode" + mode);
+
+        for (Person p : matches) {
+            model.deletePerson(p);
         }
+
+        String matchingList = matches.stream()
+                .map(Messages::format)
+                .collect(Collectors.joining("\n"));
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, matches.size(), matchingList));
+    }
+
+    /**
+     * Deletes one or more {@link Person}s identified by {@link #targetIndexes} in the currently displayed list.
+     *
+     * Validation: All indices must refer to existing entries in the displayed list;
+     * otherwise a {@link CommandException} is thrown.
+     * Deletion semantics:
+     * - Indices are processed in descending order to avoid shifting issues.
+     * - Duplicates are ignored via {@code distinct()} to prevent double-deletes.
+     * Result:
+     * - Single deletion returns {@link #MESSAGE_DELETE_PERSON_SUCCESS} with the person formatted.
+     * - Multiple deletions return {@link #MESSAGE_DELETE_PERSONS_SUCCESS} with a newline-joined list.
+     *
+     * @param model The model providing the displayed list and delete operation.
+     * @return A {@link CommandResult} describing which person(s) were deleted.
+     * @throws CommandException If any provided index is invalid for the displayed list.
+     */
+    private CommandResult executeByIndex(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+
+        for (Index id : targetIndexes) {
+            if (id.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            }
         }
+
+        List<Person> toDelete = targetIndexes.stream()
+                .sorted((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()))
+                .map(i -> lastShownList.get(i.getZeroBased()))
+                .distinct()
+                .toList();
+
+        for (Person p : toDelete) {
+            model.deletePerson(p);
+        }
+
+        if (toDelete.size() == 1) {
+            return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
+                    Messages.format(toDelete.get(0))));
+        }
+
+        String deletedPersons = toDelete.stream()
+                .map(Messages::format)
+                .collect(Collectors.joining("\n"));
+        return new CommandResult(String.format(MESSAGE_DELETE_PERSONS_SUCCESS, toDelete.size(), deletedPersons));
     }
 
     @Override
