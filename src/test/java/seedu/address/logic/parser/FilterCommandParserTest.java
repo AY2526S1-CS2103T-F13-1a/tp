@@ -21,12 +21,10 @@ public class FilterCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsFilterCommand() {
-        // no leading and trailing whitespaces
         FilterCommand expectedFilterCommand =
                 new FilterCommand(new TagContainsKeywordPredicate("friends"));
         assertParseSuccess(parser, " t/friends", expectedFilterCommand);
 
-        // multiple whitespaces between keywords
         assertParseSuccess(parser, " \n t/friends  \t", expectedFilterCommand);
     }
 }
