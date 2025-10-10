@@ -89,16 +89,16 @@ public class DeleteCommand extends Command {
     }
 
     /**
-     * Executes the delete command against the provided {@link Model}.
+     * Runs the delete command on the given {@link Model}.
      *
-     * Dispatches to the appropriate deletion strategy based on {@link #mode}:
-     * - {@link Mode#BY_INDEX}: delete one or more people by their displayed indices
-     * - {@link Mode#BY_TAG}: delete all displayed people that contain the specified tag
+     * Modes:
+     * - {@link Mode#BY_INDEX}: delete by displayed indices
+     * - {@link Mode#BY_TAG}: delete all with a given tag
      *
-     * @param model The model containing the filtered person list and mutation methods.
-     * @return A {@link CommandResult} describing the outcome.
-     * @throws CommandException If indices are invalid or no persons match the given tag.
-     * @throws AssertionError If an unknown mode is encountered.
+     * @param model Model with the filtered list and mutators.
+     * @return {@link CommandResult} describing the outcome.
+     * @throws CommandException If indices are invalid or no matches for the tag.
+     * @throws AssertionError If an unknown mode is used.
      */
     @Override
     public CommandResult execute(Model model) throws CommandException {
@@ -110,15 +110,11 @@ public class DeleteCommand extends Command {
     }
 
     /**
-     * Deletes all currently displayed {@link Person}s that contain {@link #targetTag}.
+     * Deletes all displayed {@link Person}s containing {@link #targetTag}.
      *
-     * If no displayed person contains the tag, a {@link CommandException} is thrown.
-     * On success, all matching persons are removed from the model and a summary
-     * listing the deleted persons is returned.
-     *
-     * @param model The model providing access to the filtered list and delete operation.
-     * @return A {@link CommandResult} indicating how many persons were deleted and listing them.
-     * @throws CommandException If no persons with the specified tag are found in the displayed list.
+     * @param model Model providing the filtered list and delete operation.
+     * @return {@link CommandResult} with count and a list of deletions.
+     * @throws CommandException If no displayed person has the tag.
      */
     private CommandResult executeByTag(Model model) throws CommandException {
         List<Person> visible = model.getFilteredPersonList();
@@ -144,20 +140,15 @@ public class DeleteCommand extends Command {
     }
 
     /**
-     * Deletes one or more {@link Person}s identified by {@link #targetIndexes} in the currently displayed list.
+     * Deletes one or more displayed {@link Person}s by {@link #targetIndexes}.
      *
-     * Validation: All indices must refer to existing entries in the displayed list;
-     * otherwise a {@link CommandException} is thrown.
-     * Deletion semantics:
-     * - Indices are processed in descending order to avoid shifting issues.
-     * - Duplicates are ignored via {@code distinct()} to prevent double-deletes.
-     * Result:
-     * - Single deletion returns {@link #MESSAGE_DELETE_PERSON_SUCCESS} with the person formatted.
-     * - Multiple deletions return {@link #MESSAGE_DELETE_PERSONS_SUCCESS} with a newline-joined list.
+     * Validation: all indices must be in range.
+     * Deletion: process indices descending; ignore duplicates.
+     * Result: single → {@link #MESSAGE_DELETE_PERSON_SUCCESS}; multiple → {@link #MESSAGE_DELETE_PERSONS_SUCCESS}.
      *
-     * @param model The model providing the displayed list and delete operation.
-     * @return A {@link CommandResult} describing which person(s) were deleted.
-     * @throws CommandException If any provided index is invalid for the displayed list.
+     * @param model Model providing the displayed list and delete operation.
+     * @return {@link CommandResult} listing deleted person(s).
+     * @throws CommandException If any index is out of range.
      */
     private CommandResult executeByIndex(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
