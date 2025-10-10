@@ -10,6 +10,9 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -18,6 +21,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.Tag;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -102,10 +106,34 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void toStringMethod() {
+    public void toString_singleIndex() {
         Index targetIndex = Index.fromOneBased(1);
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
-        String expected = DeleteCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
+        String expected = DeleteCommand.class.getCanonicalName()
+                + "{mode=BY_INDEX, targetIndexes=[" + targetIndex + "], targetTag=null}";
+
+        assertEquals(expected, deleteCommand.toString());
+    }
+
+    @Test
+    public void toString_multipleIndexes() {
+        List<Index> indices = Arrays.asList(Index.fromOneBased(2), Index.fromOneBased(5));
+        DeleteCommand deleteCommand = new DeleteCommand(indices);
+
+        String expected = DeleteCommand.class.getCanonicalName()
+                + "{mode=BY_INDEX, targetIndexes=[" + indices.get(0) + ", " + indices.get(1) + "], targetTag=null}";
+
+        assertEquals(expected, deleteCommand.toString());
+    }
+
+    @Test
+    public void toString_byTag() {
+        Tag tag = new Tag("friends");
+        DeleteCommand deleteCommand = new DeleteCommand(tag);
+
+        String expected = DeleteCommand.class.getCanonicalName()
+                + "{mode=BY_TAG, targetIndexes=null, targetTag=" + tag + "}";
+
         assertEquals(expected, deleteCommand.toString());
     }
 
