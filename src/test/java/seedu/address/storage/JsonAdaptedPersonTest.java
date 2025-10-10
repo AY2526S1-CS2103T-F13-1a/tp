@@ -125,7 +125,7 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL,
                 VALID_ADDRESS, VALID_TAGS,
                 INVALID_HANDLE, "");
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Handle.class.getSimpleName());
+        String expectedMessage = Handle.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 }

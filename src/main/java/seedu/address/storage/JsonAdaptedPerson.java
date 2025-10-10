@@ -113,6 +113,9 @@ class JsonAdaptedPerson {
         if (handle == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Handle.class.getSimpleName()));
         }
+        if (!Handle.isValidHandle(handle)) {
+            throw new IllegalValueException(Handle.MESSAGE_CONSTRAINTS);
+        }
         final Handle modelHandle = new Handle(handle);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
