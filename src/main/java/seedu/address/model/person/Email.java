@@ -62,7 +62,6 @@ public class Email {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof Email)) {
             return false;
         }

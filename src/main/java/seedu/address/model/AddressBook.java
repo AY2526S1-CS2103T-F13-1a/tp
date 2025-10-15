@@ -114,7 +114,6 @@ public class AddressBook implements ReadOnlyAddressBook {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof AddressBook)) {
             return false;
         }

@@ -50,7 +50,6 @@ public class AppParameters {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof AppParameters)) {
             return false;
         }
