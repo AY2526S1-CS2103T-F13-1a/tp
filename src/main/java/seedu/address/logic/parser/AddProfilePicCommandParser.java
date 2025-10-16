@@ -33,8 +33,9 @@ public class AddProfilePicCommandParser implements Parser<AddProfilePicCommand> 
         }
 
         String pp = argMultimap.getValue(PREFIX_PROFILE_PICTURE).get().trim();
-        validatePicturePath(pp);
-        return new AddProfilePicCommand(index, pp);
+        String expandedPp = expandTilde(pp);
+        validatePicturePath(expandedPp);
+        return new AddProfilePicCommand(index, expandedPp);
     }
 
     private void validatePicturePath(String pp) throws ParseException {
@@ -60,6 +61,21 @@ public class AddProfilePicCommandParser implements Parser<AddProfilePicCommand> 
                 throw new ParseException("Image file not found at path: " + candidate.toString());
             }
         }
+    }
+
+    /**
+     * Expands tilde (~) to the user's home directory path.
+     * This method is used to read the image from the user's home directory.
+     * @param path The path that may contain tilde
+     * @return The expanded path
+     */
+    private String expandTilde(String path) {
+        if (path.startsWith("~/")) {
+            return System.getProperty("user.home") + "/" + path.substring(2);
+        } else if (path.equals("~")) {
+            return System.getProperty("user.home");
+        }
+        return path;
     }
 }
 
