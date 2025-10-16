@@ -27,22 +27,17 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         if (trimmed.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
-
         if (trimmed.startsWith("all")) {
             String remainder = trimmed.length() == 3 ? "" : trimmed.substring(3);
             ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(remainder, PREFIX_TAG);
-
             if (!argMultimap.getValue(PREFIX_TAG).isPresent() || !argMultimap.getPreamble().isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-
             Tag tag = ParserUtil.parseTag(argMultimap.getValue(PREFIX_TAG).get());
             return new DeleteCommand(tag);
         }
-
         String[] tokens = trimmed.split("\\s+");
         List<Index> indexes = new ArrayList<Index>(tokens.length);
-
         try {
             for (String token : tokens) {
                 indexes.add(ParserUtil.parseIndex(token));
@@ -51,11 +46,9 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), pe);
         }
-
         if (indexes.size() == 1) {
             return new DeleteCommand(indexes.get(0));
         }
         return new DeleteCommand(indexes);
     }
-
 }

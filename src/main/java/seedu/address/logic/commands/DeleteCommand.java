@@ -144,7 +144,6 @@ public class DeleteCommand extends Command {
      *
      * Validation: all indices must be in range.
      * Deletion: process indices descending; ignore duplicates.
-     * Result: single → {@link #MESSAGE_DELETE_PERSON_SUCCESS}; multiple → {@link #MESSAGE_DELETE_PERSONS_SUCCESS}.
      *
      * @param model Model providing the displayed list and delete operation.
      * @return {@link CommandResult} listing deleted person(s).
