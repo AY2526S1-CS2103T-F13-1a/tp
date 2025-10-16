@@ -80,4 +80,16 @@ public class FileUtil {
         Files.write(file, content.getBytes(CHARSET));
     }
 
+    /**
+     * Copies a file from source to destination.
+     * Will create parent directories if they don't exist.
+     * @param source The source file path
+     * @param destination The destination file path
+     * @throws IOException if the copy operation fails
+     */
+    public static void copyFile(Path source, Path destination) throws IOException {
+        createParentDirsOfFile(destination);
+        Files.copy(source, destination, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+    }
+
 }
