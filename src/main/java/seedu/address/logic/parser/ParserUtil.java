@@ -55,19 +55,12 @@ public class ParserUtil {
         if (name == null || name.isBlank()) {
             return "";
         }
-        // Trim leading/trailing spaces, collapse multiple spaces to one
         String normalised = name.trim().replaceAll("\\s+", " ");
-        // Split into words
         String[] words = normalised.split(" ");
-
-        // Capitalise the first letter of each word
         for (int i = 0; i < words.length; i++) {
-            // substring(0, 1) takes the substring starting at index 0,
-            // up to but not including index 1
             words[i] = words[i].substring(0, 1).toUpperCase()
                         + words[i].substring(1).toLowerCase();
         }
-        // Join words back together with a single space
         return String.join(" ", words);
     }
 

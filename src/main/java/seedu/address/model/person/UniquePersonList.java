@@ -116,7 +116,6 @@ public class UniquePersonList implements Iterable<Person> {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof UniquePersonList)) {
             return false;
         }
