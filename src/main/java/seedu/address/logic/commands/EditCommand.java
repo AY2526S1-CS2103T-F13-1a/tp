@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLOSENESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HANDLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -23,6 +24,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -46,7 +48,8 @@ public class EditCommand extends Command {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TAG + "TAG]..."
-            + "[" + PREFIX_HANDLE + "HANDLE] \n"
+            + "[" + PREFIX_HANDLE + "HANDLE] "
+            + "[" + PREFIX_CLOSENESS + "CLOSENESS]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -103,8 +106,10 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         Handle updatedHandle = editPersonDescriptor.getHandle().orElse(personToEdit.getHandle());
+        Closeness updatedCloseness = editPersonDescriptor.getCloseness().orElse(personToEdit.getCloseness());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedHandle);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedHandle,
+                updatedCloseness);
     }
 
     @Override
@@ -141,6 +146,7 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
         private Handle handle;
+        private Closeness closeness;
 
         public EditPersonDescriptor() {}
 
@@ -155,6 +161,7 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTags(toCopy.tags);
             setHandle(toCopy.handle);
+            setCloseness(toCopy.closeness);
         }
 
         /**
@@ -194,6 +201,14 @@ public class EditCommand extends Command {
 
         public Optional<Address> getAddress() {
             return Optional.ofNullable(address);
+        }
+
+        public void setCloseness(Closeness closeness) {
+            this.closeness = closeness;
+        }
+
+        public Optional<Closeness> getCloseness() {
+            return Optional.ofNullable(closeness);
         }
 
         /**
@@ -237,7 +252,8 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
-                    && Objects.equals(handle, otherEditPersonDescriptor.handle);
+                    && Objects.equals(handle, otherEditPersonDescriptor.handle)
+                    && Objects.equals(closeness, otherEditPersonDescriptor.closeness);
         }
 
         @Override
@@ -249,6 +265,7 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .add("handle", handle)
+                    .add("closeness", closeness)
                     .toString();
         }
     }
