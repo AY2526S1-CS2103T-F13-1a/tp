@@ -14,6 +14,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -73,6 +74,7 @@ public class AddProfilePicCommand extends Command {
         Address address = personToEdit.getAddress();
         java.util.Set<Tag> tags = personToEdit.getTags();
         Handle handle = personToEdit.getHandle();
+        Closeness closeness = personToEdit.getCloseness();
 
         String finalProfilePicture = profilePicture;
         if (!profilePicture.isEmpty() && (profilePicture.contains("/") || profilePicture.contains("\\"))) {
@@ -86,8 +88,8 @@ public class AddProfilePicCommand extends Command {
         }
 
         Person edited = finalProfilePicture.isEmpty()
-                ? new Person(name, phone, email, address, tags, handle)
-                : new Person(name, phone, email, address, tags, handle, finalProfilePicture);
+                ? new Person(name, phone, email, address, tags, handle, closeness)
+                : new Person(name, phone, email, address, tags, handle, finalProfilePicture, closeness);
 
         model.setPerson(personToEdit, edited);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
