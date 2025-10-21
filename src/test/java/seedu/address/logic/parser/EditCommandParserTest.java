@@ -212,4 +212,26 @@ public class EditCommandParserTest {
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
+
+    @Test
+    public void parse_profilePictureWithTilde_failure() {
+        // Test profile picture path containing '~' character
+        String userInput = "1 " + PREFIX_PROFILE_PICTURE + "~/Downloads/myphoto.png";
+        String expectedMessage = EditCommand.MESSAGE_PROFILE_PICTURE_WITH_TILDE;
+
+        assertParseFailure(parser, userInput, expectedMessage);
+    }
+
+    @Test
+    public void parse_profilePictureWithoutTilde_success() {
+        // Test valid profile picture path without '~'
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + " " + PREFIX_PROFILE_PICTURE + "example.png";
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withProfilePicture("example.png").build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
 }

@@ -66,7 +66,11 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setHandle(ParserUtil.parseHandle(argMultimap.getValue(PREFIX_HANDLE).get()));
         }
         if (argMultimap.getValue(PREFIX_PROFILE_PICTURE).isPresent()) {
-            editPersonDescriptor.setProfilePicture(argMultimap.getValue(PREFIX_PROFILE_PICTURE).get().trim());
+            String profilePictureValue = argMultimap.getValue(PREFIX_PROFILE_PICTURE).get().trim();
+            if (profilePictureValue.contains("~")) {
+                throw new ParseException(EditCommand.MESSAGE_PROFILE_PICTURE_WITH_TILDE);
+            }
+            editPersonDescriptor.setProfilePicture(profilePictureValue);
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 
