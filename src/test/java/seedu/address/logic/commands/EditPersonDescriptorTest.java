@@ -65,8 +65,9 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getPhone().orElse(null) + ", email="
                 + editPersonDescriptor.getEmail().orElse(null) + ", address="
                 + editPersonDescriptor.getAddress().orElse(null) + ", tags="
-                + editPersonDescriptor.getHandle().orElse(null) + ", handle="
-                + editPersonDescriptor.getTags().orElse(null) + "}";
+                + editPersonDescriptor.getTags().orElse(null) + ", handle="
+                + editPersonDescriptor.getHandle().orElse(null) + ", profilePicture="
+                + editPersonDescriptor.getProfilePicture().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }
