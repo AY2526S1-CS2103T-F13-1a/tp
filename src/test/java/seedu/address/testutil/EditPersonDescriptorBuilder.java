@@ -39,6 +39,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setAddress(person.getAddress());
         descriptor.setTags(person.getTags());
         descriptor.setHandle(person.getHandle());
+        descriptor.setProfilePicture(person.getProfilePicture());
     }
 
     /**
@@ -87,6 +88,14 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withHandle(String handle) {
         descriptor.setHandle(new Handle(handle));
+        return this;
+    }
+
+    /**
+     * Sets the {@code ProfilePicture} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withProfilePicture(String profilePicture) {
+        descriptor.setProfilePicture(profilePicture);
         return this;
     }
 
