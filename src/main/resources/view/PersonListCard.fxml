@@ -35,16 +35,16 @@
       </HBox>
       <FlowPane fx:id="tags" />
 
-      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="1" styleClass="info-row">
+      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="2" styleClass="info-row">
         <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
       </HBox>
-      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="1" styleClass="info-row">
+      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="3" styleClass="info-row">
         <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
       </HBox>
-      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="1" styleClass="info-row">
+      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="4" styleClass="info-row">
         <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
       </HBox>
-      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="1" styleClass="info-row">
+      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="5" styleClass="info-row">
         <Label fx:id="handle" styleClass="cell_small_label" text="\$handle" />
       </HBox>
     </VBox>
