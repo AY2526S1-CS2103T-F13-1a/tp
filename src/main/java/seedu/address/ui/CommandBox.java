@@ -1,5 +1,7 @@
 package seedu.address.ui;
 
+import java.nio.file.Path;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -7,6 +9,8 @@ import javafx.scene.layout.Region;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.storage.CommandHistory;
+
 
 /**
  * The UI component that is responsible for receiving user command inputs.
@@ -17,6 +21,10 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
+    private final CommandHistory history = new CommandHistory(
+            500,
+            Path.of(System.getProperty("user.home"), ".command_history")
+    );
 
     @FXML
     private TextField commandTextField;
@@ -29,8 +37,38 @@ public class CommandBox extends UiPart<Region> {
         this.commandExecutor = commandExecutor;
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+
+        commandTextField.setOnKeyPressed(this::handleHistoryKeys);
     }
 
+    private void handleHistoryKeys(javafx.scene.input.KeyEvent ev) {
+        switch (ev.getCode()) {
+        case UP -> {
+            navigateHistory(true);
+            ev.consume();
+        }
+        case DOWN -> {
+            navigateHistory(false);
+            ev.consume();
+        }
+        default -> {
+            // ignore other keys pressed by the user
+        }
+        }
+    }
+    private void navigateHistory(boolean older) {
+        String current = commandTextField.getText();
+        history.beginNavigation(current); (
+                older ? history.up() : history.down()).ifPresent(this::applyHistory);
+    }
+    /**
+     * Sets the command box to show the requested text
+     * @param txt text to be displayed
+     */
+    private void applyHistory(String txt) {
+        commandTextField.setText(txt);
+        commandTextField.positionCaret(txt.length());
+    }
     /**
      * Handles the Enter button pressed event.
      */
@@ -42,8 +80,10 @@ public class CommandBox extends UiPart<Region> {
         }
 
         try {
+            history.push(commandText);
             commandExecutor.execute(commandText);
             commandTextField.setText("");
+            history.resetNav();
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
