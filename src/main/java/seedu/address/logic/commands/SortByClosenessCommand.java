@@ -38,8 +38,8 @@ public class SortByClosenessCommand extends Command {
         if (sortOrder == SortOrder.ASCENDING) {
             this.comparator = Comparator.comparingInt(person -> person.getCloseness().closenessLevel);
         } else {
-            this.comparator = Comparator.comparingInt(
-                    (Person person) -> person.getCloseness().closenessLevel).reversed();
+            this.comparator = Comparator.comparingInt((Person person) -> person.getCloseness().closenessLevel)
+                    .reversed();
         }
     }
 
