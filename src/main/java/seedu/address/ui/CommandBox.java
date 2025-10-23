@@ -54,12 +54,12 @@ public class CommandBox extends UiPart<Region> {
             updateSuggestions(newText.trim());
         });
 
-        // Keyboard handling (Tab to accept, Up/Down to navigate, Esc to close)
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
 
-        // Hide suggestions when focus leaves
         commandTextField.focusedProperty().addListener((o, was, isNow) -> {
-            if (!isNow) suggestions.hide();
+            if (!isNow) {
+                suggestions.hide();
+            }
         });
     }
 
