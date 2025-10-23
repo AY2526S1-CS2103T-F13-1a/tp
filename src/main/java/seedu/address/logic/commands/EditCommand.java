@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HANDLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PROFILE_PICTURE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -49,6 +50,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TAG + "TAG]..."
             + "[" + PREFIX_HANDLE + "HANDLE] "
+            + "[" + PREFIX_PROFILE_PICTURE + "PROFILE_PICTURE] "
             + "[" + PREFIX_CLOSENESS + "CLOSENESS]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -57,6 +59,10 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_PROFILE_PICTURE_WITH_TILDE =
+        "Profile picture paths containing '~' should be added using the addProfilePic command instead.\n"
+                    + "Example: addProfilePic 1 pp/~/Downloads/myphoto.png";
+
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -106,10 +112,12 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         Handle updatedHandle = editPersonDescriptor.getHandle().orElse(personToEdit.getHandle());
+        String updatedProfilePicture = editPersonDescriptor.getProfilePicture()
+            .orElse(personToEdit.getProfilePicture());
         Closeness updatedCloseness = editPersonDescriptor.getCloseness().orElse(personToEdit.getCloseness());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedHandle,
-                updatedCloseness);
+                updatedProfilePicture == null ? "" : updatedProfilePicture, updatedCloseness);
     }
 
     @Override
@@ -146,6 +154,7 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Tag> tags;
         private Handle handle;
+        private String profilePicture;
         private Closeness closeness;
 
         public EditPersonDescriptor() {}
@@ -161,6 +170,7 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTags(toCopy.tags);
             setHandle(toCopy.handle);
+            setProfilePicture(toCopy.profilePicture);
             setCloseness(toCopy.closeness);
         }
 
@@ -168,7 +178,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, handle);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, handle, profilePicture, closeness);
         }
 
         public void setName(Name name) {
@@ -236,6 +246,14 @@ public class EditCommand extends Command {
             return Optional.ofNullable(handle);
         }
 
+        public void setProfilePicture(String profilePicture) {
+            this.profilePicture = profilePicture;
+        }
+
+        public Optional<String> getProfilePicture() {
+            return Optional.ofNullable(profilePicture);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -253,6 +271,7 @@ public class EditCommand extends Command {
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(handle, otherEditPersonDescriptor.handle)
+                    && Objects.equals(profilePicture, otherEditPersonDescriptor.profilePicture)
                     && Objects.equals(closeness, otherEditPersonDescriptor.closeness);
         }
 
@@ -265,6 +284,7 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("tags", tags)
                     .add("handle", handle)
+                    .add("profilePicture", profilePicture)
                     .add("closeness", closeness)
                     .toString();
         }

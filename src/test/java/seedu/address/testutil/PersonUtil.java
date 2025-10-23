@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HANDLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PROFILE_PICTURE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
@@ -63,6 +64,9 @@ public class PersonUtil {
         }
         descriptor.getHandle().ifPresent(handle ->
                 sb.append(" ").append(PREFIX_HANDLE).append(handle.teleHandle).append(" ")
+        );
+        descriptor.getProfilePicture().ifPresent(profilePicture ->
+                sb.append(" ").append(PREFIX_PROFILE_PICTURE).append(profilePicture).append(" ")
         );
         descriptor.getCloseness().ifPresent(closeness ->
                 sb.append(PREFIX_CLOSENESS).append(closeness.toString()).append(" "));
