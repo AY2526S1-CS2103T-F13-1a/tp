@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -40,6 +41,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setTags(person.getTags());
         descriptor.setHandle(person.getHandle());
         descriptor.setProfilePicture(person.getProfilePicture());
+        descriptor.setCloseness(person.getCloseness());
     }
 
     /**
@@ -83,6 +85,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setTags(tagSet);
         return this;
     }
+
     /**
      * Sets the {@code Handle} of the {@code EditPersonDescriptor} that we are building.
      */
@@ -96,6 +99,14 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withProfilePicture(String profilePicture) {
         descriptor.setProfilePicture(profilePicture);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Closeness} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withCloseness(String closeness) {
+        descriptor.setCloseness(new Closeness(closeness));
         return this;
     }
 

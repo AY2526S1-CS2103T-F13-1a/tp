@@ -6,48 +6,55 @@
     "email" : "alice@example.com",
     "address" : "123, Jurong West Ave 6, #08-111",
     "tags" : [ "friends" ],
-    "handle" : "@alice_pauline"
+    "handle" : "@alice_pauline",
+    "closeness" : "5"
   }, {
     "name" : "Benson Meier",
     "phone" : "98765432",
     "email" : "johnd@example.com",
     "address" : "311, Clementi Ave 2, #02-25",
     "tags" : [ "owesMoney", "friends" ],
-    "handle" : "@benson_meier"
+    "handle" : "@benson_meier",
+    "closeness" : "3"
   }, {
     "name" : "Carl Kurz",
     "phone" : "95352563",
     "email" : "heinz@example.com",
     "address" : "wall street",
     "tags" : [ ],
-    "handle" : "@carl_kurz"
+    "handle" : "@carl_kurz",
+    "closeness" : "2"
   }, {
     "name" : "Daniel Meier",
     "phone" : "87652533",
     "email" : "cornelia@example.com",
     "address" : "10th street",
     "tags" : [ "friends" ],
-    "handle" : "@daniel_meier"
+    "handle" : "@daniel_meier",
+    "closeness" : "4"
   }, {
     "name" : "Elle Meyer",
     "phone" : "9482224",
     "email" : "werner@example.com",
     "address" : "michegan ave",
     "tags" : [ ],
-    "handle": "@elle_meyer"
+    "handle": "@elle_meyer",
+    "closeness" : "1"
   }, {
     "name" : "Fiona Kunz",
     "phone" : "9482427",
     "email" : "lydia@example.com",
     "address" : "little tokyo",
     "tags" : [ ],
-    "handle" : "@fiona_kunz"
+    "handle" : "@fiona_kunz",
+    "closeness" : "2"
   }, {
     "name" : "George Best",
     "phone" : "9482442",
     "email" : "anna@example.com",
     "address" : "4th street",
     "tags" : [ ],
-    "handle" : "@george_best"
+    "handle" : "@george_best",
+    "closeness" : "3"
   } ]
 }

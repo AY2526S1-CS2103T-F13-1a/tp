@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLOSENESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HANDLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -24,6 +25,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -48,7 +50,8 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TAG + "TAG]..."
             + "[" + PREFIX_HANDLE + "HANDLE] "
-            + "[" + PREFIX_PROFILE_PICTURE + "PROFILE_PICTURE] \n"
+            + "[" + PREFIX_PROFILE_PICTURE + "PROFILE_PICTURE] "
+            + "[" + PREFIX_CLOSENESS + "CLOSENESS]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -111,9 +114,10 @@ public class EditCommand extends Command {
         Handle updatedHandle = editPersonDescriptor.getHandle().orElse(personToEdit.getHandle());
         String updatedProfilePicture = editPersonDescriptor.getProfilePicture()
             .orElse(personToEdit.getProfilePicture());
+        Closeness updatedCloseness = editPersonDescriptor.getCloseness().orElse(personToEdit.getCloseness());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
-        updatedTags, updatedHandle, updatedProfilePicture == null ? "" : updatedProfilePicture);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags, updatedHandle,
+                updatedProfilePicture == null ? "" : updatedProfilePicture, updatedCloseness);
     }
 
     @Override
@@ -151,6 +155,7 @@ public class EditCommand extends Command {
         private Set<Tag> tags;
         private Handle handle;
         private String profilePicture;
+        private Closeness closeness;
 
         public EditPersonDescriptor() {}
 
@@ -166,13 +171,14 @@ public class EditCommand extends Command {
             setTags(toCopy.tags);
             setHandle(toCopy.handle);
             setProfilePicture(toCopy.profilePicture);
+            setCloseness(toCopy.closeness);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, handle, profilePicture);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, tags, handle, profilePicture, closeness);
         }
 
         public void setName(Name name) {
@@ -205,6 +211,14 @@ public class EditCommand extends Command {
 
         public Optional<Address> getAddress() {
             return Optional.ofNullable(address);
+        }
+
+        public void setCloseness(Closeness closeness) {
+            this.closeness = closeness;
+        }
+
+        public Optional<Closeness> getCloseness() {
+            return Optional.ofNullable(closeness);
         }
 
         /**
@@ -257,7 +271,8 @@ public class EditCommand extends Command {
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(handle, otherEditPersonDescriptor.handle)
-                    && Objects.equals(profilePicture, otherEditPersonDescriptor.profilePicture);
+                    && Objects.equals(profilePicture, otherEditPersonDescriptor.profilePicture)
+                    && Objects.equals(closeness, otherEditPersonDescriptor.closeness);
         }
 
         @Override
@@ -270,6 +285,7 @@ public class EditCommand extends Command {
                     .add("tags", tags)
                     .add("handle", handle)
                     .add("profilePicture", profilePicture)
+                    .add("closeness", closeness)
                     .toString();
         }
     }

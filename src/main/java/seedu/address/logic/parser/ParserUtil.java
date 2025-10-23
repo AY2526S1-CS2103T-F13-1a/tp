@@ -10,6 +10,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -149,5 +150,19 @@ public class ParserUtil {
             throw new ParseException(Handle.MESSAGE_CONSTRAINTS);
         }
         return new Handle(trimmedHandle);
+    }
+
+    /**
+     * Parses a {@code String closeness} into a {@code Closeness}
+     * Leading and trailing whitespaces will be trimmed
+     * @throws ParseException if the given {@code String closeness} is invalid
+     */
+    public static Closeness parseCloseness(String closeness) throws ParseException {
+        requireNonNull(closeness);
+        String trimmedCloseness = closeness.trim();
+        if (!Closeness.isValidCloseness(trimmedCloseness)) {
+            throw new ParseException(Closeness.MESSAGE_CONSTRAINTS);
+        }
+        return new Closeness(trimmedCloseness);
     }
 }

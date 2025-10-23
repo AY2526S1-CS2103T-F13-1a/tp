@@ -44,6 +44,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label handle;
     @FXML
+    private Label closeness;
+    @FXML
     private FlowPane tags;
     @FXML
     private ImageView avatar;
@@ -64,6 +66,7 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         handle.setText(person.getHandle().teleHandle);
+        closeness.setText("Closeness: " + person.getCloseness().toString() + "/5");
     }
 
     /**

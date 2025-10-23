@@ -21,6 +21,7 @@ public class Person {
     private final Phone phone;
     private final Email email;
     private final Handle handle;
+    private final Closeness closeness;
 
     // Data fields
     private final Address address;
@@ -30,8 +31,9 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle) {
-        requireAllNonNull(name, phone, email, address, tags, handle);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle,
+                  Closeness closeness) {
+        requireAllNonNull(name, phone, email, address, tags, handle, closeness);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -39,13 +41,14 @@ public class Person {
         this.tags.addAll(tags);
         this.handle = handle;
         this.profilePicture = "";
+        this.closeness = closeness;
     }
 
     /**
      * Constructor for Person with profile picture.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Handle handle,
-                  String profilePicture) {
+                  String profilePicture, Closeness closeness) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
@@ -54,6 +57,7 @@ public class Person {
         this.tags.addAll(tags);
         this.handle = handle;
         this.profilePicture = profilePicture == null ? "" : profilePicture;
+        this.closeness = closeness;
     }
 
     public Name getName() {
@@ -74,6 +78,10 @@ public class Person {
 
     public String getProfilePicture() {
         return profilePicture;
+    }
+
+    public Closeness getCloseness() {
+        return closeness;
     }
 
     /**
@@ -123,13 +131,14 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && profilePicture.equals(otherPerson.profilePicture)
-                && handle.equals(otherPerson.handle);
+                && handle.equals(otherPerson.handle)
+                && closeness.equals(otherPerson.closeness);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, handle, profilePicture);
+        return Objects.hash(name, phone, email, address, tags, handle, profilePicture, closeness);
     }
 
     @Override
@@ -141,7 +150,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("handle", handle)
+                .add("closeness", closeness)
                 .toString();
     }
-
 }

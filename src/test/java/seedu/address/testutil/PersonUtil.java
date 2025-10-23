@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CLOSENESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HANDLE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -39,7 +40,8 @@ public class PersonUtil {
         person.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
         );
-        sb.append(" ").append(PREFIX_HANDLE).append(person.getHandle().teleHandle);
+        sb.append(PREFIX_HANDLE + person.getHandle().teleHandle + " ");
+        sb.append(PREFIX_CLOSENESS + person.getCloseness().toString() + " ");
         return sb.toString().trim();
     }
 
@@ -66,6 +68,8 @@ public class PersonUtil {
         descriptor.getProfilePicture().ifPresent(profilePicture ->
                 sb.append(" ").append(PREFIX_PROFILE_PICTURE).append(profilePicture).append(" ")
         );
+        descriptor.getCloseness().ifPresent(closeness ->
+                sb.append(PREFIX_CLOSENESS).append(closeness.toString()).append(" "));
         return sb.toString().trim();
     }
 }

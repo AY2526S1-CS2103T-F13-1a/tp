@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Closeness;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Handle;
 import seedu.address.model.person.Name;
@@ -22,6 +23,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_HANDLE = "@amy_bee";
+    public static final String DEFAULT_CLOSENESS = "5";
 
     private Name name;
     private Phone phone;
@@ -29,6 +31,7 @@ public class PersonBuilder {
     private Address address;
     private Set<Tag> tags;
     private Handle handle;
+    private Closeness closeness;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -40,6 +43,7 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         tags = new HashSet<>();
         handle = new Handle(DEFAULT_HANDLE);
+        closeness = new Closeness(DEFAULT_CLOSENESS);
     }
 
     /**
@@ -52,6 +56,7 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
         handle = personToCopy.getHandle();
+        closeness = personToCopy.getCloseness();
     }
 
     /**
@@ -102,8 +107,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Closeness} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withCloseness(String closeness) {
+        this.closeness = new Closeness(closeness);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, tags, handle, "");
+        return new Person(name, phone, email, address, tags, handle, "", closeness);
     }
 
 }

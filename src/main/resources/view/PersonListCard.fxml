@@ -47,6 +47,9 @@
       <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="5" styleClass="info-row">
         <Label fx:id="handle" styleClass="cell_small_label" text="\$handle" />
       </HBox>
+      <HBox spacing="8" alignment="CENTER_LEFT" GridPane.rowIndex="6" styleClass="info-row">
+        <Label fx:id="closeness" styleClass="cell_small_label" text="\$closeness" />
+      </HBox>
     </VBox>
   </GridPane>
 </HBox>
