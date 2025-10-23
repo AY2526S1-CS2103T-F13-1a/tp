@@ -74,7 +74,8 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setProfilePicture(profilePictureValue);
         }
         if (argMultimap.getValue(PREFIX_CLOSENESS).isPresent()) {
-            editPersonDescriptor.setCloseness(ParserUtil.parseCloseness(argMultimap.getValue(PREFIX_CLOSENESS).get()));
+            editPersonDescriptor.setCloseness(
+                    ParserUtil.parseCloseness(argMultimap.getValue(PREFIX_CLOSENESS).get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
 
