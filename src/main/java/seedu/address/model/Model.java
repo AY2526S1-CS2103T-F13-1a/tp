@@ -86,8 +86,9 @@ public interface Model {
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
 
-    /** Returns an unmodifiable view of the sorted person list.
-     *  This is the list that should be displayed to the user.
+    /**
+     * Returns an unmodifiable view of the sorted person list.
+     * This is the list that should be displayed to the user.
      */
     ObservableList<Person> getSortedPersonList();
 
