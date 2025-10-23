@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+
 import seedu.address.logic.commands.SortByClosenessCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -15,12 +17,22 @@ public class SortByClosenessCommandParser implements Parser<SortByClosenessComma
     @Override
     public SortByClosenessCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim().toLowerCase();
-        if (trimmedArgs.equals("asc")) {
+        if (trimmedArgs.isEmpty() || !trimmedArgs.startsWith("o/")) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortByClosenessCommand.MESSAGE_USAGE));
+        }
+
+        String keyword = trimmedArgs.substring(2).trim();
+        if (keyword.isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortByClosenessCommand.MESSAGE_USAGE));
+        } else if (!keyword.equals("asc") && !keyword.equals("desc")) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortByClosenessCommand.MESSAGE_USAGE));
+        } else if (keyword.equals("asc")) {
             return new SortByClosenessCommand(SortByClosenessCommand.SortOrder.ASCENDING);
-        } else if (trimmedArgs.equals("desc")) {
-            return new SortByClosenessCommand(SortByClosenessCommand.SortOrder.DESCENDING);
         } else {
-            throw new ParseException(SortByClosenessCommand.MESSAGE_INVALID_ORDER);
+            return new SortByClosenessCommand(SortByClosenessCommand.SortOrder.DESCENDING);
         }
     }
 }
