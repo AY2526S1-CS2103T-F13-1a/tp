@@ -151,28 +151,23 @@ public class DeleteCommand extends Command {
      */
     private CommandResult executeByIndex(Model model) throws CommandException {
         List<Person> lastShownList = model.getFilteredPersonList();
-
         for (Index id : targetIndexes) {
             if (id.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
         }
-
         List<Person> toDelete = targetIndexes.stream()
                 .sorted((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()))
                 .map(i -> lastShownList.get(i.getZeroBased()))
                 .distinct()
                 .toList();
-
         for (Person p : toDelete) {
             model.deletePerson(p);
         }
-
         if (toDelete.size() == 1) {
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
                     Messages.format(toDelete.get(0))));
         }
-
         String deletedPersons = toDelete.stream()
                 .map(Messages::format)
                 .collect(Collectors.joining("\n"));
