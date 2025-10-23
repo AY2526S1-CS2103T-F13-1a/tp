@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <ImageView fx:id="avatar" fitHeight="100.0" fitWidth="100.0" preserveRatio="true" pickOnBounds="true" styleClass="avatar-image">
+<HBox id="cardPane" fx:id="cardPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER_LEFT">
+  <ImageView fx:id="avatar" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true">
     <HBox.margin>
-      <Insets top="12" right="16" bottom="12" left="12" />
+      <Insets top="5" right="5" bottom="5" left="5" />
     </HBox.margin>
   </ImageView>
   <GridPane HBox.hgrow="ALWAYS">
