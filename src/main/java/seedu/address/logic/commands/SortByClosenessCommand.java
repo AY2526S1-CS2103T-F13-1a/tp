@@ -23,7 +23,9 @@ public class SortByClosenessCommand extends Command {
     public static final String MESSAGE_SUCCESS_DESC = "Sorted contact list by closeness (descending)";
     public static final String MESSAGE_INVALID_ORDER = "Invalid sort order. Must be 'asc' or 'desc'.";
 
-    // Enum to represent sort order
+    /**
+     * This enumeration represents the possible orders in which to sort the contact list.
+     */
     public enum SortOrder {
         ASCENDING,
         DESCENDING
@@ -32,6 +34,10 @@ public class SortByClosenessCommand extends Command {
     private final SortOrder sortOrder;
     private final Comparator<Person> comparator;
 
+    /**
+     * Creates a SortByClosenessCommand to sort the contact list in the specified order.
+     * @param sortOrder
+     */
     public SortByClosenessCommand(SortOrder sortOrder) {
         requireNonNull(sortOrder);
         this.sortOrder = sortOrder;
