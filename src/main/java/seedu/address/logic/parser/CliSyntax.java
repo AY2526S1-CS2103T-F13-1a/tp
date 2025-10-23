@@ -14,4 +14,5 @@ public class CliSyntax {
     public static final Prefix PREFIX_PROFILE_PICTURE = new Prefix("pp/");
     public static final Prefix PREFIX_HANDLE = new Prefix("h/");
     public static final Prefix PREFIX_CLOSENESS = new Prefix("c/");
+    public static final Prefix PREFIX_ORDER = new Prefix("o/");
 }
