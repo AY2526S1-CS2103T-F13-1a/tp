@@ -12,7 +12,7 @@ import seedu.address.model.person.Person;
  * Sorts the contact list by closeness rating, in either ascending or descending order.
  */
 public class SortByClosenessCommand extends Command {
-    public static final String COMMAND_WORD = "sort";
+    public static final String COMMAND_WORD = "sortByCloseness";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Sorts the contact list by closeness rating.\n"
