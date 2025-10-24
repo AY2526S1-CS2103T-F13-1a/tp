@@ -19,6 +19,9 @@ Class Email
 Class Name
 Class Phone
 Class Tag
+Class TelegramHandle
+Class ProfilePicture
+Class Closeness
 
 Class I #FFFFFF
 }
@@ -42,6 +45,9 @@ Person *--> Phone
 Person *--> Email
 Person *--> Address
 Person *--> "*" Tag
+Person *--> TelegramHandle
+Person *--> Closeness
+Person *--> ProfilePicture
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
