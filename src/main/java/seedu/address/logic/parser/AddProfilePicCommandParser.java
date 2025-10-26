@@ -44,14 +44,14 @@ public class AddProfilePicCommandParser implements Parser<AddProfilePicCommand> 
                     AddProfilePicCommand.MESSAGE_USAGE));
         }
 
+        java.nio.file.Path candidate;
         if (!pp.contains("/") && !pp.contains("\\")) {
-            java.nio.file.Path candidate = java.nio.file.Paths.get(System.getProperty("user.dir"),
+            candidate = java.nio.file.Paths.get(System.getProperty("user.dir"),
                     "docs", "images", pp);
             if (!java.nio.file.Files.exists(candidate)) {
                 throw new ParseException("Image '" + pp + "' not found in docs/images");
             }
         } else {
-            java.nio.file.Path candidate;
             try {
                 candidate = java.nio.file.Paths.get(pp);
             } catch (Exception e) {
@@ -60,6 +60,14 @@ public class AddProfilePicCommandParser implements Parser<AddProfilePicCommand> 
             if (!java.nio.file.Files.exists(candidate)) {
                 throw new ParseException("Image file not found at path: " + candidate.toString());
             }
+        }
+
+        checkNotDirectory(candidate);
+    }
+
+    private void checkNotDirectory(java.nio.file.Path candidate) throws ParseException {
+        if (java.nio.file.Files.isDirectory(candidate)) {
+            throw new ParseException("The specified path is a directory, not a file: " + candidate.toString());
         }
     }
 
