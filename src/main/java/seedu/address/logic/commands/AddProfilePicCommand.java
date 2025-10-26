@@ -42,8 +42,8 @@ public class AddProfilePicCommand extends Command {
 
     /**
      * Creates an AddProfilePicCommand to add/update the profile picture of the person at the given index.
-     * @param index
-     * @param profilePicture
+     * @param index the index of the person in the displayed person list.
+     * @param profilePicture the path to the profile picture.
      */
     public AddProfilePicCommand(Index index, String profilePicture) {
         requireNonNull(index);
@@ -125,8 +125,6 @@ public class AddProfilePicCommand extends Command {
      */
     private String generateUniqueFilename(String originalFileName) {
         String fileName = originalFileName;
-        String baseName = originalFileName.substring(0, originalFileName.lastIndexOf('.'));
-        String extension = originalFileName.substring(originalFileName.lastIndexOf('.'));
 
         Path imagesDir = Paths.get(System.getProperty("user.dir"), "docs", "images");
         Path destinationPath = imagesDir.resolve(fileName);
