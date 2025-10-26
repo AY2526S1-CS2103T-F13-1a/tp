@@ -16,6 +16,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.storage.CommandHistory;
+import seedu.address.storage.CommandHistoryStorage;
+import seedu.address.storage.FileCommandHistoryStorage;
 import seedu.address.storage.Storage;
 
 /**
@@ -32,6 +35,7 @@ public class LogicManager implements Logic {
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
+    private final CommandHistory commandHistory;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -40,6 +44,8 @@ public class LogicManager implements Logic {
         this.model = model;
         this.storage = storage;
         addressBookParser = new AddressBookParser();
+        CommandHistoryStorage chStorage = new FileCommandHistoryStorage(storage.getCommandHistoryFilePath());
+        this.commandHistory = new CommandHistory(500, chStorage);
     }
 
     @Override
@@ -89,5 +95,20 @@ public class LogicManager implements Logic {
     @Override
     public void setGuiSettings(GuiSettings guiSettings) {
         model.setGuiSettings(guiSettings);
+    }
+
+    // =====================================================================================
+    // Command history access
+    // =====================================================================================
+
+    /** Returns the CommandHistory object for UI (CommandBox). */
+    @Override
+    public CommandHistory getCommandHistory() {
+        return commandHistory;
+    }
+
+    @Override
+    public Path getCommandHistoryFilePath() {
+        return storage.getCommandHistoryFilePath();
     }
 }
