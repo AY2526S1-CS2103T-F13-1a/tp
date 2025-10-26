@@ -106,9 +106,4 @@ public class LogicManager implements Logic {
     public CommandHistory getCommandHistory() {
         return commandHistory;
     }
-
-    @Override
-    public Path getCommandHistoryFilePath() {
-        return storage.getCommandHistoryFilePath();
-    }
 }

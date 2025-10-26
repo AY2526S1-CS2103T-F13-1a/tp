@@ -48,11 +48,6 @@ public interface Logic {
     GuiSettings getGuiSettings();
 
     /**
-     * Returns the command history storage file path
-     */
-    Path getCommandHistoryFilePath();
-
-    /**
      * Returns the command history object
      */
     CommandHistory getCommandHistory();
