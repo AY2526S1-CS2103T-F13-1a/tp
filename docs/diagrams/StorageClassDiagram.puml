@@ -5,6 +5,10 @@ skinparam arrowColor STORAGE_COLOR
 skinparam classBackgroundColor STORAGE_COLOR
 
 package Storage as StoragePackage {
+package "CommandHistory Storage" #F4F6F6 {
+Class "<<interface>>\nCommandHistory" as CommandHistory
+Class FileCommandHistory
+}
 
 package "UserPrefs Storage" #F4F6F6{
 Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage
@@ -22,20 +26,23 @@ Class JsonAdaptedPerson
 Class JsonAdaptedTag
 }
 
-}
 
+}
 Class HiddenOutside #FFFFFF
 HiddenOutside ..> Storage
 
 StorageManager .up.|> Storage
 StorageManager -up-> "1" UserPrefsStorage
 StorageManager -up-> "1" AddressBookStorage
+StorageManager -down-> "1" CommandHistory
 
 Storage -left-|> UserPrefsStorage
 Storage -right-|> AddressBookStorage
+Storage -left-|> CommandHistory
 
 JsonUserPrefsStorage .up.|> UserPrefsStorage
 JsonAddressBookStorage .up.|> AddressBookStorage
+FileCommandHistory .up.|> CommandHistory
 JsonAddressBookStorage ..> JsonSerializableAddressBook
 JsonSerializableAddressBook --> "*" JsonAdaptedPerson
 JsonAdaptedPerson --> "*" JsonAdaptedTag
