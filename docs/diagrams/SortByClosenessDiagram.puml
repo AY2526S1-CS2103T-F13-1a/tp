@@ -1,0 +1,73 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":SortByClosenessCommandParser" as SortByClosenessCommandParser LOGIC_COLOR
+participant "sbc:SortByClosenessCommand" as SortByClosenessCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("sortByCloseness o/desc")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("sortByCloseness o/desc")
+activate AddressBookParser
+
+create SortByClosenessCommandParser
+AddressBookParser -> SortByClosenessCommandParser
+activate SortByClosenessCommandParser
+
+SortByClosenessCommandParser --> AddressBookParser
+deactivate SortByClosenessCommandParser
+
+AddressBookParser -> SortByClosenessCommandParser : parse(" o/desc")
+activate SortByClosenessCommandParser
+
+create SortByClosenessCommand
+' The parser creates the command with the correct SortOrder enum
+SortByClosenessCommandParser -> SortByClosenessCommand : new SortByClosenessCommand(SortOrder.DESCENDING)
+activate SortByClosenessCommand
+
+SortByClosenessCommand --> SortByClosenessCommandParser :
+deactivate SortByClosenessCommand
+
+SortByClosenessCommandParser --> AddressBookParser : sbc
+deactivate SortByClosenessCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+SortByClosenessCommandParser -[hidden]-> AddressBookParser
+destroy SortByClosenessCommandParser
+
+AddressBookParser --> LogicManager : sbc
+deactivate AddressBookParser
+
+LogicManager -> SortByClosenessCommand : execute(m)
+activate SortByClosenessCommand
+
+' The command executes by calling updateSortComparator on the model [cite: 2]
+SortByClosenessCommand -> Model : updateSortComparator(comparator)
+activate Model
+
+Model --> SortByClosenessCommand
+deactivate Model
+
+create CommandResult
+' A new CommandResult is created with the success message [cite: 2]
+SortByClosenessCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> SortByClosenessCommand
+deactivate CommandResult
+
+SortByClosenessCommand --> LogicManager : r
+deactivate SortByClosenessCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
