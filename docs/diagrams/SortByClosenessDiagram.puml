@@ -70,5 +70,4 @@ deactivate SortByClosenessCommand
 
 [<--LogicManager
 deactivate LogicManager
-
 @enduml
