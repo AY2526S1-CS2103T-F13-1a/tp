@@ -1,0 +1,29 @@
+@startuml
+!include style.puml
+title Autocomplete: type -> suggest -> accept
+
+actor User
+participant CommandBox
+collections "CommandHints" as Hints
+participant "ContextMenu\n(suggestions)" as Menu
+
+User -> CommandBox : text change
+CommandBox -> CommandBox : updateSuggestions(prefix)
+CommandBox -> Hints : filter(COMMANDS startsWith prefix)
+Hints --> CommandBox : matches
+alt matches found
+  CommandBox -> Menu : clear+populate\nsetHighlight(-1)\nshow()
+else no matches
+  CommandBox -> Menu : hide()
+end
+
+== Accept ==
+User -> CommandBox : keyPressed(TAB/ENTER)
+alt menu visible
+  CommandBox -> CommandBox : if highlight<0 then setHighlight(0)
+  CommandBox -> CommandBox : acceptSuggestion(chosen)\ninsert "cmd "\nmove caret
+  CommandBox -> Menu : hide()
+else menu hidden
+  CommandBox -> CommandBox : consume Tab (no focus travel)
+end
+@enduml
