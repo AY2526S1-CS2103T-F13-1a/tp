@@ -2,6 +2,7 @@ package seedu.address.storage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -19,13 +20,16 @@ public class StorageManager implements Storage {
     private static final Logger logger = LogsCenter.getLogger(StorageManager.class);
     private AddressBookStorage addressBookStorage;
     private UserPrefsStorage userPrefsStorage;
+    private CommandHistoryStorage commandHistoryStorage;
 
     /**
      * Creates a {@code StorageManager} with the given {@code AddressBookStorage} and {@code UserPrefStorage}.
      */
-    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage) {
+    public StorageManager(AddressBookStorage addressBookStorage, UserPrefsStorage userPrefsStorage,
+                          CommandHistoryStorage commandHistoryStorage) {
         this.addressBookStorage = addressBookStorage;
         this.userPrefsStorage = userPrefsStorage;
+        this.commandHistoryStorage = commandHistoryStorage;
     }
 
     // ================ UserPrefs methods ==============================
@@ -73,6 +77,22 @@ public class StorageManager implements Storage {
     public void saveAddressBook(ReadOnlyAddressBook addressBook, Path filePath) throws IOException {
         logger.fine("Attempting to write to data file: " + filePath);
         addressBookStorage.saveAddressBook(addressBook, filePath);
+    }
+    @Override
+    public Path getCommandHistoryFilePath() {
+        return commandHistoryStorage.getCommandHistoryFilePath();
+    }
+    @Override
+    public Optional<List<String>> readCommandHistory() throws IOException {
+        return commandHistoryStorage.readCommandHistory();
+    }
+    @Override
+    public Optional<List<String>> readCommandHistory(Path filePath) throws IOException {
+        return commandHistoryStorage.readCommandHistory(filePath);
+    }
+    @Override
+    public void saveCommandHistory(List<String> oldestFirst) throws IOException {
+        commandHistoryStorage.saveCommandHistory(oldestFirst);
     }
 
 }

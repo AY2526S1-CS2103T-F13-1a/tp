@@ -1,36 +1,49 @@
 package seedu.address.storage;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
+
+import seedu.address.MainApp;
+import seedu.address.commons.core.LogsCenter;
+
 
 /**
  * Methods in this class are called to return the previous commands.
  * Commands are stored into the storage Path object
  */
 public class CommandHistory {
+    private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private final Deque<String> entries = new ArrayDeque<>();
     private final int maxSize;
+    private final CommandHistoryStorage storage;
     private int index = -1;
     private String snapshotBeforeNav = "";
-    private final Path store;
 
     /**
-     * Creates a new CommandHistory object
-     * @param maxSize the maximum number of lines stored
-     * @param store the file to save the entries in
+     * Initiates the CommandHistory object
+     * @param maxSize the number of lines it tracks
+     * @param storage wrapper of the file it is going to store in
      */
-    public CommandHistory(int maxSize, Path store) {
+    public CommandHistory(int maxSize, CommandHistoryStorage storage) {
         this.maxSize = Math.max(1, maxSize);
-        this.store = store;
-        load();
+        this.storage = storage;
+        try {
+            List<String> oldestFirst = storage.readCommandHistory().orElse(List.of());
+            for (int i = oldestFirst.size() - 1; i >= 0; i--) {
+                String cmd = oldestFirst.get(i).strip();
+                if (!cmd.isEmpty()) {
+                    entries.addFirst(cmd);
+                }
+            }
+        } catch (IOException e) {
+            logger.info("File to store command history does not exist");
+        }
     }
 
     /**
@@ -101,41 +114,21 @@ public class CommandHistory {
     }
 
     /**
-     * Loads the stored commands into the entries deque
-     */
-    private void load() {
-        if (store == null) {
-            return;
-        }
-        try {
-            if (Files.exists(store)) {
-                List<String> lines = Files.readAllLines(store);
-                for (int i = lines.size() - 1; i >= 0; i--) {
-                    String l = lines.get(i).strip();
-                    if (!l.isEmpty()) {
-                        entries.addFirst(l);
-                    }
-                }
-            }
-        } catch (IOException ignored) {
-            // No op
-        }
-    }
-
-    /**
      * Saves the updated entries into the storage
      */
     public void save() {
-        if (store == null) {
-            return;
-        }
         try {
-            Files.createDirectories(store.getParent());
-            List<String> oldestFirst = new ArrayList<>(entries);
-            Collections.reverse(oldestFirst);
-            Files.write(store, oldestFirst, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-        } catch (IOException ignored) {
-            // No op
+            storage.saveCommandHistory(toOldestFirstList());
+        } catch (IOException e) {
+            logger.info("File to store command history does not exist");
         }
     }
+
+    private List<String> toOldestFirstList() {
+        List<String> list = new ArrayList<>(entries);
+        Collections.reverse(list);
+        return list;
+    }
+
 }
+

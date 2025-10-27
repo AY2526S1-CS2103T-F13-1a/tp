@@ -160,5 +160,4 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons)
                 && sortedPersons.equals(otherModelManager.sortedPersons);
     }
-
 }
