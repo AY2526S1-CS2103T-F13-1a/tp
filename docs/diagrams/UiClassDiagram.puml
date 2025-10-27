@@ -23,7 +23,10 @@ Class HiddenModel #FFFFFF
 
 package Logic <<Rectangle>> {
 Class HiddenLogic #FFFFFF
+Class CommandHints <<utility>>
 }
+
+CommandBox ..> CommandHints
 
 Class HiddenOutside #FFFFFF
 HiddenOutside ..> Ui
