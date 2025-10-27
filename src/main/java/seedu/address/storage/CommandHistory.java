@@ -7,12 +7,18 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
+
+import seedu.address.MainApp;
+import seedu.address.commons.core.LogsCenter;
+
 
 /**
  * Methods in this class are called to return the previous commands.
  * Commands are stored into the storage Path object
  */
 public class CommandHistory {
+    private static final Logger logger = LogsCenter.getLogger(MainApp.class);
     private final Deque<String> entries = new ArrayDeque<>();
     private final int maxSize;
     private final CommandHistoryStorage storage;
@@ -36,7 +42,7 @@ public class CommandHistory {
                 }
             }
         } catch (IOException e) {
-            // Ignore
+            logger.info("File to store command history does not exist");
         }
     }
 
@@ -113,8 +119,8 @@ public class CommandHistory {
     public void save() {
         try {
             storage.saveCommandHistory(toOldestFirstList());
-        } catch (IOException ignored) {
-            // Ignore
+        } catch (IOException e) {
+            logger.info("File to store command history does not exist");
         }
     }
 
