@@ -1,5 +1,6 @@
 package seedu.address.ui;
 
+import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -122,38 +123,6 @@ public class CommandBox extends UiPart<Region> {
         styleClass.add(ERROR_STYLE_CLASS);
     }
 
-    private void updateSuggestions(String prefix) {
-        if (prefix.isEmpty()) {
-            suggestions.hide();
-            return;
-        }
-        var matches = CommandHints.COMMANDS.stream()
-                .filter(cmd -> cmd.startsWith(prefix.toLowerCase()))
-                .limit(8)
-                .toList();
-        if (matches.isEmpty()) {
-            suggestions.hide();
-            return;
-        }
-        suggestions.getItems().clear();
-        highlightIndex = -1;
-        for (int i = 0; i < matches.size(); i++) {
-            final int index = i;
-            String text = matches.get(i);
-
-            Label label = new Label(text);
-            label.setMaxWidth(Double.MAX_VALUE);
-            var item = new CustomMenuItem(label, true);
-
-            item.setOnAction(e -> acceptSuggestion(text));
-            label.setOnMouseEntered(e -> setHighlight(index));
-            suggestions.getItems().add(item);
-        }
-        if (!suggestions.isShowing()) {
-            suggestions.show(commandTextField, Side.BOTTOM, 0, 0);
-        }
-    }
-
     private void acceptSuggestion(String suggestion) {
         commandTextField.setText(suggestion + " ");
         commandTextField.positionCaret(commandTextField.getText().length());
@@ -178,33 +147,28 @@ public class CommandBox extends UiPart<Region> {
     }
 
     private void handleKeyPressed(KeyEvent e) {
-        if (!suggestions.isShowing() || suggestions.getItems().isEmpty()) {
+        if (!isMenuVisible()) {
             if (e.getCode() == KeyCode.TAB) {
                 e.consume();
             }
             return;
         }
-
         switch (e.getCode()) {
         case TAB:
-        case ENTER:
             e.consume();
-            if (highlightIndex < 0) {
-                setHighlight(0);
-            }
-            String chosen = ((Label) ((CustomMenuItem) suggestions.getItems().get(highlightIndex)).getContent())
-                    .getText();
-            acceptSuggestion(chosen);
+            acceptHighlightedOrFirst();
+            break;
+        case ENTER:
+            handleEnterWithMenu(e);
             break;
         case DOWN:
             e.consume();
-            int next = (highlightIndex + 1) % suggestions.getItems().size();
-            setHighlight(next);
+            setHighlight((highlightIndex + 1) % suggestions.getItems().size());
             break;
         case UP:
             e.consume();
-            int prev = (highlightIndex - 1 + suggestions.getItems().size()) % suggestions.getItems().size();
-            setHighlight(prev);
+            int size = suggestions.getItems().size();
+            setHighlight((highlightIndex - 1 + size) % size);
             break;
         case ESCAPE:
             e.consume();
@@ -213,6 +177,82 @@ public class CommandBox extends UiPart<Region> {
         default:
         }
     }
+
+    private void updateSuggestions(String prefix) {
+        if (prefix.isEmpty()) {
+            suggestions.hide();
+            return;
+        }
+        List<String> matches = buildMatches(prefix);
+        if (matches.isEmpty() || isExactSingleMatch(prefix, matches)) {
+            suggestions.hide();
+            return;
+        }
+        populateMenu(matches);
+        showMenuIfNeeded();
+    }
+
+    private boolean isMenuVisible() {
+        return suggestions.isShowing() && !suggestions.getItems().isEmpty();
+    }
+
+    private void handleEnterWithMenu(KeyEvent e) {
+        String typed = commandTextField.getText().trim().toLowerCase();
+        boolean isCommand = CommandHints.COMMANDS.stream()
+                .anyMatch(c -> c.equalsIgnoreCase(typed));
+        e.consume();
+        if (isCommand) {
+            suggestions.hide();
+            handleCommandEntered();
+            return;
+        }
+        acceptHighlightedOrFirst();
+    }
+
+    private void acceptHighlightedOrFirst() {
+        if (highlightIndex < 0) {
+            setHighlight(0);
+        }
+        CustomMenuItem item =
+                (CustomMenuItem) suggestions.getItems().get(highlightIndex);
+        Label label = (Label) item.getContent();
+        acceptSuggestion(label.getText());
+    }
+
+    private List<String> buildMatches(String prefix) {
+        String p = prefix.toLowerCase();
+        return CommandHints.COMMANDS.stream()
+                .filter(cmd -> cmd.toLowerCase().startsWith(p))
+                .limit(8)
+                .toList();
+    }
+
+    private boolean isExactSingleMatch(String prefix, List<String> matches) {
+        return matches.size() == 1
+                && matches.get(0).equalsIgnoreCase(prefix);
+    }
+
+    private void populateMenu(List<String> matches) {
+        suggestions.getItems().clear();
+        highlightIndex = -1;
+        for (int i = 0; i < matches.size(); i++) {
+            final int idx = i;
+            String text = matches.get(i);
+            Label label = new Label(text);
+            label.setMaxWidth(Double.MAX_VALUE);
+            CustomMenuItem item = new CustomMenuItem(label, true);
+            item.setOnAction(ev -> acceptSuggestion(text));
+            label.setOnMouseEntered(ev -> setHighlight(idx));
+            suggestions.getItems().add(item);
+        }
+    }
+
+    private void showMenuIfNeeded() {
+        if (!suggestions.isShowing()) {
+            suggestions.show(commandTextField, Side.BOTTOM, 0, 0);
+        }
+    }
+
 
     /**
      * Represents a function that can execute commands.
