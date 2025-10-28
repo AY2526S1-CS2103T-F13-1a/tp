@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_NEGATIVE_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.commands.AddProfilePicCommand.MESSAGE_USAGE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PROFILE_PICTURE;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -93,7 +94,7 @@ public class AddProfilePicCommandParserTest {
     public void parse_invalidIndex_throwsParseException() {
         // Negative index
         String userInput = "-1 " + PREFIX_PROFILE_PICTURE + VALID_IMAGE;
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE);
+        String expectedMessage = MESSAGE_NEGATIVE_PERSON_DISPLAYED_INDEX;
         CommandParserTestUtil.assertParseFailure(parser, userInput, expectedMessage);
 
         // Zero index
@@ -101,6 +102,7 @@ public class AddProfilePicCommandParserTest {
         CommandParserTestUtil.assertParseFailure(parser, userInput, expectedMessage);
 
         // Non-numeric index
+        expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE);
         userInput = "a " + PREFIX_PROFILE_PICTURE + VALID_IMAGE;
         CommandParserTestUtil.assertParseFailure(parser, userInput, expectedMessage);
 
