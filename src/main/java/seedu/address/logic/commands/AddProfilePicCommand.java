@@ -31,9 +31,10 @@ public class AddProfilePicCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds/updates the profile picture of the person "
             + "identified by the index number used in the displayed person list.\n"
+            + "Only .png image files are supported.\n"
             + "Example (Upload a local image file, from your directory): " + COMMAND_WORD
             + " 1 pp/~/Downloads/myphoto.png\n"
-            + "Example (Upload a past picture): " + COMMAND_WORD + " 1 pp/johndoe.png\n";
+            + "Example (Upload an existing picture): " + COMMAND_WORD + " 1 pp/johndoe.png\n";
 
     public static final String MESSAGE_SUCCESS = "Updated profile picture for: %1$s";
 
@@ -87,6 +88,10 @@ public class AddProfilePicCommand extends Command {
             }
         }
 
+        if (!finalProfilePicture.isEmpty() && !isPngFileName(finalProfilePicture)) {
+            throw new CommandException("Only .png images are supported.");
+        }
+
         Person edited = finalProfilePicture.isEmpty()
                 ? new Person(name, phone, email, address, tags, handle, closeness)
                 : new Person(name, phone, email, address, tags, handle, finalProfilePicture, closeness);
@@ -107,6 +112,9 @@ public class AddProfilePicCommand extends Command {
 
         Path sourcePath = Paths.get(localImagePath);
         String originalFileName = sourcePath.getFileName().toString();
+        if (!isPngFileName(originalFileName)) {
+            throw new IllegalArgumentException("Only .png files are supported.");
+        }
         String fileName = generateUniqueFilename(originalFileName);
 
         Path imagesDir = Paths.get(System.getProperty("user.dir"), "docs", "images");
@@ -131,9 +139,15 @@ public class AddProfilePicCommand extends Command {
 
         if (destinationPath.toFile().exists()) {
             throw new IllegalArgumentException("File already exists: " + originalFileName
-                + " in the docs/images directory, please choose a different filename.");
+                + " in the docs/images directory. Please add with this command instead: \n"
+                + "addProfilePic <index> pp/<image name> \n"
+                + "Example: addProfilePic 1 pp/example.png");
         }
         return fileName;
+    }
+
+    private boolean isPngFileName(String fileName) {
+        return fileName != null && fileName.toLowerCase().endsWith(".png");
     }
 
     /**
