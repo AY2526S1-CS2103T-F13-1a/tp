@@ -27,7 +27,6 @@ public class CommandHistory {
 
     /**
      * Initiates the CommandHistory object
-     * @param maxSize the number of lines it tracks
      * @param storage wrapper of the file it is going to store in
      */
     public CommandHistory(int maxSize, CommandHistoryStorage storage) {
@@ -35,10 +34,10 @@ public class CommandHistory {
         this.storage = storage;
         try {
             List<String> oldestFirst = storage.readCommandHistory().orElse(List.of());
-            for (int i = oldestFirst.size() - 1; i >= 0; i--) {
-                String cmd = oldestFirst.get(i).strip();
-                if (!cmd.isEmpty()) {
-                    entries.addFirst(cmd);
+            for (String cmd : oldestFirst) {
+                String s = cmd.strip();
+                if (!s.isEmpty()) {
+                    entries.addFirst(s); // newest ends up at front
                 }
             }
         } catch (IOException e) {
@@ -63,6 +62,7 @@ public class CommandHistory {
         }
         save();
         resetNav();
+        snapshotBeforeNav = "";
     }
 
     /**
@@ -110,7 +110,6 @@ public class CommandHistory {
      */
     public void resetNav() {
         index = -1;
-        snapshotBeforeNav = "";
     }
 
     /**

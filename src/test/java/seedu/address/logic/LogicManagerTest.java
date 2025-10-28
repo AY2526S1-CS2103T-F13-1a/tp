@@ -30,6 +30,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.storage.CommandHistory;
 import seedu.address.storage.CommandHistoryStorage;
 import seedu.address.storage.FileCommandHistoryStorage;
 import seedu.address.storage.JsonAddressBookStorage;
@@ -55,7 +56,8 @@ public class LogicManagerTest {
         FileCommandHistoryStorage commandHistoryStorage = new FileCommandHistoryStorage(temporaryFolder
                 .resolve("command_history.txt"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, commandHistoryStorage);
-        logic = new LogicManager(model, storage);
+        CommandHistory commandHistory = new CommandHistory(500, commandHistoryStorage);
+        logic = new LogicManager(model, storage, commandHistory);
     }
 
     @Test
@@ -169,8 +171,9 @@ public class LogicManagerTest {
         CommandHistoryStorage commandHistoryStorage =
                 new FileCommandHistoryStorage(temporaryFolder.resolve("ExceptionCommandHistory.txt"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage, commandHistoryStorage);
+        CommandHistory commandHistory = new CommandHistory(500, commandHistoryStorage);
 
-        logic = new LogicManager(model, storage);
+        logic = new LogicManager(model, storage, commandHistory);
 
         // Triggers the saveAddressBook method by executing an add command
         String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_AMY + PHONE_DESC_AMY

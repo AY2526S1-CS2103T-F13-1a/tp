@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
@@ -48,12 +49,18 @@ public interface Logic {
     GuiSettings getGuiSettings();
 
     /**
-     * Returns the command history object
-     */
-    CommandHistory getCommandHistory();
-
-    /**
      * Set the user prefs' GUI settings.
      */
     void setGuiSettings(GuiSettings guiSettings);
+
+    /**
+     * Returns the command history.
+     */
+    CommandHistory getCommandHistory();
+    Optional<String> up();
+    Optional<String> down();
+    void push(String txt);
+    void resetNav();
+    void beginNavigation(String txt);
+    void save();
 }
