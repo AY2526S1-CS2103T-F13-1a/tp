@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Closeness;
@@ -22,7 +21,8 @@ import seedu.address.model.tag.Tag;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_INDEX = "The person index is not a non-zero unsigned integer.";
+
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -30,11 +30,20 @@ public class ParserUtil {
      * @throws ParseException if the specified index is invalid (not non-zero unsigned integer).
      */
     public static Index parseIndex(String oneBasedIndex) throws ParseException {
-        String trimmedIndex = oneBasedIndex.trim();
-        if (!StringUtil.isNonZeroUnsignedInteger(trimmedIndex)) {
+        String s = oneBasedIndex == null ? "" : oneBasedIndex.trim();
+        if (s.isEmpty()) {
             throw new ParseException(MESSAGE_INVALID_INDEX);
         }
-        return Index.fromOneBased(Integer.parseInt(trimmedIndex));
+
+        try {
+            int value = Integer.parseInt(s);
+            if (value <= 0) {
+                throw new ParseException(seedu.address.logic.Messages.MESSAGE_NEGATIVE_PERSON_DISPLAYED_INDEX);
+            }
+            return Index.fromOneBased(value);
+        } catch (NumberFormatException ex) {
+            throw new ParseException(MESSAGE_INVALID_INDEX);
+        }
     }
 
     /**
