@@ -3,6 +3,7 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -17,8 +18,6 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.storage.CommandHistory;
-import seedu.address.storage.CommandHistoryStorage;
-import seedu.address.storage.FileCommandHistoryStorage;
 import seedu.address.storage.Storage;
 
 /**
@@ -40,18 +39,18 @@ public class LogicManager implements Logic {
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
      */
-    public LogicManager(Model model, Storage storage) {
+    public LogicManager(Model model, Storage storage, CommandHistory commandHistory) {
         this.model = model;
         this.storage = storage;
+        this.commandHistory = commandHistory;
         addressBookParser = new AddressBookParser();
-        CommandHistoryStorage chStorage = new FileCommandHistoryStorage(storage.getCommandHistoryFilePath());
-        this.commandHistory = new CommandHistory(500, chStorage);
     }
 
     @Override
     public CommandResult execute(String commandText) throws CommandException, ParseException {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
-
+        commandHistory.push(commandText);
+        commandHistory.save();
         CommandResult commandResult;
         Command command = addressBookParser.parseCommand(commandText);
         commandResult = command.execute(model);
@@ -97,13 +96,36 @@ public class LogicManager implements Logic {
         model.setGuiSettings(guiSettings);
     }
 
-    // =====================================================================================
-    // Command history access
-    // =====================================================================================
-
-    /** Returns the CommandHistory object for UI (CommandBox). */
     @Override
     public CommandHistory getCommandHistory() {
-        return commandHistory;
+        return this.commandHistory;
+    }
+
+    @Override
+    public void push(String txt) {
+        this.commandHistory.push(txt);
+    }
+
+    @Override
+    public void resetNav() {
+        this.commandHistory.resetNav();
+    }
+
+    @Override
+    public Optional<String> up() {
+        return this.commandHistory.up();
+    }
+
+    @Override
+    public Optional<String> down() {
+        return this.commandHistory.down();
+    }
+    @Override
+    public void beginNavigation(String txt) {
+        this.commandHistory.beginNavigation(txt);
+    }
+    @Override
+    public void save() {
+        this.commandHistory.save();
     }
 }

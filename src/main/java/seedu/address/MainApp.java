@@ -22,7 +22,9 @@ import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.util.SampleDataUtil;
+//import seedu.address.storage.*;
 import seedu.address.storage.AddressBookStorage;
+import seedu.address.storage.CommandHistory;
 import seedu.address.storage.CommandHistoryStorage;
 import seedu.address.storage.FileCommandHistoryStorage;
 import seedu.address.storage.JsonAddressBookStorage;
@@ -61,13 +63,14 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         AddressBookStorage addressBookStorage = new JsonAddressBookStorage(userPrefs.getAddressBookFilePath());
-        Path historyPath = Path.of(System.getProperty("user.home"), ".command_history");
-        CommandHistoryStorage commandHistoryStorage = new FileCommandHistoryStorage(historyPath);
+        CommandHistoryStorage commandHistoryStorage = new FileCommandHistoryStorage(
+                userPrefs.getCommandHistoryFilePath());
+        CommandHistory commandHistory = new CommandHistory(500, commandHistoryStorage);
         storage = new StorageManager(addressBookStorage, userPrefsStorage, commandHistoryStorage);
 
         model = initModelManager(storage, userPrefs);
 
-        logic = new LogicManager(model, storage);
+        logic = new LogicManager(model, storage, commandHistory);
 
         ui = new UiManager(logic);
     }

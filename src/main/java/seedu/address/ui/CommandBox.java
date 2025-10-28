@@ -11,11 +11,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
+import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandHints;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.storage.CommandHistory;
 
 
 /**
@@ -27,7 +27,6 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
-    private final CommandHistory history;
 
     private final ContextMenu suggestions = new ContextMenu();
     private int highlightIndex = -1;
@@ -38,14 +37,11 @@ public class CommandBox extends UiPart<Region> {
     /**
      * Creates a {@code CommandBox} with the given {@code CommandExecutor}.
      */
-    public CommandBox(CommandExecutor commandExecutor, CommandHistory history) {
+    public CommandBox(CommandExecutor commandExecutor) {
         super(FXML);
         this.commandExecutor = commandExecutor;
-        this.history = history;
         // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
-
-        commandTextField.setOnKeyPressed(this::handleHistoryKeys);
 
         commandTextField.textProperty().addListener((obs, oldText, newText) -> {
             updateSuggestions(newText.trim());
@@ -60,33 +56,33 @@ public class CommandBox extends UiPart<Region> {
         });
     }
 
-    private void handleHistoryKeys(javafx.scene.input.KeyEvent ev) {
-        switch (ev.getCode()) {
-        case UP -> {
-            navigateHistory(true);
-            ev.consume();
-        }
-        case DOWN -> {
-            navigateHistory(false);
-            ev.consume();
-        }
-        default -> {
-            // ignore other keys pressed by the user
-        }
-        }
-    }
-    private void navigateHistory(boolean older) {
-        String current = commandTextField.getText();
-        history.beginNavigation(current); (
-                older ? history.up() : history.down()).ifPresent(this::applyHistory);
+    public String getCommandText() {
+        return commandTextField.getText();
     }
     /**
      * Sets the command box to show the requested text
      * @param txt text to be displayed
      */
-    private void applyHistory(String txt) {
+    public void showText(String txt) {
         commandTextField.setText(txt);
         commandTextField.positionCaret(txt.length());
+    }
+
+    /**
+     * Passes the logic object to command box and updates its contents
+     * @param logic
+     */
+    public void installHistoryHandlers(Logic logic) {
+        commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.DOWN) {
+                logic.beginNavigation(commandTextField.getText()); (
+                        e.getCode() == KeyCode.UP ? logic.up() : logic.down())
+                        .ifPresent(s -> {
+                            showText(s);
+                        });
+                e.consume();
+            }
+        });
     }
     /**
      * Handles the Enter button pressed event.
@@ -99,10 +95,8 @@ public class CommandBox extends UiPart<Region> {
         }
 
         try {
-            history.push(commandText);
             commandExecutor.execute(commandText);
             commandTextField.setText("");
-            history.resetNav();
         } catch (CommandException | ParseException e) {
             setStyleToIndicateCommandFailure();
         }
