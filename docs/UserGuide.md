@@ -1,214 +1,530 @@
 ---
-layout: page
-title: User Guide
+title: UniContactsPro User Guide
+
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+# UniContactsPro User Guide
 
-* Table of Contents
-{:toc}
+## About This Guide
 
---------------------------------------------------------------------------------------------------------------------
+This guide is designed for undergraduate student who:
+- Need to organize and manage university-related contacts, such as project groupmates, classmates, and CCA members.
+- Are comfortable using a Command Line Interface (CLI) for efficient data entry and management.
+- Prefer a keyboard-driven workflow for speed.
+- Want a dedicated, local desktop application to keep track of connections.
 
-## Quick start
+## Table of Contents
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. [Introduction](#1-introduction)
+2. [Quick Start](#2-quick-start)
+3. [Understanding the Interface](#3-understanding-the-interface)
+4. [Command Basics](#4-command-basics)
+5. [Features](#5-features)
+6. [FAQ](#6-faq)
+7. [Glossary](#7-glossary)
+8. [Acknowledgements](#8-acknowledgements)
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+---
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+## 1. Introduction
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+Welcome to **UniContactsPro**! We built this desktop app specifically for you, an undergraduate student, to finally get your school contacts organized and accessible.
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+Think of it as your personal digital address book for university. Whether you're managing project groupmates, classmates for a single module, or your CCA contacts, UniContactsPro is here to help. Our goal is to make sure you never lose touch, especially with those people you aren't close to but still need to contact.
 
-   * `list` : Lists all contacts.
+We've optimized it for however you work best—whether you're a fan of keyboard commands (CLI) or prefer using a mouse, you'll find it combines efficiency with simplicity for managing all your university connections.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+---
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+## 2. Quick Start
 
-   * `clear` : Deletes all contacts.
+Get up and running with UniContactsPro in minutes.
 
-   * `exit` : Exits the app.
+### System Requirements
 
-1. Refer to the [Features](#features) below for details of each command.
+* **Operating System:** Windows, macOS, or Linux
+* **Java Version:** Java 17 or above
 
---------------------------------------------------------------------------------------------------------------------
+> **How to check your Java version:**
+> 1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
+> 2.  Type `java -version` and press `Enter`.
+> 3.  Ensure the output shows a version number of `17` or higher.
 
-## Features
+### Installation & Launch
 
-<div markdown="block" class="alert alert-info">
+1.  **Download:** Get the latest `UniContactsPro.jar` from the [GitHub releases page](https://github.com/AY2526S1-CS2103T-F13-1a/tp/releases).
+2.  **Store:** Create a new folder for the application and place the downloaded `.jar` file inside it.
+3.  **Run:**
+    * Open a command terminal.
+    * Navigate (using `cd`) to the folder you created in step 2.
+    * Execute the following command:
+        ```
+        java -jar UniContactsPro.jar
+        ```
 
-**:information_source: Notes about the command format:**<br>
+The application will launch, pre-filled with sample data for you to explore.
 
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+![image](https://hackmd.io/_uploads/B1ZtN5AAlx.png)
 
-* Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
 
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+### Your First Commands
 
-* Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+Once the app is open, try these commands in the command box:
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `help 123`, it will be interpreted as `help`.
+1.  **See all commands:**
+    ```
+    help
+    ```
+2.  **Add a new contact:**
+    ```
+    add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe
+    ```
+3.  **View all contacts:**
+    ```
+    list
+    ```
+4.  **Clear the sample data:** (When you're ready to add your own contacts)
+    ```
+    clear
+    ```
 
-* If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
-</div>
+---
 
-### Viewing help : `help`
+## 3. Understanding the Interface
 
-Shows a message explaining how to access the help page.
+### Main Components
 
-![help message](images/helpMessage.png)
+- **Menu Bar:** Access File and Help menus (press `F1` for help)
+- **Command Box:** Type commands here and press `Enter` to execute
+- **Result Display:** Shows feedback messages and command results
+- **Contact List:** Displays contacts with index numbers
+- **Status Bar:** Shows data file location and total contacts
 
-Format: `help`
+![photo_6057644066834418466_y](https://hackmd.io/_uploads/ryOZB5CAeg.jpg)
 
 
-### Adding a person: `add`
+### Contact Card Details
 
-Adds a person to the address book.
+Each contact shows:
+- **Index:** Position in list (for commands)
+- **Name:** Contact's full name
+- **Phone:** 8-digit number
+- **Email:** Email address
+- **Address:** Physical address
+- **Telegram Handle:** Telegram handle
+- **Tags:** Categories/labels (if any)
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS h/TELEGRAM HANDLE [t/TAG]…​`
+![photo_6057644066834418469_y](https://hackmd.io/_uploads/B1Ti85A0ge.jpg)
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
-</div>
 
-Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 h/@johndoe`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal h/@betsy`
+### Keyboard Shortcuts
 
-### Listing all persons : `list`
+| Shortcut | Action |
+|----------|--------|
+| `↑` | Previous command in history |
+| `↓` | Next command in history |
 
-Shows a list of all persons in the address book.
+**Note** : The last input typed by the user (before pressing enter) will be shown if there are no more stored commands after pressing `↓`
 
-Format: `list`
+### Using Command Autocomplete
+UniContactsPro uses an autocomplete system to help you type commands faster and reduce errors
 
-### Editing a person : `edit`
+**How it works**
+As you type in the command box, a dropdown box will appear with recognized command word suggestions
 
-Edits an existing person in the address book.
+![photo_6057644066834418453_y](https://hackmd.io/_uploads/ryNWZ5AAlg.jpg)
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
+**Keyboard Controls:**
 
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+| Key | Action |
+|-----|--------|
+| `Tab` or `Enter` | Accept highlighted suggestion |
+| `↑` | Move highlight up |
+| `↓` | Move highlight down |
+| `Esc` | Close dropdown |
 
-### Locating persons by name: `find`
+**Mouse Support:**
+- Hover over a suggestion to highlight it
+- Click to accept the suggestion
 
-Finds persons whose names contain any of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+---
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+## 4. Command Basics
 
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+### Command Structure
 
-### Deleting a person : `delete`
+```
+command_word PREFIX/VALUE [PREFIX/VALUE]...
+```
 
-Deletes the specified person from the address book.
+### Common Prefixes
 
-Format: `delete INDEX`
+| Prefix | Meaning | Format |
+|--------|---------|--------|
+| `n/` | Name | Alphabets, spaces, hyphens |
+| `p/` | Phone | 8 digits, starts with 8 or 9 |
+| `e/` | Email | Valid email format |
+| `a/` | Address | Any text |
+| `h/` | Telegram Handle | Alphabets, integers, underscores, 5 to 32 characters, starts with an `@`
+| `t/` | Tag | Alphanumeric, max 15 characters |
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+### Parameter Rules
 
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+**Name (`n/`):**
+- Alphabets, spaces, and hyphens only
+- Automatically capitalized
+- Extra spaces trimmed
 
-### Clearing all entries : `clear`
+**Phone (`p/`):**
+- Exactly 8 digits
+- Must start with 8 or 9
+- No spaces allowed
 
-Clears all entries from the address book.
+**Email (`e/`):**
+- Must be valid email format
+- Example: `user@example.com`
 
-Format: `clear`
+**Telegram handle (`h/`):**
+- Alphabets, integers and underscores
+- Must begin with an `@`
+- Must be between 5 and 32 characters inclusive
+- Must not start with a number
 
-### Exiting the program : `exit`
+**Tags (`t/`):**
+- Alphanumeric only
+- Maximum 15 characters
+- Saved in lowercase
+- Can specify multiple
 
-Exits the program.
+---
 
-Format: `exit`
+## 5. Features
 
-### Saving the data
+### Adding Contacts
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+**Command:** `add n/NAME p/PHONE e/EMAIL a/ADDRESS h/TELEGRAM HANDLE [t/TAG]..`
 
-### Editing the data file
+**Example:**
+```
+add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
+```
+**Name formatting** : 
+- Name is not case-sensitive.  The first character of each word is captalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
+- When the name starts with the digit, the digit will remain while the rest of the characters are set to lower case (eg. `1JOhN dOE` will be set to `1john Doe`)
+- Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed 
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+**Duplicates**
+- Two people are considered duplicates if they have either of the same fields : 
+    - Phone number 
+    - Email address
+    - Telegram handle
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
-</div>
+**Success:** Contact added with confirmation message
+![Screenshot 2025-10-29 at 03.11.43](https://hackmd.io/_uploads/Hk3OH500xg.png)
 
-### Archiving data files `[coming in v2.0]`
 
-_Details coming soon ..._
+**Errors:**
+- `Invalid name` - Contains special characters that is not a hyphen
+- `Phone number does not start with 8 or 9`
+- `Invalid email format`
+![Screenshot 2025-10-29 at 03.12.50](https://hackmd.io/_uploads/BykTH5C0ge.png)
+- `This person already exists`
+![Screenshot 2025-10-29 at 03.17.02](https://hackmd.io/_uploads/B1ph8qC0xl.png)
 
---------------------------------------------------------------------------------------------------------------------
 
-## FAQ
+---
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+### Editing Contacts
 
---------------------------------------------------------------------------------------------------------------------
+**Command:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [h/TELEGRAM HANDLE] [t/TAG]...`
 
-## Known issues
+**Example:**
+```
+edit 1 p/98765432 e/newemail@example.com
+```
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+**Note:** At least one field must be provided. Tags replace all existing tags.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
-## Command summary
+### Adding Profile Picture
 
-Action | Format, Examples
---------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List** | `list`
-**Help** | `help`
+Adding a new image with a from a local file path
 
+**Command:** `addProfilePic INDEX pp/ImageFilePath.png`
 
-Add 
-3
-lines
-but
-i 
-add
-more
-i 
-add
-more 
-also 
-haahha
+**Example:**
+```
+addProfilePic 1 pp/~Downloads/example.png
+```
+
+**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+
+
+Adding an existing image with with file name
+
+**Command:** `addProfilePic INDEX pp/imagename.png`
+
+**Example:**
+```
+addProfilePic 1 pp/example.png
+```
+
+**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+
+**Note:** Only .png images can be added
+
+---
+
+### Deleting Contacts
+
+**Command:** 
+```
+delete INDEX [MORE_INDEXES]...
+delete all t/TAG
+```
+
+**Examples:**
+```
+delete 1
+delete 1 2 3
+delete all t/friends
+```
+
+**Success:** 
+Single Deletion: Shows deleted contact(s) details
+Multiple Deletion: Shows number of deleted contats
+
+**Errors:**
+- No contact found with index: `The person index provided is invalid`
+- No contact found with delete all tag: `No persons found with tag: <TAG>`
+
+---
+
+### Listing Contacts
+
+**Command:** `list`
+
+Shows all contacts in order added (newest first).
+
+---
+
+### Searching Contacts
+
+The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported. 
+
+**Command:** `find KEYWORD`
+
+**Example:**
+
+Given a contact book with the following state:
+![Screenshot 2025-10-29 at 2.50.06 AM](https://hackmd.io/_uploads/rJCvlc0Age.png)
+
+All of the following commands should result in only `Alex` being displayed:
+```
+find Al
+find Alex
+find ex
+```
+
+**Success:**
+
+Shows the list of contacts with name matching the keyword. Successful execution message also states number of contacts displayed.
+
+**Errors:**
+- No keyword input: "Invalid command format" message is shown
+
+---
+
+### Filtering by Tag
+
+The `filter` command allows users to filter their contact list by tags. All contacts with a tag matching the `TAG` argument will be shown.
+
+**Command:** `filter t/TAG`
+
+**Example:**
+
+Given a contact book with the following state:
+![Screenshot 2025-10-29 at 3.08.05 AM](https://hackmd.io/_uploads/SkriN9ACxl.png)
+
+The following command will result in only `Alex` and `Bernice` being displayed:
+```
+filter t/friends
+```
+
+**Success:**
+
+Shows the list of contacts with the respective tag. Successful execution message also states number of contacts displayed.
+
+**Errors:**
+- Empty tag input: "Invalid command format" message is shown
+- No prefix `t/`: "Invalid command format" message is shown
+- Multiple tags input: "Invalid command format" message is shown
+
+
+
+---
+
+### Sorting Contacts
+
+Contacts can be sorted by `Closeness`. The `sortByCloseness` command can sort the contacts either by ascending or descending order in terms of `Closeness`. 
+
+**Examples:**
+Given a contact book with the following state:
+![Screenshot 2025-10-29 at 3.13.06 AM](https://hackmd.io/_uploads/ryGRBc0Rex.png)
+
+The following command:
+```
+sortByCloseness o/desc
+```
+results in the contact book looking like this:
+
+
+
+**Note:** Must use lowercase `asc` or `desc`
+
+---
+
+### Tracking Last Contact
+
+**Command:** `track NAME`
+
+**Example:**
+```
+track John Doe
+```
+
+**Output:** `Days since last contact with John Doe: X days`
+
+**Note:** Name must uniquely identify one person.
+
+---
+
+### Managing Tags
+
+**Add tags when creating:**
+```
+add n/John p/91234567 e/john@example.com a/123 h/@john123 St t/friend t/CS2103T
+```
+
+**Update tags:**
+```
+edit 1 t/bestfriend t/CCA
+```
+
+**Note:** Editing tags replaces ALL existing tags.
+
+---
+
+### Clearing All Contacts
+
+**Command:** `clear`
+
+**Warning:** Permanent and cannot be undone.
+
+---
+
+### Getting Help
+
+**Command:** `help`
+
+Opens help window with command reference and User Guide link.
+
+---
+
+### Exiting
+
+**Command:** `exit`
+
+Closes the application. Data is automatically saved.
+
+---
+
+## 6. FAQ
+
+**Q: Is my data automatically saved?**  
+A: Yes, all changes are saved immediately.
+
+**Q: Where is my data stored?**  
+A: In `addressbook.json` in the same folder as `unicontactspro.jar`.
+
+**Q: Can I undo a command?**  
+A: No, undo is not currently supported. Be careful with `delete` and `clear`.
+
+**Q: Are commands case-sensitive?**  
+A: Command words are not case-sensitive, but `asc`/`desc` must be lowercase.
+
+**Q: Why does editing tags replace all existing tags?**  
+A: This is intentional. To keep existing tags, specify them along with new ones.
+
+**Q: Can I search by phone or email?**  
+A: Currently, only name search is supported via the `find` command.
+
+**Q: How do I transfer data to another computer?**  
+A: Copy the `addressbook.json` file to the new computer's UniContactsPro folder.
+
+**Q: What if my data file gets corrupted?**  
+A: Keep regular backups of `addressbook.json`. The app will start with an empty list if the file is corrupted.
+
+---
+
+## 7. Glossary
+
+### CLI (Command Line Interface)
+A text-based way of interacting with software by typing commands.
+
+### Command Box
+The text input field where you type commands. Press `Enter` to execute.
+
+### Contact Card
+Visual representation of a contact showing index, name, phone, email, address, and tags.
+
+### Index
+The number shown next to each contact in the list. Used in commands to specify which contact. Starts at 1 (not 0).
+
+### JSON
+File format used to store contact data (`addressbook.json`). Not recommended to edit manually.
+
+### Parameter
+Information provided to a command using prefixes. Example: `n/John`, `p/91234567`.
+
+### Prefix
+The identifier before a parameter value, ending with `/`. Examples: `n/`, `p/`, `e/`, `t/`.
+
+### Tag
+A label or category assigned to a contact for organization. Must be alphanumeric, maximum 15 characters.
+
+### Track
+Feature that calculates days since a contact was added or last modified.
+
+---
+
+## 8. Acknowledgements
+
+UniContactsPro is developed as part of the CS2103T Software Engineering module at the National University of Singapore.
+
+### Project Team
+
+- **darzizalol** - [GitHub](https://github.com/darzizalol)
+- **he-yue-svg** - [GitHub](https://github.com/he-yue-svg)
+- **fifamobilegems** - [GitHub](https://github.com/fifamobilegems)
+- **ravichandran-gokool** - [GitHub](https://github.com/ravichandran-gokool)
+
+### Built On
+
+This project is based on the **AddressBook-Level3 (AB3)** project created by the [SE-EDU initiative](https://se-education.org/).
+
+### Libraries and Tools
+
+- **JavaFX** - GUI framework
+- **Jackson** - JSON processing
+- **JUnit5** - Testing framework
+
+### Contact and Support
+
+- Visit our [GitHub Repository](https://github.com/AY2526S1-CS2103T-F13-1a/tp)
+- Report issues at [GitHub Issues](https://github.com/AY2526S1-CS2103T-F13-1a/tp/issues)
+
+---
