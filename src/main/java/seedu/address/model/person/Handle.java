@@ -8,8 +8,11 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Handle {
     public static final String MESSAGE_CONSTRAINTS =
-            "Telegram handles should only contain alphanumeric characters, should contain between 5 to 32 characters "
-                  + "and it should not be blank";
+            "Telegram handles must start with '@'. "
+                    + "\n" + "It should only contain alphanumeric characters and underscores,"
+                  + "\n" + "though the first character must be an alphabet."
+                    + "\n" + "It must be between 5 and 32 characters long "
+                    + "and it should not be blank";
     /*
      * The first character of the address must be a @,
      * Minimum length of 5 characters, maximum of 32
@@ -34,6 +37,7 @@ public class Handle {
     public static boolean isValidHandle(String test) {
         return test.matches(VALIDATION_REGEX);
     }
+
     @Override
     public String toString() {
         return teleHandle;
