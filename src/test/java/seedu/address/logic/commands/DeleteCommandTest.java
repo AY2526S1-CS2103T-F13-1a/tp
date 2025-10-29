@@ -12,6 +12,7 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -110,8 +111,7 @@ public class DeleteCommandTest {
         Index targetIndex = Index.fromOneBased(1);
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName()
-                + "{mode=BY_INDEX, targetIndexes=[" + targetIndex + "], targetTag=null}";
-
+                + "{mode=BY_INDEX, targetIndexes=[" + targetIndex + "], targetTags=null}";
         assertEquals(expected, deleteCommand.toString());
     }
 
@@ -119,21 +119,18 @@ public class DeleteCommandTest {
     public void toString_multipleIndexes() {
         List<Index> indices = Arrays.asList(Index.fromOneBased(2), Index.fromOneBased(5));
         DeleteCommand deleteCommand = new DeleteCommand(indices);
-
         String expected = DeleteCommand.class.getCanonicalName()
-                + "{mode=BY_INDEX, targetIndexes=[" + indices.get(0) + ", " + indices.get(1) + "], targetTag=null}";
-
+                + "{mode=BY_INDEX, targetIndexes=[" + indices.get(0) + ", " + indices.get(1) + "], targetTags=null}";
         assertEquals(expected, deleteCommand.toString());
     }
 
     @Test
     public void toString_byTag() {
         Tag tag = new Tag("friends");
-        DeleteCommand deleteCommand = new DeleteCommand(tag);
-
+        DeleteCommand deleteCommand = new DeleteCommand(Set.of(tag));
+        // Set.toString with one element is "[<elem>]" and Tag.toString() prints the tag name
         String expected = DeleteCommand.class.getCanonicalName()
-                + "{mode=BY_TAG, targetIndexes=null, targetTag=" + tag + "}";
-
+                + "{mode=BY_TAGS, targetIndexes=null, targetTags=[" + tag + "]}";
         assertEquals(expected, deleteCommand.toString());
     }
 
