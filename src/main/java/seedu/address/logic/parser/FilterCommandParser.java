@@ -1,6 +1,8 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.model.tag.Tag.MESSAGE_CONSTRAINTS;
+import static seedu.address.model.tag.Tag.isValidTagName;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -24,9 +26,8 @@ public class FilterCommandParser implements Parser<FilterCommand> {
         }
 
         String keyword = trimmedArgs.substring(2).trim();
-        if (keyword.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterCommand.MESSAGE_USAGE));
+        if (!isValidTagName(keyword)) {
+            throw new ParseException(MESSAGE_CONSTRAINTS);
         }
 
         return new FilterCommand(new TagContainsKeywordPredicate(keyword));
