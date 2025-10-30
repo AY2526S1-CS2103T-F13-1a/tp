@@ -1,23 +1,26 @@
 package seedu.address.model.person;
 
+import java.util.Set;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.tag.Tag;
 
 /**
- * Tests that a {@code Person}'s {@code Tag} matches the keyword given.
+ * Tests that a {@code Person}'s {@code Tag} set contains any of the tags given.
  */
 public class TagContainsKeywordPredicate implements Predicate<Person> {
-    private final String keyword;
+    private final Set<Tag> tags;
 
-    public TagContainsKeywordPredicate(String keyword) {
-        this.keyword = keyword;
+    public TagContainsKeywordPredicate(Set<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override
     public boolean test(Person person) {
-        return person.getTags().stream()
-                .anyMatch(tag -> tag.tagName.equalsIgnoreCase(keyword));
+        return tags.stream()
+                .anyMatch(predicateTag -> person.getTags().stream()
+                        .anyMatch(personTag -> personTag.equals(predicateTag)));
     }
 
     @Override
@@ -31,11 +34,11 @@ public class TagContainsKeywordPredicate implements Predicate<Person> {
         }
 
         TagContainsKeywordPredicate otherPredicate = (TagContainsKeywordPredicate) other;
-        return keyword.equalsIgnoreCase(otherPredicate.keyword);
+        return tags.equals(otherPredicate.tags);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keyword", keyword).toString();
+        return new ToStringBuilder(this).add("tags", tags).toString();
     }
 }
