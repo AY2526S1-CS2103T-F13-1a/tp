@@ -480,15 +480,15 @@ A: Yes, all changes are saved immediately.
 **Q: Where is my data stored?**
 A: In `addressbook.json` in the same folder as `unicontactspro.jar`.
 
-**Q: How do I transfer data to another computer?**  
+**Q: How do I transfer data to another computer?**
 A: Copy the `addressbook.json` file to the new computer's UniContactsPro folder.
 
-**Q: What if my data file gets corrupted?**  
+**Q: What if my data file gets corrupted?**
 A: Keep regular backups of `addressbook.json`. The app will start with an empty list if the file is corrupted.
 
 ### Commands
 
-**Q: Can I undo a command?**  
+**Q: Can I undo a command?**
 A: No, undo is not currently supported. Be careful with `delete` and `clear`.
 
 **Q: Are commands case-sensitive?**
