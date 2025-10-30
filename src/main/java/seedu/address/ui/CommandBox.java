@@ -75,12 +75,13 @@ public class CommandBox extends UiPart<Region> {
      */
     public void installHistoryHandlers(Logic logic) {
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (isMenuVisible()) {
+                return; // let suggestion handler deal with UP/DOWN
+            }
             if (e.getCode() == KeyCode.UP || e.getCode() == KeyCode.DOWN) {
-                logic.beginNavigation(commandTextField.getText()); (
-                        e.getCode() == KeyCode.UP ? logic.up() : logic.down())
-                        .ifPresent(s -> {
-                            showText(s);
-                        });
+                logic.beginNavigation(commandTextField.getText());
+                var nav = e.getCode() == KeyCode.UP ? logic.up() : logic.down();
+                nav.ifPresent(this::showText);
                 e.consume();
             }
         });
@@ -235,17 +236,25 @@ public class CommandBox extends UiPart<Region> {
     private void populateMenu(List<String> matches) {
         suggestions.getItems().clear();
         highlightIndex = -1;
+
         for (int i = 0; i < matches.size(); i++) {
             final int idx = i;
             String text = matches.get(i);
+
             Label label = new Label(text);
             label.setMaxWidth(Double.MAX_VALUE);
+            label.setStyle("-fx-background-color: transparent;");
+
             CustomMenuItem item = new CustomMenuItem(label, true);
+            item.setStyle("-fx-background-color: transparent;");
+
             item.setOnAction(ev -> acceptSuggestion(text));
             label.setOnMouseEntered(ev -> setHighlight(idx));
+
             suggestions.getItems().add(item);
         }
     }
+
 
     private void showMenuIfNeeded() {
         if (!suggestions.isShowing()) {
