@@ -13,10 +13,10 @@ import seedu.address.model.person.TagContainsKeywordPredicate;
 public class FilterCommand extends Command {
     public static final String COMMAND_WORD = "filter";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters and lists all persons who have a tag "
-            + "matching the keyword (case-insensitive) \n"
-            + "Parameters: KEYWORD \n"
-            + "Example: " + COMMAND_WORD + " t/friends";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters and lists all persons who have "
+            + "at least one of the specified tags (case-insensitive) \n"
+            + "Parameters: t/KEYWORD [t/MORE_KEYWORDS]... \n"
+            + "Example: " + COMMAND_WORD + " t/friends t/colleagues";
 
     private final TagContainsKeywordPredicate predicate;
 
