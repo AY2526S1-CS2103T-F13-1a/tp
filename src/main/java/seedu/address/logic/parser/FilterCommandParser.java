@@ -1,12 +1,17 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.tag.Tag.MESSAGE_CONSTRAINTS;
 import static seedu.address.model.tag.Tag.isValidTagName;
+
+import java.util.Collection;
+import java.util.Set;
 
 import seedu.address.logic.commands.FilterCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.TagContainsKeywordPredicate;
+import seedu.address.model.tag.Tag;
 
 /**
  * Parses input arguments and creates a new FilterCommand object
@@ -19,17 +24,27 @@ public class FilterCommandParser implements Parser<FilterCommand> {
      */
     @Override
     public FilterCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty() || !trimmedArgs.startsWith("t/")) {
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG);
+
+        // Cases where preamble is not empty and the prefix tag is not detected
+        if (!argumentMultimap.getPreamble().isEmpty()
+            || argumentMultimap.getAllValues(PREFIX_TAG).isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterCommand.MESSAGE_USAGE));
         }
 
-        String keyword = trimmedArgs.substring(2).trim();
-        if (!isValidTagName(keyword)) {
-            throw new ParseException(MESSAGE_CONSTRAINTS);
-        }
+        // This ensures no duplicate prefixes like n/ or p/ are present,
+        // although filter only uses t/. We leave it empty to check all.
+        argumentMultimap.verifyNoDuplicatePrefixesFor();
 
-        return new FilterCommand(new TagContainsKeywordPredicate(keyword));
+        Collection<String> tagKeywords = argumentMultimap.getAllValues(PREFIX_TAG);
+
+        try {
+            Set<Tag> tagSet = ParserUtil.parseTags(tagKeywords);
+            return new FilterCommand(new TagContainsKeywordPredicate(tagSet));
+        } catch (ParseException pe) {
+            // Catch errors from parseTags (e.g., invalid tag name)
+            throw new ParseException(pe.getMessage(), pe);
+        }
     }
 }
