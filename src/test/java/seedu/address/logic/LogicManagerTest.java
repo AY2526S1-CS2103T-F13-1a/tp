@@ -1,6 +1,8 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.ADDRESS_DESC_AMY;
@@ -10,7 +12,14 @@ import static seedu.address.logic.commands.CommandTestUtil.HANDLE_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
 import static seedu.address.testutil.Assert.assertThrows;
+import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.AMY;
+import static seedu.address.testutil.TypicalPersons.BENSON;
+import static seedu.address.testutil.TypicalPersons.CARL;
+import static seedu.address.testutil.TypicalPersons.DANIEL;
+import static seedu.address.testutil.TypicalPersons.ELLE;
+import static seedu.address.testutil.TypicalPersons.HOON;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
@@ -20,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import javafx.collections.ObservableList;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
@@ -93,6 +103,93 @@ public class LogicManagerTest {
     @Test
     public void getFilteredPersonList_modifyList_throwsUnsupportedOperationException() {
         assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredPersonList().remove(0));
+    }
+
+    @Test
+    public void execute_filterThenDelete_deletesCorrectDisplayedPerson() throws Exception {
+        // --- Setup: Add typical persons ---
+        model.setAddressBook(getTypicalAddressBook()); // Assumes you have this helper from TypicalPersons
+
+        // --- 1. Modify State: Filter to show only BENSON ---
+        logic.execute("filter t/owesMoney"); // Assuming only Benson has this tag
+
+        // Pre-assertion: check that the displayed list is correct
+        ObservableList<Person> displayedList = model.getSortedPersonList();
+        assertEquals(1, displayedList.size());
+        assertEquals(BENSON, displayedList.get(0));
+
+        // --- 2. Execute Command: Delete index 1 (which must be BENSON) ---
+        logic.execute("delete 1");
+
+        // --- 3. Assert: The master list (AddressBook) should no longer contain BENSON ---
+        assertFalse(model.hasPerson(BENSON));
+
+        // --- 4. Assert: The displayed list should now be empty ---
+        assertEquals(0, model.getSortedPersonList().size());
+    }
+
+    @Test
+    public void execute_filterThenSortThenDelete_deletesCorrectDisplayedPerson() throws Exception {
+        // Setup
+        model.setAddressBook(getTypicalAddressBook());
+
+        // 1. Modify State (Filter): Get all "friends"
+        // Insertion order: [ALICE (c/5), BENSON (c/3), DANIEL (c/4)]
+        logic.execute("filter t/friends");
+        assertEquals(3, model.getSortedPersonList().size());
+
+        // 2. Modify State (Sort): Sort the filtered list by closeness (ascending)
+        // Displayed list: [BENSON (c/3), DANIEL (c/4), ALICE (c/5)]
+        logic.execute("sortByCloseness o/asc");
+
+        // Pre-assertion: check that the displayed list is correct
+        ObservableList<Person> displayedList = model.getSortedPersonList();
+        assertEquals(BENSON, displayedList.get(0)); // Benson (c/3) is at index 1
+        assertEquals(DANIEL, displayedList.get(1)); // Daniel (c/4) is at index 2
+        assertEquals(ALICE, displayedList.get(2)); // Alice (c/5) is at index 3
+
+        // 3. Execute Command: Delete index 1 (which must be BENSON)
+        logic.execute("delete 1");
+
+        // 4. Assert: The master list should no longer contain BENSON
+        assertFalse(model.hasPerson(BENSON));
+        assertTrue(model.hasPerson(ALICE)); // Others are safe
+        assertTrue(model.hasPerson(DANIEL));
+
+        // 5. Assert: The displayed list should now contain DANIEL and ALICE, still sorted
+        displayedList = model.getSortedPersonList();
+        assertEquals(2, displayedList.size());
+        assertEquals(DANIEL, displayedList.get(0)); // Daniel is now at index 1
+        assertEquals(ALICE, displayedList.get(1)); // Alice is now at index 2
+    }
+
+    @Test
+    public void execute_sortThenEditCloseness_updatesSortOrder() throws Exception {
+        // Setup: ALICE (c/5), BENSON (c/3), CARL (c/2), DANIEL (c/4), ELLE (c/1), ...
+        model.setAddressBook(getTypicalAddressBook());
+
+        // 1. Modify State: Sort by closeness (ascending)
+        // Displayed list: [ELLE (c/1), CARL (c/2), FIONA (c/2), BENSON (c/3), GEORGE (c/3), DANIEL (c/4), ALICE (c/5)]
+        logic.execute("sortByCloseness o/asc");
+
+        // Pre-assertion: ELLE (c/1) is at index 1
+        ObservableList<Person> displayedList = model.getSortedPersonList();
+        assertEquals(ELLE, displayedList.get(0));
+
+        // 2. Execute Command: Edit index 1 (ELLE) and change closeness from 1 to 5
+        logic.execute("edit 1 c/5");
+
+        // 3. Assert: The list should re-sort itself. ELLE (now c/5) should be at the end.
+        displayedList = model.getSortedPersonList();
+        assertEquals(7, displayedList.size());
+
+        // Check that ELLE is no longer at the start
+        assertFalse(displayedList.get(0).equals(ELLE));
+
+        // Check that ELLE is now at the end (or tied with ALICE, also c/5)
+        Person editedElle = new PersonBuilder(ELLE).withCloseness("5").build();
+        assertTrue(displayedList.get(5).equals(ALICE) || displayedList.get(6).equals(ALICE));
+        assertTrue(displayedList.get(5).equals(editedElle) || displayedList.get(6).equals(editedElle));
     }
 
     /**
