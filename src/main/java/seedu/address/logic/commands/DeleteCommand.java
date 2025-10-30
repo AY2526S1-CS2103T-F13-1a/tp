@@ -109,7 +109,7 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeByTags(Model model) throws CommandException {
-        List<Person> visible = model.getFilteredPersonList();
+        List<Person> visible = model.getSortedPersonList();
         List<Person> matches = collectPersonsByTags(visible, targetTags);
         if (matches.isEmpty()) {
             throw new CommandException(tagsNotFoundMessage(targetTags));
@@ -143,7 +143,7 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeByIndex(Model model) throws CommandException {
-        List<Person> visible = model.getFilteredPersonList();
+        List<Person> visible = model.getSortedPersonList();
         validateIndices(visible.size(), targetIndexes);
         List<Person> toDelete = collectPersonsByIndices(visible, targetIndexes);
         deletePersons(model, toDelete);
