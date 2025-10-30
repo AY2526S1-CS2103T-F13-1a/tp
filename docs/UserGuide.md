@@ -375,9 +375,9 @@ Shows the list of contacts with name matching the keyword. Successful execution 
 
 ### Filtering by Tag
 
-The `filter` command allows users to filter their contact list by tags. All contacts with a tag matching the `TAG` argument will be shown.
+The `filter` command allows users to filter their contact list by tags. All contacts with a tag matching the `TAG` arguments will be shown.
 
-**Command:** `filter t/TAG`
+**Command:** `filter t/TAG [t/MORE_TAGS] ...`
 
 **Example:**
 
@@ -396,7 +396,7 @@ Shows the list of contacts with the respective tag. Successful execution message
 **Errors:**
 - Empty tag input: "Invalid command format" message is shown
 - No prefix `t/`: "Invalid command format" message is shown
-- Multiple tags input: "Invalid command format" message is shown
+- Invalid tag: Tag specifications message is shown
 
 ---
 
@@ -425,7 +425,7 @@ Shows . Successful execution message states order in which sort has been perform
 **Errors:**
 - Empty order input: "Invalid command format" message is shown
 - No prefix `o/`: "Invalid command format" message is shown
-- Invalid order: "Invalid command format" message is shown
+- Invalid order: "Invalid order" message is shown
 
 
 **Note:** Order arguments are case-insensitive
