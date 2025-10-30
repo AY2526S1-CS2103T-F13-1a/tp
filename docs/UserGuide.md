@@ -1,10 +1,3 @@
----
-title: UniContactsPro User Guide
-
----
-
-# UniContactsPro User Guide
-
 ## About This Guide
 
 This guide is designed for undergraduate student who:
@@ -49,6 +42,26 @@ Get up and running with UniContactsPro in minutes.
 > 1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
 > 2.  Type `java -version` and press `Enter`.
 > 3.  Ensure the output shows a version number of `17` or higher.
+
+
+<details>
+<summary>How to open your command terminal</summary>
+
+***Linux***
+1. Press `Ctrl` + `Alt` + `T`.
+
+***macOS***
+1. Press `F4` or press `Command (⌘) + Space` to open Spotlight.
+2. Type "Terminal" and click the terminal app.
+
+
+***Windows***
+1. Press Windows key or click the Start menu.
+2. Type cmd or Command Prompt.
+3. Press Enter.
+
+After doing these steps, a black window will open, that is the command terminal
+</details>
 
 ### Installation & Launch
 
@@ -112,12 +125,13 @@ Each contact shows:
 - **Email:** Email address
 - **Address:** Physical address
 - **Telegram Handle:** Telegram handle
+- **Closeness:** Closeness rating
 - **Tags:** Categories/labels (if any)
 
 ![photo_6057644066834418469_y](https://hackmd.io/_uploads/B1Ti85A0ge.jpg)
 
 
-### Keyboard Shortcuts
+### Navigating Command History
 
 | Shortcut | Action |
 |----------|--------|
@@ -159,31 +173,51 @@ As you type in the command box, a dropdown box will appear with recognized comma
 command_word PREFIX/VALUE [PREFIX/VALUE]...
 ```
 
-### Common Prefixes
+**Prefixes** are in the format:
 
-| Prefix | Meaning | Format |
+`prefix/Value`
+
+Prefixes have several variations with different notations:
+
+|| Mandatory | Optional |
 |--------|---------|--------|
-| `n/` | Name | Alphabets, spaces, hyphens |
-| `p/` | Phone | 8 digits, starts with 8 or 9 |
-| `e/` | Email | Valid email format |
-| `a/` | Address | Any text |
-| `h/` | Telegram Handle | Alphabets, integers, underscores, 5 to 32 characters, starts with an `@`
-| `t/` | Tag | Alphanumeric, max 15 characters |
+| Not variadic | prefix/Value | 	[prefix/Value] |
+| Variadic | prefix/Value... | [prefix/Value]... |
+
+### Valid Prefixes
+
+| Prefix | Meaning | Format | Mandatory Field|
+|--------|---------|--------|--------|
+| `n/` | Name | Alphabets, numbers, spaces, hyphens | Yes |
+| `p/` | Phone | 8 digits, starts with 8 or 9 | Yes |
+| `e/` | Email | Valid email format | Yes |
+| `a/` | Address | Any text | Yes |
+| `h/` | Telegram Handle | Alphabets, integers, underscores, 5 to 32 characters, starts with an `@` |Yes |
+|`c/`| Closeness | Numbers from 1 to 5 (inclusive) | Yes
+| `t/` | Tag | Alphanumeric, max 15 characters | No |
 
 ### Parameter Rules
 
 **Name (`n/`):**
-- Alphabets, spaces, and hyphens only
+- Alphabets, numerical digits, spaces, and hyphens only
 - Automatically capitalized
 - Extra spaces trimmed
 
 **Phone (`p/`):**
-- Exactly 8 digits
+- Exactly 8 numerical digits
 - Must start with 8 or 9
 - No spaces allowed
 
 **Email (`e/`):**
-- Must be valid email format
+- Must be valid email format (`Local-part`@`Domain name`)
+    - Local-part
+        - Alphanumeric characters and these special characters `+`, `_` + `.`, `-` only.
+        - May not start or end with any special characters.
+    -  Domain name
+        - Made up of domain labels separated by periods.
+        - Must end with a domain label at least 2 characters long
+        - Must have each domain label start and end with alphanumeric characters
+        - Must have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
 - Example: `user@example.com`
 
 **Telegram handle (`h/`):**
@@ -192,10 +226,11 @@ command_word PREFIX/VALUE [PREFIX/VALUE]...
 - Must be between 5 and 32 characters inclusive
 - Must not start with a number
 
+**Closeness (`c/`):**
+- Numerical values between 1 and 5 inclusive
+
 **Tags (`t/`):**
 - Alphanumeric only
-- Maximum 15 characters
-- Saved in lowercase
 - Can specify multiple
 
 ---
@@ -210,35 +245,35 @@ command_word PREFIX/VALUE [PREFIX/VALUE]...
 ```
 add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
 ```
-**Name formatting** : 
+**Name formatting** :
 - Name is not case-sensitive.  The first character of each word is captalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
 - When the name starts with the digit, the digit will remain while the rest of the characters are set to lower case (eg. `1JOhN dOE` will be set to `1john Doe`)
-- Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed 
+- Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed
 
 **Duplicates**
-- Two people are considered duplicates if they have either of the same fields : 
-    - Phone number 
+- Two people are considered duplicates if they have either of the same fields :
+    - Phone number
     - Email address
     - Telegram handle
 
-**Success:** Contact added with confirmation message
-![Screenshot 2025-10-29 at 03.11.43](https://hackmd.io/_uploads/Hk3OH500xg.png)
-
+**Success:** Contact added with confirmation message:
+:::success
+<pre> New person added: Mary; Phone: 98765432; Email: marylim@gmail.com; Address: Ang Mo Kio; Tags: </pre>
+:::
 
 **Errors:**
 - `Invalid name` - Contains special characters that is not a hyphen
-- `Phone number does not start with 8 or 9`
+- `Invalid phone number`
 - `Invalid email format`
-![Screenshot 2025-10-29 at 03.12.50](https://hackmd.io/_uploads/BykTH5C0ge.png)
+- `Invalid telegram handle`
+- `Invalid tag format`
 - `This person already exists`
-![Screenshot 2025-10-29 at 03.17.02](https://hackmd.io/_uploads/B1ph8qC0xl.png)
-
 
 ---
 
 ### Editing Contacts
 
-**Command:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [h/TELEGRAM HANDLE] [t/TAG]...`
+**Command:** `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [h/TELEGRAM HANDLE] [c/closeness] [t/TAG]...`
 
 **Example:**
 ```
@@ -280,7 +315,7 @@ addProfilePic 1 pp/example.png
 
 ### Deleting Contacts
 
-**Command:** 
+**Command:**
 ```
 delete INDEX [MORE_INDEXES]...
 delete all t/TAG
@@ -293,7 +328,7 @@ delete 1 2 3
 delete all t/friends
 ```
 
-**Success:** 
+**Success:**
 Single Deletion: Shows deleted contact(s) details
 Multiple Deletion: Shows number of deleted contats
 
@@ -313,7 +348,7 @@ Shows all contacts in order added (newest first).
 
 ### Searching Contacts
 
-The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported. 
+The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported.
 
 **Command:** `find KEYWORD`
 
@@ -363,13 +398,13 @@ Shows the list of contacts with the respective tag. Successful execution message
 - No prefix `t/`: "Invalid command format" message is shown
 - Multiple tags input: "Invalid command format" message is shown
 
-
-
 ---
 
 ### Sorting Contacts
 
-Contacts can be sorted by `Closeness`. The `sortByCloseness` command can sort the contacts either by ascending or descending order in terms of `Closeness`. 
+Contacts can be sorted by `Closeness`. The `sortByCloseness` command can sort the contacts either by ascending or descending order in terms of `Closeness`.
+
+**Command:** `sortByCloseness o/[asc|desc]`
 
 **Examples:**
 Given a contact book with the following state:
@@ -379,28 +414,22 @@ The following command:
 ```
 sortByCloseness o/desc
 ```
+
 results in the contact book looking like this:
+![Screenshot 2025-10-29 at 3.17.43 AM](https://hackmd.io/_uploads/rk41PcRCge.png)
+
+**Success:**
+
+Shows . Successful execution message states order in which sort has been performed.
+
+**Errors:**
+- Empty order input: "Invalid command format" message is shown
+- No prefix `o/`: "Invalid command format" message is shown
+- Invalid order: "Invalid command format" message is shown
 
 
+**Note:** Order arguments are case-insensitive
 
-**Note:** Must use lowercase `asc` or `desc`
-
----
-
-### Tracking Last Contact
-
-**Command:** `track NAME`
-
-**Example:**
-```
-track John Doe
-```
-
-**Output:** `Days since last contact with John Doe: X days`
-
-**Note:** Name must uniquely identify one person.
-
----
 
 ### Managing Tags
 
@@ -443,12 +472,21 @@ Closes the application. Data is automatically saved.
 ---
 
 ## 6. FAQ
+### Storage and transfer of data
 
 **Q: Is my data automatically saved?**  
 A: Yes, all changes are saved immediately.
 
 **Q: Where is my data stored?**  
 A: In `addressbook.json` in the same folder as `unicontactspro.jar`.
+
+**Q: How do I transfer data to another computer?**  
+A: Copy the `addressbook.json` file to the new computer's UniContactsPro folder.
+
+**Q: What if my data file gets corrupted?**  
+A: Keep regular backups of `addressbook.json`. The app will start with an empty list if the file is corrupted.
+
+### Commands
 
 **Q: Can I undo a command?**  
 A: No, undo is not currently supported. Be careful with `delete` and `clear`.
@@ -462,11 +500,6 @@ A: This is intentional. To keep existing tags, specify them along with new ones.
 **Q: Can I search by phone or email?**  
 A: Currently, only name search is supported via the `find` command.
 
-**Q: How do I transfer data to another computer?**  
-A: Copy the `addressbook.json` file to the new computer's UniContactsPro folder.
-
-**Q: What if my data file gets corrupted?**  
-A: Keep regular backups of `addressbook.json`. The app will start with an empty list if the file is corrupted.
 
 ---
 
@@ -482,7 +515,7 @@ The text input field where you type commands. Press `Enter` to execute.
 Visual representation of a contact showing index, name, phone, email, address, and tags.
 
 ### Index
-The number shown next to each contact in the list. Used in commands to specify which contact. Starts at 1 (not 0).
+The number shown next to each contact in the list. Used in commands to specify which contact. Starts at 1.
 
 ### JSON
 File format used to store contact data (`addressbook.json`). Not recommended to edit manually.
@@ -496,8 +529,8 @@ The identifier before a parameter value, ending with `/`. Examples: `n/`, `p/`, 
 ### Tag
 A label or category assigned to a contact for organization. Must be alphanumeric, maximum 15 characters.
 
-### Track
-Feature that calculates days since a contact was added or last modified.
+### Variadic
+A command or prefix that can accept multiple values, entered one after another—for example, `add t/friend t/CS2103T t/project` uses variadic tags (you can add several tags at once).
 
 ---
 
