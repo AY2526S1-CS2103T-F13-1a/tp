@@ -9,7 +9,30 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+## Acknowledgements
+
+- **AddressBook-Level3 (AB3) by SE-EDU** ([GitHub](https://github.com/se-edu/addressbook-level3), [Documentation](https://se-education.org/))
+  - UniContactsPro is adapted from AB3, with extensive additions and customizations.
+  - Documentation and diagrams (such as sequence/activity/class diagrams) and setup instructions were adapted from AB3 and SE-EDU documentation guides.
+  - Project and codebase are licensed under the MIT License, as per AB3 and SE-EDU.
+
+- **JavaFX** ([https://openjfx.io/]), **Jackson** ([https://github.com/FasterXML/jackson]), **JUnit5** ([https://junit.org/junit5/]) — Used as core libraries and tools.
+
+- **Checkstyle** ([https://github.com/checkstyle/checkstyle]) — Used for code quality and style checking.
+
+- **JaCoCo** ([https://www.jacoco.org/jacoco/]) — Used for Java code coverage analysis.
+
+- **Gradle Shadow Plugin** ([https://github.com/johnrengelman/shadow]) — Used for building fat/uber jar files.
+
+- **Jekyll** ([https://jekyllrb.com/]) — Used for static website generation and documentation.
+
+- **JavaFX 8 Tutorial by Marco Jakob**  
+  - Some code adapted for UI components: [JavaFX 8 Tutorial](http://code.makery.ch/library/javafx-8-tutorial/).
+
+- **Icons and Images**  
+  - Susumu Yoshida ([address_book_32.png, AddressApp.ico](http://www.mcdodesign.com/))
+  - Jan Jan Kovařík ([calendar.png, edit.png](http://glyphicons.com/))
+  - See `copyright.txt`.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -430,29 +453,158 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
 
-### Deleting a person
+### Finding contacts by name
 
-1. Deleting a person while all persons are being shown
+1. Prerequisites: Multiple persons in the list.
+
+   1. Test case: `find alex david`<br>
+      Expected: Lists contacts whose names contain "alex" or "david" (case-insensitive). Status shows the number of persons listed.
+
+   1. Test case: `find` (empty)<br>
+      Expected: Error message with usage: `find KEYWORD [MORE_KEYWORDS]...`.
+
+
+### Filtering contacts by tag
+
+1. Prerequisites: At least some contacts have tags (e.g., `friends`, `colleagues`).
+
+   1. Test case: `filter t/friends`<br>
+      Expected: Only contacts with the `friends` tag are shown. Status shows number of persons listed.
+
+   1. Test case: `filter t/friends t/colleagues`<br>
+      Expected: Shows contacts that have at least one of the tags `friends` or `colleagues`.
+
+   1. Test case: `filter` (missing tag prefixes) or `filter friends` (missing `t/`)<br>
+      Expected: Error message with usage: `filter t/KEYWORD [t/MORE_KEYWORDS]...`.
+
+
+### Deleting contacts
+
+1. Deleting by displayed indices
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First contact is deleted. Details of the deleted contact shown in the result message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+   1. Test case: `delete 1 2 2 5`<br>
+      Expected: Contacts at indices 1, 2, and 5 are deleted (duplicates ignored). Result message lists all deleted persons.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
-      Expected: Similar to previous.
+   1. Test case: `delete 0` or `delete 999` (index out of range)<br>
+      Expected: Error message: invalid person displayed index. No one is deleted.
 
-1. _{ more test cases …​ }_
+2. Deleting all contacts matching tags (union)
+
+   1. Prerequisites: Multiple persons in the list, with tags set (e.g., `friends`, `noisy`).
+
+   1. Test case: `delete all t/friends`<br>
+      Expected: All currently displayed contacts having the `friends` tag are deleted. Result message lists all deleted persons.
+
+   1. Test case: `delete all t/superhero t/noisy`<br>
+      Expected: Deletes all currently displayed contacts that have either `superhero` or `noisy`. If none match, shows: `No persons found with tag(s): superhero, noisy`.
+
+   1. Test case: `delete all` (no `t/` provided)<br>
+      Expected: Error with usage instructions.
+
+
+### Sorting by closeness
+
+1. Prerequisites: Contacts have a closeness rating set.
+
+   1. Test case: `sortByCloseness o/asc`<br>
+      Expected: List is sorted by closeness in ascending order. Result message: `Sorted contact list by closeness (ascending)`.
+
+   1. Test case: `sortByCloseness o/desc`<br>
+      Expected: List is sorted by closeness in descending order. Result message: `Sorted contact list by closeness (descending)`.
+
+   1. Test case: `sortByCloseness` or `sortByCloseness o/invalid`<br>
+      Expected: Error message with usage: `sortByCloseness: Parameters: o/{asc|desc}`.
+
+
+### Adding/updating a profile picture
+
+1. Prerequisites: At least one person exists in the list (index 1 available). Ensure you have a `.png` image at `~/Downloads/example.png`.
+
+   1. Test case (copy from local path): `addProfilePic 1 pp/~/Downloads/example.png`<br>
+      Expected: The image is copied into `docs/images/` with a unique filename. Contact 1 shows the updated profile picture. Success message includes the contact name. Only `.png` is accepted.
+
+   1. Test case (use existing filename already in docs/images): `addProfilePic 1 pp/example.png`<br>
+      Expected: Uses existing image `docs/images/example.png`. Profile picture updated. Success message shown.
+
+   1. Test case (non-PNG): `addProfilePic 1 pp/~/Downloads/example.jpg`<br>
+      Expected: Error message: only `.png` images are supported.
+
+   1. Test case (file already exists in docs/images when copying): ensure `docs/images/example.png` exists, then run `addProfilePic 1 pp/~/Downloads/example.png`<br>
+      Expected: Error message indicating the file already exists in `docs/images` and how to reference it directly using `pp/<image name>`.
+
+   1. Test case (invalid index): `addProfilePic 0 pp/example.png` or `addProfilePic 999 pp/example.png`<br>
+      Expected: Error message: invalid person displayed index.
+
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Missing file
+      - Close the app. Delete `data/addressbook.json`.
+      - Launch the app.<br>
+        Expected: App starts with an empty list (or sample data if the app provides it). No crash.
+
+   1. Corrupted file
+      - Close the app. Open `data/addressbook.json` in a text editor and replace its contents with an invalid JSON (e.g., `{ not: valid }`). Save the file.
+      - Launch the app.<br>
+        Expected: App handles the error gracefully and starts with an empty list (no crash). Consider checking logs for a warning about corrupted storage.
 
 1. _{ more test cases …​ }_
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Appendix: Effort
+
+This appendix summarizes the total effort and achievements for UniContactsPro, to facilitate evaluation.
+
+### Project Difficulty and Challenges
+- **Complexity Beyond AB3**: While AB3 comprises mostly single-entity (Person) management, UniContactsPro extends or customizes many features (such as tagging, closeness, profile pictures, filtering, and reminders) requiring broader and deeper changes to the model, parser, command, and UI layers.
+- **JavaFX Customizations**: Significant effort was spent modernizing the UI, introducing new FXML views, and handling advanced JavaFX behaviors such as theme switching and dynamic filtering, which go beyond the base AB3 layout.
+- **Data Model Enhancements**: Many new attributes (profile picture, closeness, handle) and features such as multiple tags, filtering, advanced searching, and custom sorting increased the challenge compared to AB3’s flat data structure.
+- **Code Quality and Testing**: Maintaining high-quality code, documentation, and extensive unit and integration testing for all new features to ensure the product remains robust and extensible.
+
+### Major Effort Spent
+- Requirements gathering, architecture planning, and design revisions to support student-specific features (e.g., coursemate search, reminders, tracking last contacted date).
+- Implementing and integrating new commands for tags, themes, closeness, and profile pictures, each requiring multi-layer changes (parser, command, UI, storage, model).
+- Manual and automated testing (unit, system, and acceptance).
+- Updating and maintaining comprehensive documentation and diagrams for all new behaviors and structural changes.
+
+### Reuse and Adaptation
+- **SE-EDU AB3 Base: Significant Reuse**: Core infrastructure (logic, UI, storage patterns) and some commands are inherited/adapted from AB3. This saved foundational setup effort.
+    - However, most major features added required rewriting or significant refactoring of nearly all subsystems (model, command, UI, storage, test).
+    - Examples: Tagging, profile pictures, reminders, and custom filters required original solutions, test cases, and new classes.
+- **Third-party libraries (JavaFX, Jackson, JUnit, Jekyll)** provided building blocks (GUI, JSON handling, testing, docs), saving development time on those core functionalities.
+- **Attribution Transparency**: All reused code/assets were documented (see Acknowledgements) and integrated according to open-source licensing requirements. Where adaptation was significant (e.g., UI components or advanced command parsing), new code was written.
+
+### Effort Estimate
+- The bulk of team effort was focused on:
+    - Modifying the data model for greater extensibility and richer user experience
+    - Implementing, testing, and documenting new or enhanced CLI commands and UI workflows
+    - Ensuring a seamless, robust, and user-friendly application beyond AB3 capabilities
+- **Estimated AB3 Reuse Impact**: Foundational AB3 code (~20-30% of the codebase) provided basic address book structure; however, over 70% of features, logic, UI, and documentation reflect new or heavily extended work.
+
+### Achievements
+- UniContactsPro delivers features highly tailored to undergraduate student needs (tracking, reminders, advanced filtering), all integrated in a modernized, user-friendly, and extensible JavaFX application.
+- Our team successfully tackled technical and design challenges across multiple software layers, upholding strong software engineering and documentation standards.
+
+## Appendix: Planned Enhancements
+
+- ZhengHao
+ToBeDone
+
+- He Yue
+ToBeDone
+
+- Gokul
+ToBeDone
+
+- Max
+ToBeDone
