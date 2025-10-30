@@ -26,10 +26,10 @@ title: Developer Guide
 
 - **Jekyll** ([https://jekyllrb.com/]) — Used for static website generation and documentation.
 
-- **JavaFX 8 Tutorial by Marco Jakob**  
+- **JavaFX 8 Tutorial by Marco Jakob**
   - Some code adapted for UI components: [JavaFX 8 Tutorial](http://code.makery.ch/library/javafx-8-tutorial/).
 
-- **Icons and Images**  
+- **Icons and Images**
   - Susumu Yoshida ([address_book_32.png, AddressApp.ico](http://www.mcdodesign.com/))
   - Jan Jan Kovařík ([calendar.png, edit.png](http://glyphicons.com/))
   - See `copyright.txt`.
@@ -414,10 +414,10 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 10. Should allow exporting data (e.g., CSV) in under 3 seconds for 500 contacts.
 11. Should provide error messages that are clear and easy for students to understand.
 12. Should be maintainable by new developers, with clear documentation and modular design.
-13. Should be extensible to add new features (e.g., reminders, themes) without major refactoring. 
-14. Should ensure tags/categories remain consistent (no duplicates unless explicitly allowed). 
-15. Should recover gracefully from corrupted storage files (e.g., reset to last known good state). 
-16. Should support basic accessibility, e.g., adjustable font size in the GUI. 
+13. Should be extensible to add new features (e.g., reminders, themes) without major refactoring.
+14. Should ensure tags/categories remain consistent (no duplicates unless explicitly allowed).
+15. Should recover gracefully from corrupted storage files (e.g., reset to last known good state).
+16. Should support basic accessibility, e.g., adjustable font size in the GUI.
 17. Should consume no more than 200MB of RAM during typical usage with 1000 contacts.
 
 

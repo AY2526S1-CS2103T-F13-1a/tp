@@ -210,14 +210,14 @@ command_word PREFIX/VALUE [PREFIX/VALUE]...
 ```
 add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
 ```
-**Name formatting** : 
+**Name formatting** :
 - Name is not case-sensitive.  The first character of each word is captalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
 - When the name starts with the digit, the digit will remain while the rest of the characters are set to lower case (eg. `1JOhN dOE` will be set to `1john Doe`)
-- Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed 
+- Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed
 
 **Duplicates**
-- Two people are considered duplicates if they have either of the same fields : 
-    - Phone number 
+- Two people are considered duplicates if they have either of the same fields :
+    - Phone number
     - Email address
     - Telegram handle
 
@@ -280,7 +280,7 @@ addProfilePic 1 pp/example.png
 
 ### Deleting Contacts
 
-**Command:** 
+**Command:**
 ```
 delete INDEX [MORE_INDEXES]...
 delete all t/TAG
@@ -293,7 +293,7 @@ delete 1 2 3
 delete all t/friends
 ```
 
-**Success:** 
+**Success:**
 Single Deletion: Shows deleted contact(s) details
 Multiple Deletion: Shows number of deleted contats
 
@@ -313,7 +313,7 @@ Shows all contacts in order added (newest first).
 
 ### Searching Contacts
 
-The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported. 
+The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported.
 
 **Command:** `find KEYWORD`
 
@@ -369,7 +369,7 @@ Shows the list of contacts with the respective tag. Successful execution message
 
 ### Sorting Contacts
 
-Contacts can be sorted by `Closeness`. The `sortByCloseness` command can sort the contacts either by ascending or descending order in terms of `Closeness`. 
+Contacts can be sorted by `Closeness`. The `sortByCloseness` command can sort the contacts either by ascending or descending order in terms of `Closeness`.
 
 **Examples:**
 Given a contact book with the following state:
@@ -444,28 +444,28 @@ Closes the application. Data is automatically saved.
 
 ## 6. FAQ
 
-**Q: Is my data automatically saved?**  
+**Q: Is my data automatically saved?**
 A: Yes, all changes are saved immediately.
 
-**Q: Where is my data stored?**  
+**Q: Where is my data stored?**
 A: In `addressbook.json` in the same folder as `unicontactspro.jar`.
 
-**Q: Can I undo a command?**  
+**Q: Can I undo a command?**
 A: No, undo is not currently supported. Be careful with `delete` and `clear`.
 
-**Q: Are commands case-sensitive?**  
+**Q: Are commands case-sensitive?**
 A: Command words are not case-sensitive, but `asc`/`desc` must be lowercase.
 
-**Q: Why does editing tags replace all existing tags?**  
+**Q: Why does editing tags replace all existing tags?**
 A: This is intentional. To keep existing tags, specify them along with new ones.
 
-**Q: Can I search by phone or email?**  
+**Q: Can I search by phone or email?**
 A: Currently, only name search is supported via the `find` command.
 
-**Q: How do I transfer data to another computer?**  
+**Q: How do I transfer data to another computer?**
 A: Copy the `addressbook.json` file to the new computer's UniContactsPro folder.
 
-**Q: What if my data file gets corrupted?**  
+**Q: What if my data file gets corrupted?**
 A: Keep regular backups of `addressbook.json`. The app will start with an empty list if the file is corrupted.
 
 ---
