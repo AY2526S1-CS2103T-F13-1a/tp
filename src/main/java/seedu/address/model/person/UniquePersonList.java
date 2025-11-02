@@ -43,7 +43,7 @@ public class UniquePersonList implements Iterable<Person> {
     public boolean hasPersonExcluding(Person exclude, Person toAdd) {
         requireNonNull(toAdd);
         return internalList.stream()
-                .filter(p -> !p.equals(exclude))
+                .filter(p -> p != exclude)
                 .anyMatch(p -> p.isSamePerson(toAdd));
     }
 
