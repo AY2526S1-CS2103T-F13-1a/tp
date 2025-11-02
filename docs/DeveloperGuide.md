@@ -315,6 +315,284 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 
+### \[Implemented\] Add Profile Picture feature
+
+#### Implementation
+
+The add profile picture mechanism is facilitated by `AddProfilePicCommand`. It extends `Command` with the ability to add or update profile pictures for persons in the address book. Additionally, it implements the following operations:
+
+* `AddProfilePicCommand#execute()` — Updates the profile picture of the person at the specified index.
+* `AddProfilePicCommand#copyLocalImageToImagesDirectory()` — Copies a local image file to the `docs/images` directory.
+* `AddProfilePicCommand#generateUniqueFilename()` — Generates a unique filename to avoid conflicts.
+
+The command is parsed by `AddProfilePicCommandParser`, which handles argument tokenization and path validation. The parser supports:
+* Local file paths (absolute or relative paths, with support for `~` expansion for home directory)
+* Existing images in the `docs/images` directory (specified by filename only)
+
+Given below is an example usage scenario and how the add profile picture mechanism behaves at each step.
+
+Step 1. The user executes `addProfilePic 1 pp/~/Downloads/myphoto.png` to add a profile picture from their local Downloads directory. The `AddProfilePicCommandParser` parses the command and expands the `~` to the user's home directory.
+
+Step 2. The parser validates that the file exists at the specified path and checks that it's not a directory. If validation passes, an `AddProfilePicCommand` is created with the index and expanded path.
+
+Step 3. The `AddProfilePicCommand#execute()` method is called. It retrieves the person at the specified index from the displayed list.
+
+Step 4. Since the path contains `/` or `\`, the command identifies this as a local file path. It calls `copyLocalImageToImagesDirectory()` to:
+   * Validate that the file is a `.png` file
+   * Generate a unique filename (checking if it already exists in `docs/images`)
+   * Copy the file from the source location to `docs/images`
+   * Return the filename for storage
+
+Step 5. The command creates a new `Person` object with all the original fields, but with the new profile picture filename set.
+
+Step 6. The model updates the person using `Model#setPerson()`, replacing the old person with the new one containing the profile picture.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the user specifies only a filename (e.g., `pp/johndoe.png`), the command assumes the image already exists in `docs/images` and uses it directly without copying. The parser validates that the file exists before creating the command.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a file with the same name already exists in `docs/images`, the command throws an exception instructing the user to use the existing file directly by specifying only the filename.
+
+</div>
+
+The following sequence diagram shows how an add profile picture operation works:
+
+![AddProfilePicSequenceDiagram](images/AddProfilePicSequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to handle image storage:**
+
+* **Alternative 1 (current choice):** Store images in `docs/images` directory and reference by filename.
+  * Pros: Simple to implement, images are easily accessible, supports relative paths for documentation.
+  * Cons: Requires copying files, may lead to file conflicts if not handled properly.
+
+* **Alternative 2:** Store full file paths in the Person object.
+  * Pros: No need to copy files, original file location is preserved.
+  * Cons: Files may be moved or deleted, breaking references. Harder to share address book data.
+
+**Aspect: Image format support:**
+
+* **Alternative 1 (current choice):** Only support `.png` files.
+  * Pros: Consistent format, simple validation.
+  * Cons: Users may have images in other formats that need conversion.
+
+* **Alternative 2:** Support multiple image formats (JPG, PNG, GIF, etc.).
+  * Pros: More flexible for users.
+  * Cons: Requires more complex validation and potentially conversion logic.
+
+
+### \[Implemented\] Sort By Closeness feature
+
+#### Implementation
+
+The sort by closeness mechanism is facilitated by `SortByClosenessCommand`. It extends `Command` with the ability to sort the contact list by closeness rating in either ascending or descending order. Additionally, it implements the following operations:
+
+* `SortByClosenessCommand#execute()` — Updates the sort comparator in the model.
+* `SortByClosenessCommand#SortOrder` — An enumeration representing ascending or descending sort order.
+
+The command is parsed by `SortByClosenessCommandParser`, which validates the order parameter (`o/asc` or `o/desc`) and creates a `SortByClosenessCommand` with the appropriate `SortOrder`.
+
+Given below is an example usage scenario and how the sort by closeness mechanism behaves at each step.
+
+Step 1. The user executes `sortByCloseness o/desc` to sort contacts by closeness in descending order (highest closeness first). The `SortByClosenessCommandParser` parses the command and validates that `desc` is a valid order.
+
+Step 2. The parser creates a `SortByClosenessCommand` with `SortOrder.DESCENDING`. The command constructor creates a comparator that:
+   * Extracts the `closenessLevel` from each person's `Closeness` object
+   * Compares persons based on their closeness level
+   * Reverses the order for descending sort
+
+Step 3. The `SortByClosenessCommand#execute()` method is called. It calls `Model#updateSortComparator()` with the created comparator.
+
+Step 4. The model updates its internal sorted person list by setting the comparator on the `sortedPersons` observable list. This triggers a re-sort of the displayed list.
+
+Step 5. The UI automatically reflects the new sort order since it observes the `sortedPersons` list.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The sorting is applied to the `sortedPersons` list, which is the list displayed to users. This list is separate from the `filteredPersons` list, allowing sorting to work independently of filtering.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The `list` command resets the sort comparator to `null`, restoring the default order of the contact list.
+
+</div>
+
+The following sequence diagram shows how a sort by closeness operation works:
+
+![SortByClosenessDiagram](images/SortByClosenessDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to implement sorting:**
+
+* **Alternative 1 (current choice):** Use a comparator that is applied to an observable list.
+  * Pros: Integrates well with JavaFX's observable collections, automatically updates UI when sort changes.
+  * Cons: Requires maintaining a separate sorted list.
+
+* **Alternative 2:** Sort the list directly and replace it.
+  * Pros: Simpler implementation, no need for separate sorted list.
+  * Cons: May cause UI flickering, less efficient for large lists.
+
+**Aspect: Persistence of sort order:**
+
+* **Alternative 1 (current choice):** Sort order is not persisted, resets on `list` command.
+  * Pros: Simple, predictable behavior.
+  * Cons: Users need to re-sort if they want the same order again.
+
+* **Alternative 2:** Persist sort order in user preferences.
+  * Pros: Better user experience, maintains sort preference across sessions.
+  * Cons: More complex, requires additional storage logic.
+
+
+### \[Implemented\] Command History feature
+
+#### Implementation
+
+The command history mechanism is facilitated by `CommandHistory`. It manages a history of previously executed commands, allowing users to navigate through their command history using arrow keys. Additionally, it implements the following operations:
+
+* `CommandHistory#push()` — Adds a command to history (disallows consecutive duplicates).
+* `CommandHistory#up()` — Navigates to the previous (older) command in history.
+* `CommandHistory#down()` — Navigates to the next (newer) command in history.
+* `CommandHistory#beginNavigation()` — Initializes navigation state with current input.
+* `CommandHistory#save()` — Persists command history to storage.
+
+The command history is stored using `CommandHistoryStorage`, which reads from and writes to a file (`data/command_history.txt`). The history is loaded when `CommandHistory` is initialized and saved whenever a new command is added.
+
+Given below is an example usage scenario and how the command history mechanism behaves at each step.
+
+Step 1. The user launches the application. The `CommandHistory` is initialized with a maximum size (default 500) and loads any existing history from storage into an `ArrayDeque`, with the newest commands at the front.
+
+Step 2. The user executes several commands: `add n/Alice`, `add n/Bob`, `list`. Each command calls `CommandHistory#push()` through `LogicManager#execute()`, which:
+   * Strips whitespace and checks if the command is empty
+   * Prevents consecutive duplicates (if the same command was just executed)
+   * Adds the command to the front of the deque
+   * Removes old commands if the size exceeds `maxSize`
+   * Saves the history to storage
+   * Resets navigation state
+
+Step 3. The user starts typing a new command but presses the UP arrow key. The `CommandBox` calls `CommandHistory#beginNavigation()` with the current input (if not already in navigation mode) to save a snapshot of what the user was typing.
+
+Step 4. The `CommandBox` calls `CommandHistory#up()`, which:
+   * Checks if history is empty (returns empty if so)
+   * Increments the internal navigation index
+   * Returns the command at that position in history
+   * The `CommandBox` displays this command in the text field
+
+Step 5. The user presses UP again to go further back in history. The index increments and the next older command is retrieved and displayed.
+
+Step 6. The user presses DOWN to go forward in history. The `CommandBox` calls `CommandHistory#down()`, which:
+   * Decrements the navigation index
+   * Returns the command at that position
+   * If the index reaches 1 or less, it returns the snapshot text (what the user was originally typing) and resets navigation
+
+Step 7. The user presses DOWN again when at the snapshot, which resets navigation completely and returns the snapshot text.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The navigation state (`index` and `snapshotBeforeNav`) is reset when a command is executed, ensuring that starting navigation always begins from the user's current input.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** Consecutive duplicate commands are not stored in history. This prevents the history from being cluttered with repeated commands like `list` executed multiple times in a row.
+
+</div>
+
+The following sequence diagram shows how command history navigation works:
+
+![CommandHistorySequenceDiagram](images/CommandHistorySequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to store command history:**
+
+* **Alternative 1 (current choice):** Use an `ArrayDeque` with newest at front, persisted to file.
+  * Pros: Efficient for adding new commands, easy to navigate backwards, persists across sessions.
+  * Cons: Requires file I/O operations.
+
+* **Alternative 2:** Store in memory only, using a simple list.
+  * Pros: Faster, no file I/O overhead.
+  * Cons: History is lost when application closes.
+
+**Aspect: How to handle navigation:**
+
+* **Alternative 1 (current choice):** Use an index-based approach with snapshot of current input.
+  * Pros: Allows returning to what user was typing, smooth navigation experience.
+  * Cons: Requires maintaining navigation state.
+
+* **Alternative 2:** Store current input separately and always navigate from history.
+  * Pros: Simpler implementation.
+  * Cons: User loses their current input when navigating, worse user experience.
+
+
+### Autocomplete feature
+
+#### Implementation
+
+The autocomplete mechanism is facilitated by `CommandHints` and implemented in `CommandBox`. It provides real-time command suggestions as users type, helping them discover available commands. Additionally, it implements the following operations:
+
+* `CommandBox#updateSuggestions()` — Filters and displays matching commands based on current input.
+* `CommandBox#buildMatches()` — Filters commands from `CommandHints.COMMANDS` that start with the current prefix.
+* `CommandBox#acceptSuggestion()` — Inserts a selected suggestion into the command box.
+
+The autocomplete feature uses a `ContextMenu` (suggestions menu) that appears below the command box as the user types. It filters commands from `CommandHints.COMMANDS`, which contains all valid command words.
+
+Given below is an example usage scenario and how the autocomplete mechanism behaves at each step.
+
+Step 1. The user starts typing in the command box. The `CommandBox` has a text property listener that calls `updateSuggestions()` whenever the text changes.
+
+Step 2. The user types `"add"`. The `updateSuggestions()` method:
+   * Takes the trimmed input as a prefix
+   * Calls `buildMatches()` which filters `CommandHints.COMMANDS` for commands starting with `"add"` (case-insensitive)
+   * Finds matches: `["add", "addProfilePic"]`
+   * Since there are multiple matches, it populates the suggestions menu and displays it
+
+Step 3. The suggestions menu appears below the command box with the matching commands. The user can:
+   * Use UP/DOWN arrow keys to navigate through suggestions
+   * Press TAB or ENTER to accept the highlighted (or first) suggestion
+   * Continue typing to further filter suggestions
+   * Press ESCAPE to hide the menu
+
+Step 4. The user types `"Pro"` to get `"addPro"`. The suggestions are filtered further, now only showing `["addProfilePic"]` if it matches.
+
+Step 5. If the user's input exactly matches a single command (e.g., `"add"` when only `"add"` matches), the suggestions menu is hidden automatically to avoid cluttering the UI.
+
+Step 6. The user presses TAB to accept the highlighted suggestion. The `acceptSuggestion()` method:
+   * Replaces the current text with the selected command word followed by a space
+   * Positions the cursor after the inserted text
+   * Hides the suggestions menu
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The autocomplete only suggests command words, not full commands with parameters. Users still need to type the parameters themselves after accepting a suggestion.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The suggestions menu is limited to 8 matches maximum to prevent overwhelming the user with too many options.
+
+</div>
+
+The following sequence diagram shows how autocomplete works:
+
+![AutocompleteSequenceDiagram](images/AutocompleteSequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to maintain command list:**
+
+* **Alternative 1 (current choice):** Maintain a static list in `CommandHints` class.
+  * Pros: Simple, centralized location, easy to keep in sync with commands.
+  * Cons: Requires manual updates when new commands are added.
+
+* **Alternative 2:** Dynamically discover commands using reflection or command registry.
+  * Pros: Automatically includes new commands, no manual maintenance.
+  * Cons: More complex, potential performance overhead, may include internal commands.
+
+**Aspect: When to show suggestions:**
+
+* **Alternative 1 (current choice):** Show suggestions as user types, hide on exact single match.
+  * Pros: Provides immediate feedback, helps discover commands.
+  * Cons: May be distracting for experienced users.
+
+* **Alternative 2:** Only show suggestions on explicit trigger (e.g., Ctrl+Space).
+  * Pros: Less distracting, gives user control.
+  * Cons: Users may not discover the feature, requires extra key press.
+
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**

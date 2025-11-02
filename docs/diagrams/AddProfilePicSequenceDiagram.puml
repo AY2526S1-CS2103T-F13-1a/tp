@@ -1,0 +1,103 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":AddProfilePicCommandParser" as AddProfilePicCommandParser LOGIC_COLOR
+participant ":CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":FileUtil" as FileUtil STORAGE_COLOR
+end box
+
+[-> LogicManager : execute("addProfilePic 1 pp/&#126;/Downloads/myphoto.png")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("addProfilePic 1 pp/&#126;/Downloads/myphoto.png")
+activate AddressBookParser
+
+create AddProfilePicCommandParser
+AddressBookParser -> AddProfilePicCommandParser
+activate AddProfilePicCommandParser
+
+AddProfilePicCommandParser --> AddressBookParser
+deactivate AddProfilePicCommandParser
+
+AddressBookParser -> AddProfilePicCommandParser : parse("1 pp/&#126;/Downloads/myphoto.png")
+activate AddProfilePicCommandParser
+
+' The parser validates the path and expands tilde
+AddProfilePicCommandParser -> AddProfilePicCommandParser : expandTilde("&#126;/Downloads/myphoto.png")
+AddProfilePicCommandParser -> AddProfilePicCommandParser : validatePicturePath(expandedPath)
+
+create AddProfilePicCommand
+' The parser creates the command with the index and expanded path
+AddProfilePicCommandParser -> AddProfilePicCommand : new AddProfilePicCommand(index, expandedPath)
+activate AddProfilePicCommand
+
+AddProfilePicCommand --> AddProfilePicCommandParser :
+deactivate AddProfilePicCommand
+
+AddProfilePicCommandParser --> AddressBookParser :
+deactivate AddProfilePicCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+AddProfilePicCommandParser -[hidden]-> AddressBookParser
+destroy AddProfilePicCommandParser
+
+AddressBookParser --> LogicManager :
+deactivate AddressBookParser
+
+LogicManager -> AddProfilePicCommand : execute(m)
+activate AddProfilePicCommand
+
+' The command gets the person from the sorted list
+AddProfilePicCommand -> Model : getSortedPersonList()
+activate Model
+Model --> AddProfilePicCommand : personList
+deactivate Model
+
+' The command copies the local image file to docs/images
+AddProfilePicCommand -> AddProfilePicCommand : copyLocalImageToImagesDirectory(imagePath)
+activate AddProfilePicCommand
+AddProfilePicCommand -> FileUtil : copyFile(sourcePath, destinationPath)
+activate FileUtil
+FileUtil --> AddProfilePicCommand
+deactivate FileUtil
+AddProfilePicCommand --> AddProfilePicCommand : fileName
+deactivate AddProfilePicCommand
+
+' The command creates a new Person with the profile picture
+AddProfilePicCommand -> AddProfilePicCommand : new Person(...with profilePicture...)
+
+' The command updates the person in the model
+AddProfilePicCommand -> Model : setPerson(personToEdit, editedPerson)
+activate Model
+Model --> AddProfilePicCommand
+deactivate Model
+
+create CommandResult
+' A new CommandResult is created with the success message
+AddProfilePicCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> AddProfilePicCommand
+deactivate CommandResult
+
+AddProfilePicCommand --> LogicManager :
+deactivate AddProfilePicCommand
+
+LogicManager -> LogicManager : saveAddressBook(model.getAddressBook())
+activate LogicManager
+deactivate LogicManager
+
+[<--LogicManager
+deactivate LogicManager
+@enduml
+
