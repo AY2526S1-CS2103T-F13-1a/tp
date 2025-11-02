@@ -923,6 +923,8 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 
 ### **ZhengHao: UI Component Refinement and User Experience Enhancement**
 
+**Priority:** Medium
+
 **Objective:** Enhance the UI component architecture and improve user experience through systematic UI/UX improvements while maintaining separation of concerns between the UI, Logic, and Model layers.
 
 **Implementation Scope:**
@@ -934,6 +936,8 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 **Testing Strategy:** Develop unit tests for UI component behavior using `TestFX` framework, and create integration tests verifying UI-Model synchronization through observable list updates.
 
 ### **He Yue: Undo/Redo Feature Implementation**
+
+**Priority:** Medium
 
 **Objective:** Complete the implementation of the version control mechanism for address book state management as outlined in the proposed undo/redo feature specification.
 
@@ -948,6 +952,8 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 
 ### **Gokul: SortByCloseness Feature Enhancement and Closeness Validation**
 
+**Priority:** High
+
 **Objective:** Enhance the sorting functionality and ensure robustness of the closeness rating system through comprehensive improvements and testing.
 
 **Implementation Scope:**
@@ -960,6 +966,8 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 **Testing Strategy:** Achieve high code coverage (>90%) for all closeness-related classes through unit tests. Perform manual testing with various closeness value distributions and verify sorting behavior matches expected results. Add logging statements for debugging sort operations in production.
 
 ### **Max: External Integration and Contact Synchronization**
+
+**Priority:** Low
 
 **Objective:** Implement secure, bidirectional contact synchronization with external services, starting with Telegram integration, while maintaining data integrity and user privacy.
 
