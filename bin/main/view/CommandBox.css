@@ -1,6 +1,0 @@
-.context-menu .menu-item:focused,
-.context-menu .menu-item:armed,
-.context-menu .menu-item:hover {
-    -fx-background-color: transparent !important;
-    -fx-text-fill: black;
-}
