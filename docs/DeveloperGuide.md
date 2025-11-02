@@ -2,8 +2,6 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
 
 1. [Acknowledgements](#acknowledgements)
 2. [Setting up, getting started](#setting-up-getting-started)
@@ -16,6 +14,10 @@ title: Developer Guide
    - [Common classes](#common-classes)
 4. [Implementation](#implementation)
    - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+   - [[Implemented] Add Profile Picture feature](#implemented-add-profile-picture-feature)
+   - [[Implemented] Sort By Closeness feature](#implemented-sort-by-closeness-feature)
+   - [[Implemented] Command History feature](#implemented-command-history-feature)
+   - [Autocomplete feature](#autocomplete-feature)
 5. [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
 6. [Appendix: Requirements](#appendix-requirements)
    - [Product scope](#product-scope)
