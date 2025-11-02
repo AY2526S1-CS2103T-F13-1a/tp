@@ -38,6 +38,16 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Returns true if the list contains
+     */
+    public boolean hasPersonExcluding(Person exclude, Person toAdd) {
+        requireNonNull(toAdd);
+        return internalList.stream()
+                .filter(p -> p != exclude)
+                .anyMatch(p -> p.isSamePerson(toAdd));
+    }
+
+    /**
      * Adds a person to the list.
      * The person must not already exist in the list.
      */
@@ -62,7 +72,7 @@ public class UniquePersonList implements Iterable<Person> {
             throw new PersonNotFoundException();
         }
 
-        if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
+        if (hasPersonExcluding(target, editedPerson)) {
             throw new DuplicatePersonException();
         }
 

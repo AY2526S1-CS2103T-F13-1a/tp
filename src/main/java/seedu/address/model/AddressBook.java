@@ -68,6 +68,14 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
+     * Returns true if toAdd does not have duplicates in the existing list, besides clashing with exclude
+     */
+    public boolean hasPersonExcluding(Person exclude, Person toAdd) {
+        requireNonNull(toAdd);
+        return persons.hasPersonExcluding(exclude, toAdd);
+    }
+
+    /**
      * Adds a person to the address book.
      * The person must not already exist in the address book.
      */
