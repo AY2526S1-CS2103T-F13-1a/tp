@@ -59,6 +59,11 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
+     * Returns true if the person toAdd does not overlap with any other persons besides exclude
+     */
+    boolean hasPersonExcluding(Person exclude, Person toAdd);
+
+    /**
      * Deletes the given person.
      * The person must exist in the address book.
      */
