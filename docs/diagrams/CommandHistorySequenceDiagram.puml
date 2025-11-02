@@ -1,0 +1,101 @@
+@startuml
+!include style.puml
+title Command History: navigation flow
+
+actor User
+box UI UI_COLOR_T1
+participant ":CommandBox" as CommandBox UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":Logic" as Logic LOGIC_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":CommandHistory" as CommandHistory STORAGE_COLOR
+participant ":CommandHistoryStorage" as CommandHistoryStorage STORAGE_COLOR
+end box
+
+== Adding Command to History ==
+User -> CommandBox : execute("add n/Alice")
+CommandBox -> LogicManager : execute("add n/Alice")
+activate LogicManager
+
+LogicManager -> CommandHistory : push("add n/Alice")
+activate CommandHistory
+
+CommandHistory -> CommandHistory : strip() and check for duplicates
+CommandHistory -> CommandHistory : entries.addFirst(command)
+CommandHistory -> CommandHistory : save()
+activate CommandHistory
+CommandHistory -> CommandHistoryStorage : saveCommandHistory(entries)
+activate CommandHistoryStorage
+CommandHistoryStorage --> CommandHistory
+deactivate CommandHistoryStorage
+deactivate CommandHistory
+CommandHistory -> CommandHistory : resetNav()
+
+CommandHistory --> LogicManager
+deactivate CommandHistory
+
+LogicManager --> CommandBox
+deactivate LogicManager
+
+== Navigation: UP Arrow ==
+User -> CommandBox : keyPressed(UP)
+activate CommandBox
+
+CommandBox -> Logic : beginNavigation(currentInput)
+activate Logic
+Logic -> CommandHistory : beginNavigation(currentInput)
+activate CommandHistory
+CommandHistory -> CommandHistory : snapshotBeforeNav = currentInput\nindex = 0
+CommandHistory --> Logic
+deactivate CommandHistory
+Logic --> CommandBox
+deactivate Logic
+
+CommandBox -> Logic : up()
+activate Logic
+Logic -> CommandHistory : up()
+activate CommandHistory
+CommandHistory -> CommandHistory : index = Math.min(index + 1, entries.size())
+CommandHistory -> CommandHistory : entries.stream().skip(index - 1).findFirst()
+CommandHistory --> Logic : Optional.of(command)
+deactivate CommandHistory
+Logic --> CommandBox : Optional.of("add n/Bob")
+deactivate Logic
+
+CommandBox -> CommandBox : showText("add n/Bob")
+CommandBox --> User
+deactivate CommandBox
+
+== Navigation: DOWN Arrow ==
+User -> CommandBox : keyPressed(DOWN)
+activate CommandBox
+
+CommandBox -> Logic : down()
+activate Logic
+Logic -> CommandHistory : down()
+activate CommandHistory
+
+alt index <= 1
+    CommandHistory -> CommandHistory : snapshot = snapshotBeforeNav\nresetNav()
+    CommandHistory --> Logic : Optional.of(snapshot)
+else index > 1
+    CommandHistory -> CommandHistory : index -= 1
+    CommandHistory -> CommandHistory : entries.stream().skip(index - 1).findFirst()
+    CommandHistory --> Logic : Optional.of(command)
+end
+deactivate CommandHistory
+
+Logic --> CommandBox : Optional.of(command or snapshot)
+deactivate Logic
+
+CommandBox -> CommandBox : showText(command or snapshot)
+CommandBox --> User
+deactivate CommandBox
+
+@enduml
+

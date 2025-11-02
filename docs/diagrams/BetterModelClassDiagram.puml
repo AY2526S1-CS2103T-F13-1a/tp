@@ -21,4 +21,6 @@ Person *--> Address
 Person *--> TelegramHandle
 Person *--> Closeness
 Person *--> ProfilePicture
+Person *--> NameContainsKeywordsPredicate
+Person *--> TagContainsKeywordPredicate
 @enduml

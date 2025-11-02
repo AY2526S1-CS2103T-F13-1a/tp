@@ -2,14 +2,52 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
+
+1. [Acknowledgements](#acknowledgements)
+2. [Setting up, getting started](#setting-up-getting-started)
+3. [Design](#design)
+   - [Architecture](#architecture)
+   - [UI component](#ui-component)
+   - [Logic component](#logic-component)
+   - [Model component](#model-component)
+   - [Storage component](#storage-component)
+   - [Common classes](#common-classes)
+4. [Implementation](#implementation)
+   - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+   - [[Implemented] Add Profile Picture feature](#implemented-add-profile-picture-feature)
+   - [[Implemented] Sort By Closeness feature](#implemented-sort-by-closeness-feature)
+   - [[Implemented] Command History feature](#implemented-command-history-feature)
+   - [Autocomplete feature](#autocomplete-feature)
+5. [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+6. [Appendix: Requirements](#appendix-requirements)
+   - [Product scope](#product-scope)
+   - [User stories](#user-stories)
+   - [Use cases](#use-cases)
+   - [Non-Functional Requirements](#non-functional-requirements)
+   - [Glossary](#glossary)
+7. [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+   - [Launch and shutdown](#launch-and-shutdown)
+   - [Finding contacts by name](#finding-contacts-by-name)
+   - [Filtering contacts by tag](#filtering-contacts-by-tag)
+   - [Deleting contacts](#deleting-contacts)
+   - [Sorting by closeness](#sorting-by-closeness)
+   - [Adding/updating a profile picture](#addingupdating-a-profile-picture)
+   - [Saving data](#saving-data)
+8. [Appendix: Effort](#appendix-effort)
+   - [Project Difficulty and Challenges](#project-difficulty-and-challenges)
+   - [Major Effort Spent](#major-effort-spent)
+   - [Reuse and Adaptation](#reuse-and-adaptation)
+   - [Effort Estimate](#effort-estimate)
+   - [Achievements](#achievements)
+9. [Appendix: Planned Enhancements](#appendix-planned-enhancements)
+   - [ZhengHao: UI Component Refinement and User Experience Enhancement](#zhenghao-ui-component-refinement-and-user-experience-enhancement)
+   - [He Yue: Undo/Redo Feature Implementation](#he-yue-undoredo-feature-implementation)
+   - [Gokul: SortByCloseness Feature Enhancement and Closeness Validation](#gokul-sortbycloseness-feature-enhancement-and-closeness-validation)
+   - [Max: External Integration and Contact Synchronization](#max-external-integration-and-contact-synchronization)
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
-
-## Acknowledgements
 
 - **AddressBook-Level3 (AB3) by SE-EDU** ([GitHub](https://github.com/se-edu/addressbook-level3), [Documentation](https://se-education.org/))
   - UniContactsPro is adapted from AB3, with extensive additions and customizations.
@@ -25,6 +63,11 @@ title: Developer Guide
 - **Gradle Shadow Plugin** ([https://github.com/johnrengelman/shadow]) — Used for building fat/uber jar files.
 
 - **Jekyll** ([https://jekyllrb.com/]) — Used for static website generation and documentation.
+
+- **AI-Assisted Development Tools** (e.g., GitHub Copilot, Cursor AI, Chatgpt)
+  - Used to increase productivity in code writing through intelligent auto-completion and code suggestions.
+  - Employed to generate alternative implementations of algorithms and code patterns for comparison and learning purposes, helping improve coding skills through iterative refinement.
+  - Utilized for troubleshooting and debugging assistance to help locate problems and suggest solutions during development.
 
 - **JavaFX 8 Tutorial by Marco Jakob**
   - Some code adapted for UI components: [JavaFX 8 Tutorial](http://code.makery.ch/library/javafx-8-tutorial/).
@@ -59,7 +102,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -91,7 +134,7 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
@@ -108,7 +151,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -129,6 +172,14 @@ How the `Logic` component works:
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
+Here are some other sequence diagrams that illustrates the interactions within `Logic` component:
+
+`sortByCloseness o/desc` Command
+![Interactions Inside the Logic Component for the `sortByCloseness o/desc` Command](images/SortByClosenessDiagram.png)
+
+`AutocompleteSequenceDiagram` Command
+![Interactions Inside the Logic Component for the `AutocompleteSequenceDiagram` Command](images/AutocompleteSequenceDiagram.png)
+
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
 <img src="images/ParserClasses.png" width="600"/>
@@ -137,10 +188,13 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
-### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+In summary, this is how the sequence of each command looks like within `Logic` component:
+![LogicSequenceDiagram](images/LogicSequenceDiagram.png)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+### Model component
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/model/Model.java)
+
+<img src="images/ModelClassDiagram.png" width="800" />
 
 
 The `Model` component,
@@ -152,14 +206,16 @@ The `Model` component,
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
+<img src="images/BetterModelClassDiagram.png" width="800" />
+
+**Note**: A person is uniquely identified with **phone, email, and Telegram handle**.
 
 </div>
 
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -260,11 +316,283 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
 
-### \[Proposed\] Data archiving
+### \[Implemented\] Add Profile Picture feature
 
-_{Explain here how the data archiving feature will be implemented}_
+#### Implementation
+
+The add profile picture mechanism is facilitated by `AddProfilePicCommand`. It extends `Command` with the ability to add or update profile pictures for persons in the address book. Additionally, it implements the following operations:
+
+* `AddProfilePicCommand#execute()` — Updates the profile picture of the person at the specified index.
+* `AddProfilePicCommand#copyLocalImageToImagesDirectory()` — Copies a local image file to the `docs/images` directory.
+* `AddProfilePicCommand#generateUniqueFilename()` — Generates a unique filename to avoid conflicts.
+
+The command is parsed by `AddProfilePicCommandParser`, which handles argument tokenization and path validation. The parser supports:
+* Local file paths (absolute or relative paths, with support for `~` expansion for home directory)
+* Existing images in the `docs/images` directory (specified by filename only)
+
+Given below is an example usage scenario and how the add profile picture mechanism behaves at each step.
+
+Step 1. The user executes `addProfilePic 1 pp/~/Downloads/myphoto.png` to add a profile picture from their local Downloads directory. The `AddProfilePicCommandParser` parses the command and expands the `~` to the user's home directory.
+
+Step 2. The parser validates that the file exists at the specified path and checks that it's not a directory. If validation passes, an `AddProfilePicCommand` is created with the index and expanded path.
+
+Step 3. The `AddProfilePicCommand#execute()` method is called. It retrieves the person at the specified index from the displayed list.
+
+Step 4. Since the path contains `/` or `\`, the command identifies this as a local file path. It calls `copyLocalImageToImagesDirectory()` to:
+   * Validate that the file is a `.png` file
+   * Generate a unique filename (checking if it already exists in `docs/images`)
+   * Copy the file from the source location to `docs/images`
+   * Return the filename for storage
+
+Step 5. The command creates a new `Person` object with all the original fields, but with the new profile picture filename set.
+
+Step 6. The model updates the person using `Model#setPerson()`, replacing the old person with the new one containing the profile picture.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the user specifies only a filename (e.g., `pp/johndoe.png`), the command assumes the image already exists in `docs/images` and uses it directly without copying. The parser validates that the file exists before creating the command.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If a file with the same name already exists in `docs/images`, the command throws an exception instructing the user to use the existing file directly by specifying only the filename.
+
+</div>
+
+The following sequence diagram shows how an add profile picture operation works:
+
+![AddProfilePicSequenceDiagram](images/AddProfilePicSequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to handle image storage:**
+
+* **Alternative 1 (current choice):** Store images in `docs/images` directory and reference by filename.
+  * Pros: Simple to implement, images are easily accessible, supports relative paths for documentation.
+  * Cons: Requires copying files, may lead to file conflicts if not handled properly.
+
+* **Alternative 2:** Store full file paths in the Person object.
+  * Pros: No need to copy files, original file location is preserved.
+  * Cons: Files may be moved or deleted, breaking references. Harder to share address book data.
+
+**Aspect: Image format support:**
+
+* **Alternative 1 (current choice):** Only support `.png` files.
+  * Pros: Consistent format, simple validation.
+  * Cons: Users may have images in other formats that need conversion.
+
+* **Alternative 2:** Support multiple image formats (JPG, PNG, GIF, etc.).
+  * Pros: More flexible for users.
+  * Cons: Requires more complex validation and potentially conversion logic.
+
+
+### \[Implemented\] Sort By Closeness feature
+
+#### Implementation
+
+The sort by closeness mechanism is facilitated by `SortByClosenessCommand`. It extends `Command` with the ability to sort the contact list by closeness rating in either ascending or descending order. Additionally, it implements the following operations:
+
+* `SortByClosenessCommand#execute()` — Updates the sort comparator in the model.
+* `SortByClosenessCommand#SortOrder` — An enumeration representing ascending or descending sort order.
+
+The command is parsed by `SortByClosenessCommandParser`, which validates the order parameter (`o/asc` or `o/desc`) and creates a `SortByClosenessCommand` with the appropriate `SortOrder`.
+
+Given below is an example usage scenario and how the sort by closeness mechanism behaves at each step.
+
+Step 1. The user executes `sortByCloseness o/desc` to sort contacts by closeness in descending order (highest closeness first). The `SortByClosenessCommandParser` parses the command and validates that `desc` is a valid order.
+
+Step 2. The parser creates a `SortByClosenessCommand` with `SortOrder.DESCENDING`. The command constructor creates a comparator that:
+   * Extracts the `closenessLevel` from each person's `Closeness` object
+   * Compares persons based on their closeness level
+   * Reverses the order for descending sort
+
+Step 3. The `SortByClosenessCommand#execute()` method is called. It calls `Model#updateSortComparator()` with the created comparator.
+
+Step 4. The model updates its internal sorted person list by setting the comparator on the `sortedPersons` observable list. This triggers a re-sort of the displayed list.
+
+Step 5. The UI automatically reflects the new sort order since it observes the `sortedPersons` list.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The sorting is applied to the `sortedPersons` list, which is the list displayed to users. This list is separate from the `filteredPersons` list, allowing sorting to work independently of filtering.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The `list` command resets the sort comparator to `null`, restoring the default order of the contact list.
+
+</div>
+
+The following sequence diagram shows how a sort by closeness operation works:
+
+![SortByClosenessDiagram](images/SortByClosenessDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to implement sorting:**
+
+* **Alternative 1 (current choice):** Use a comparator that is applied to an observable list.
+  * Pros: Integrates well with JavaFX's observable collections, automatically updates UI when sort changes.
+  * Cons: Requires maintaining a separate sorted list.
+
+* **Alternative 2:** Sort the list directly and replace it.
+  * Pros: Simpler implementation, no need for separate sorted list.
+  * Cons: May cause UI flickering, less efficient for large lists.
+
+**Aspect: Persistence of sort order:**
+
+* **Alternative 1 (current choice):** Sort order is not persisted, resets on `list` command.
+  * Pros: Simple, predictable behavior.
+  * Cons: Users need to re-sort if they want the same order again.
+
+* **Alternative 2:** Persist sort order in user preferences.
+  * Pros: Better user experience, maintains sort preference across sessions.
+  * Cons: More complex, requires additional storage logic.
+
+
+### \[Implemented\] Command History feature
+
+#### Implementation
+
+The command history mechanism is facilitated by `CommandHistory`. It manages a history of previously executed commands, allowing users to navigate through their command history using arrow keys. Additionally, it implements the following operations:
+
+* `CommandHistory#push()` — Adds a command to history (disallows consecutive duplicates).
+* `CommandHistory#up()` — Navigates to the previous (older) command in history.
+* `CommandHistory#down()` — Navigates to the next (newer) command in history.
+* `CommandHistory#beginNavigation()` — Initializes navigation state with current input.
+* `CommandHistory#save()` — Persists command history to storage.
+
+The command history is stored using `CommandHistoryStorage`, which reads from and writes to a file (`data/command_history.txt`). The history is loaded when `CommandHistory` is initialized and saved whenever a new command is added.
+
+Given below is an example usage scenario and how the command history mechanism behaves at each step.
+
+Step 1. The user launches the application. The `CommandHistory` is initialized with a maximum size (default 500) and loads any existing history from storage into an `ArrayDeque`, with the newest commands at the front.
+
+Step 2. The user executes several commands: `add n/Alice`, `add n/Bob`, `list`. Each command calls `CommandHistory#push()` through `LogicManager#execute()`, which:
+   * Strips whitespace and checks if the command is empty
+   * Prevents consecutive duplicates (if the same command was just executed)
+   * Adds the command to the front of the deque
+   * Removes old commands if the size exceeds `maxSize`
+   * Saves the history to storage
+   * Resets navigation state
+
+Step 3. The user starts typing a new command but presses the UP arrow key. The `CommandBox` calls `CommandHistory#beginNavigation()` with the current input (if not already in navigation mode) to save a snapshot of what the user was typing.
+
+Step 4. The `CommandBox` calls `CommandHistory#up()`, which:
+   * Checks if history is empty (returns empty if so)
+   * Increments the internal navigation index
+   * Returns the command at that position in history
+   * The `CommandBox` displays this command in the text field
+
+Step 5. The user presses UP again to go further back in history. The index increments and the next older command is retrieved and displayed.
+
+Step 6. The user presses DOWN to go forward in history. The `CommandBox` calls `CommandHistory#down()`, which:
+   * Decrements the navigation index
+   * Returns the command at that position
+   * If the index reaches 1 or less, it returns the snapshot text (what the user was originally typing) and resets navigation
+
+Step 7. The user presses DOWN again when at the snapshot, which resets navigation completely and returns the snapshot text.
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The navigation state (`index` and `snapshotBeforeNav`) is reset when a command is executed, ensuring that starting navigation always begins from the user's current input.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** Consecutive duplicate commands are not stored in history. This prevents the history from being cluttered with repeated commands like `list` executed multiple times in a row.
+
+</div>
+
+The following sequence diagram shows how command history navigation works:
+
+![CommandHistorySequenceDiagram](images/CommandHistorySequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to store command history:**
+
+* **Alternative 1 (current choice):** Use an `ArrayDeque` with newest at front, persisted to file.
+  * Pros: Efficient for adding new commands, easy to navigate backwards, persists across sessions.
+  * Cons: Requires file I/O operations.
+
+* **Alternative 2:** Store in memory only, using a simple list.
+  * Pros: Faster, no file I/O overhead.
+  * Cons: History is lost when application closes.
+
+**Aspect: How to handle navigation:**
+
+* **Alternative 1 (current choice):** Use an index-based approach with snapshot of current input.
+  * Pros: Allows returning to what user was typing, smooth navigation experience.
+  * Cons: Requires maintaining navigation state.
+
+* **Alternative 2:** Store current input separately and always navigate from history.
+  * Pros: Simpler implementation.
+  * Cons: User loses their current input when navigating, worse user experience.
+
+
+### Autocomplete feature
+
+#### Implementation
+
+The autocomplete mechanism is facilitated by `CommandHints` and implemented in `CommandBox`. It provides real-time command suggestions as users type, helping them discover available commands. Additionally, it implements the following operations:
+
+* `CommandBox#updateSuggestions()` — Filters and displays matching commands based on current input.
+* `CommandBox#buildMatches()` — Filters commands from `CommandHints.COMMANDS` that start with the current prefix.
+* `CommandBox#acceptSuggestion()` — Inserts a selected suggestion into the command box.
+
+The autocomplete feature uses a `ContextMenu` (suggestions menu) that appears below the command box as the user types. It filters commands from `CommandHints.COMMANDS`, which contains all valid command words.
+
+Given below is an example usage scenario and how the autocomplete mechanism behaves at each step.
+
+Step 1. The user starts typing in the command box. The `CommandBox` has a text property listener that calls `updateSuggestions()` whenever the text changes.
+
+Step 2. The user types `"add"`. The `updateSuggestions()` method:
+   * Takes the trimmed input as a prefix
+   * Calls `buildMatches()` which filters `CommandHints.COMMANDS` for commands starting with `"add"` (case-insensitive)
+   * Finds matches: `["add", "addProfilePic"]`
+   * Since there are multiple matches, it populates the suggestions menu and displays it
+
+Step 3. The suggestions menu appears below the command box with the matching commands. The user can:
+   * Use UP/DOWN arrow keys to navigate through suggestions
+   * Press TAB or ENTER to accept the highlighted (or first) suggestion
+   * Continue typing to further filter suggestions
+   * Press ESCAPE to hide the menu
+
+Step 4. The user types `"Pro"` to get `"addPro"`. The suggestions are filtered further, now only showing `["addProfilePic"]` if it matches.
+
+Step 5. If the user's input exactly matches a single command (e.g., `"add"` when only `"add"` matches), the suggestions menu is hidden automatically to avoid cluttering the UI.
+
+Step 6. The user presses TAB to accept the highlighted suggestion. The `acceptSuggestion()` method:
+   * Replaces the current text with the selected command word followed by a space
+   * Positions the cursor after the inserted text
+   * Hides the suggestions menu
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The autocomplete only suggests command words, not full commands with parameters. Users still need to type the parameters themselves after accepting a suggestion.
+
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** The suggestions menu is limited to 8 matches maximum to prevent overwhelming the user with too many options.
+
+</div>
+
+The following sequence diagram shows how autocomplete works:
+
+![AutocompleteSequenceDiagram](images/AutocompleteSequenceDiagram.png)
+
+#### Design considerations:
+
+**Aspect: How to maintain command list:**
+
+* **Alternative 1 (current choice):** Maintain a static list in `CommandHints` class.
+  * Pros: Simple, centralized location, easy to keep in sync with commands.
+  * Cons: Requires manual updates when new commands are added.
+
+* **Alternative 2:** Dynamically discover commands using reflection or command registry.
+  * Pros: Automatically includes new commands, no manual maintenance.
+  * Cons: More complex, potential performance overhead, may include internal commands.
+
+**Aspect: When to show suggestions:**
+
+* **Alternative 1 (current choice):** Show suggestions as user types, hide on exact single match.
+  * Pros: Provides immediate feedback, helps discover commands.
+  * Cons: May be distracting for experienced users.
+
+* **Alternative 2:** Only show suggestions on explicit trigger (e.g., Ctrl+Space).
+  * Pros: Less distracting, gives user control.
+  * Cons: Users may not discover the feature, requires extra key press.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -299,31 +627,31 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice to have) - `*`
 
-| Priority | As a …           | I want to …                                                        | So that I can …                                                     |
-|----------|------------------|--------------------------------------------------------------------|----------------------------------------------------------------------|
-| * * *    | user             | search for a contact by name or tag                                | quickly find the contact I need                                     |
-| * * *    | user             | view the contact list                                              | see all my contacts at a glance                                     |
-| * * *    | user             | add a contact                                                      | keep new people I meet in my address book                           |
-| * * *    | user             | delete a contact                                                   | remove entries I no longer need                                     |
-| * * *    | user             | edit a contact                                                     | keep contact details up to date                                     |
-| * *      | user             | filter my contacts by tag                                          | find people in specific groups easily                               |
-| * *      | user             | create a new tag                                                   | categorize my contacts the way I want                               |
-| * *      | user             | delete an existing tag                                             | clean up tags I no longer use                                       |
-| * *      | student          | search for coursemates in the same tutorial                        | find group mates for a project                                      |
-| * *      | user             | sort in alphabetical order and search by first letter of name      | find my friends quicker                                             |
-| * *      | user             | merge duplicate contacts                                           | organize my list by combining duplicates                            |
-| * *      | user             | assign multiple tags to each contact                               | find them via multiple categories                                   |
-| *        | new user         | view the user guide easily                                         | learn more about the product whenever I need                        |
-| *        | experienced user | pin important contacts to the top of my address book               | access them quickly                                                 |
-| *        | student          | add a profile picture to my profile or another contact's profile   | recognize and recall people more easily                             |
-| *        | user             | add notes about a person                                           | remember details about where and when I met them                    |
-| *        | user             | indicate how close a person is to me                               | make efforts to contact closer friends more regularly               |
-| *        | user             | log interactions with a contact                                    | keep track of how often I connect with them                         |
-| *        | user             | sort my contacts by date added                                     | catch up with old or new friends                                    |
-| *        | user             | import contacts from my phone and email                            | avoid typing them manually                                          |
-| *        | user             | export (filtered) contact list as a CSV file                       | share and store it externally                                       |
-| *        | user             | be reminded to maintain connections                                | catch up with friends I haven’t talked to for ~2 months             |
-| *        | user             | create and switch between custom themes                            | customize the app’s appearance to my liking                         |
+| Priority | As a …           | I want to …                                                      | So that I can …                                                     |
+|----------|------------------|------------------------------------------------------------------|----------------------------------------------------------------------|
+| * * *    | user             | search for a contact by name or tag                              | quickly find the contact I need                                     |
+| * * *    | user             | view the contact list                                            | see all my contacts at a glance                                     |
+| * * *    | user             | add a contact                                                    | keep new people I meet in my address book                           |
+| * * *    | user             | delete a contact                                                 | remove entries I no longer need                                     |
+| * * *    | user             | edit a contact                                                   | keep contact details up to date                                     |
+| * *      | user             | filter my contacts by tag                                        | find people in specific groups easily                               |
+| * *      | user             | create a new tag                                                 | categorize my contacts the way I want                               |
+| * *      | user             | delete an existing tag                                           | clean up tags I no longer use                                       |
+| * *      | student          | search for coursemates in the same tutorial                      | find group mates for a project                                      |
+| * *      | user             | search by first few characters of name                           | find my friends quicker                                             |
+| * *      | user             | merge duplicate contacts                                         | organize my list by combining duplicates                            |
+| * *      | user             | assign multiple tags to each contact                             | find them via multiple categories                                   |
+| *        | new user         | view the user guide easily                                       | learn more about the product whenever I need                        |
+| *        | experienced user | pin important contacts to the top of my address book             | access them quickly                                                 |
+| *        | student          | add a profile picture to my profile or another contact's profile | recognize and recall people more easily                             |
+| *        | user             | add notes about a person                                         | remember details about where and when I met them                    |
+| *        | user             | indicate how close a person is to me                             | make efforts to contact closer friends more regularly               |
+| *        | user             | log interactions with a contact                                  | keep track of how often I connect with them                         |
+| *        | user             | sort my contacts by date added                                   | catch up with old or new friends                                    |
+| *        | user             | import contacts from my phone and email                          | avoid typing them manually                                          |
+| *        | user             | export (filtered) contact list as a CSV file                     | share and store it externally                                       |
+| *        | user             | be reminded to maintain connections                              | catch up with friends I haven’t talked to for ~2 months             |
+| *        | user             | create and switch between custom themes                          | customize the app’s appearance to my liking                         |
 
 
 ### Use cases
@@ -357,7 +685,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
 **MSS**
 
-1.  User requests to create a person based on their name, phone number, email address, date, profile picture (optional)
+1.  User requests to create a person with their name, phone number, email address, address, Telegram handle, closeness rating, and optionally tags
 2.  UniContactsPro adds a person
 3.  UniContactsPro displays the updated list of contacts
     Use case ends.
@@ -556,8 +884,6 @@ testers are expected to do more *exploratory* testing.
       - Launch the app.<br>
         Expected: App handles the error gracefully and starts with an empty list (no crash). Consider checking logs for a warning about corrupted storage.
 
-1. _{ more test cases …​ }_
-
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -597,14 +923,62 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 
 ## Appendix: Planned Enhancements
 
-- ZhengHao
-ToBeDone
+### **ZhengHao: UI Component Refinement and User Experience Enhancement**
 
-- He Yue
-ToBeDone
+**Priority:** Medium
 
-- Gokul
-ToBeDone
+**Objective:** Enhance the UI component architecture and improve user experience through systematic UI/UX improvements while maintaining separation of concerns between the UI, Logic, and Model layers.
 
-- Max
-ToBeDone
+**Implementation Scope:**
+* **Component-Level Improvements:** Refactor existing `UiPart` subclasses (`MainWindow`, `PersonListPanel`, `CommandBox`, `ResultDisplay`) to implement responsive layout constraints using JavaFX `Bindings` API for dynamic resizing. Integrate ObservableList listeners to provide real-time visual feedback when `Model` data changes.
+* **Accessibility Enhancements:** Implement keyboard navigation handlers in `MainWindow` to support accessibility standards, and extend `UserPrefs` storage to persist user-defined font size preferences. Create a `ThemeManager` utility class following the Singleton pattern to manage theme switching while ensuring proper resource cleanup.
+* **Visual Feedback Mechanisms:** Add loading indicators and command execution status visualization by extending the `CommandResult` class to include execution metadata (success/failure states, execution time). Implement toast notifications using JavaFX `Tooltip` or custom `NotificationPane` components.
+* **Code Quality:** Ensure all UI enhancements follow the existing dependency injection pattern where UI components depend on `Logic` and `Model` interfaces, not concrete implementations. Maintain backward compatibility with existing FXML layouts while introducing enhanced CSS styling.
+
+**Testing Strategy:** Develop unit tests for UI component behavior using `TestFX` framework, and create integration tests verifying UI-Model synchronization through observable list updates.
+
+### **He Yue: Undo/Redo Feature Implementation**
+
+**Priority:** Medium
+
+**Objective:** Complete the implementation of the version control mechanism for address book state management as outlined in the proposed undo/redo feature specification.
+
+**Implementation Scope:**
+* **Core Architecture:** Implement the `VersionedAddressBook` class extending `AddressBook` to maintain an `addressBookStateList` (using `ArrayList<AddressBook>`) and `currentStatePointer` (integer index). Implement state management operations: `commit()`, `undo()`, `redo()`, `canUndo()`, and `canRedo()` with proper bounds checking.
+* **Model Integration:** Integrate `VersionedAddressBook` into the `Model` component through the `Model` interface. Ensure `ModelManager` wraps a `VersionedAddressBook` instance and properly delegates state management methods. Implement `Model#commitAddressBook()`, `Model#undoAddressBook()`, and `Model#redoAddressBook()` with appropriate exception handling for invalid operations.
+* **Command Integration:** Audit all `Command` subclasses in the `Logic` component that modify address book state (e.g., `AddCommand`, `DeleteCommand`, `EditCommand`, `ClearCommand`) to invoke `Model#commitAddressBook()` upon successful execution. Ensure commands that fail execution (throw `CommandException`) do not commit state changes.
+* **Memory Optimization:** Implement state pruning mechanism to limit history size (e.g., maximum 50 states) to prevent excessive memory consumption. Consider implementing shallow copy strategies or immutable state snapshots using builder patterns to reduce memory footprint for large address books.
+* **Error Handling:** Add comprehensive validation in `UndoCommand` and `RedoCommand` parsers to check state availability before execution. Implement user-friendly error messages through `CommandResult` when undo/redo operations are not possible.
+
+**Testing Strategy:** Develop comprehensive unit tests for `VersionedAddressBook` covering state transitions, edge cases (empty history, maximum history reached), and memory management. Create integration tests verifying undo/redo functionality across multiple command sequences.
+
+### **Gokul: SortByCloseness Feature Enhancement and Closeness Validation**
+
+**Priority:** High
+
+**Objective:** Enhance the sorting functionality and ensure robustness of the closeness rating system through comprehensive improvements and testing.
+
+**Implementation Scope:**
+* **Enhanced Sorting Logic:** Extend `SortByClosenessCommand` and its associated `Comparator<Person>` implementation to support composite sorting (primary: closeness value, secondary: name alphabetically) when multiple contacts share identical closeness ratings. Refactor the comparator to use `Comparator.comparingInt()` and `thenComparing()` for maintainable multi-criteria sorting.
+* **Closeness Rating System:** Enhance the `Closeness` value object class in the `Model` component to support more granular rating levels if needed, ensuring immutability and proper validation through the constructor. Implement `Closeness#isValid()` method to enforce business rules (e.g., valid range checks) and add corresponding validation in `PersonBuilder` and parser classes.
+* **Data Consistency:** Implement validation in `Person#setCloseness()` and ensure persistence layer (`JsonAdaptedPerson`) correctly serializes/deserializes closeness values. Add defensive checks in `SortByClosenessCommandParser` to handle null or invalid closeness values gracefully.
+* **Model Integration:** Verify that `Model#updateSortComparator()` correctly applies sorting to the filtered person list and maintains sort order across subsequent operations. Ensure UI components (`PersonListPanel`) reactively update when sort comparator changes through proper `ObservableList` bindings.
+* **Testing and Debugging:** Develop comprehensive unit tests for `SortByClosenessCommand`, `SortByClosenessCommandParser`, and `Closeness` class covering edge cases (null values, equal closeness values, boundary conditions). Create integration tests validating sort persistence across multiple operations and ensuring UI updates correctly reflect sort state.
+
+**Testing Strategy:** Achieve high code coverage (>90%) for all closeness-related classes through unit tests. Perform manual testing with various closeness value distributions and verify sorting behavior matches expected results. Add logging statements for debugging sort operations in production.
+
+### **Max: External Integration and Contact Synchronization**
+
+**Priority:** Low
+
+**Objective:** Implement secure, bidirectional contact synchronization with external services, starting with Telegram integration, while maintaining data integrity and user privacy.
+
+**Implementation Scope:**
+* **Architecture Design:** Create a new `Integration` component following the same architectural pattern as existing components (separate interface and manager classes). Implement `TelegramIntegrationManager` as the concrete implementation, with proper dependency injection through the `MainApp` initialization sequence. Follow the Command pattern for sync operations to ensure testability and maintainability.
+* **API Integration:** Implement secure OAuth 2.0 authentication flow for Telegram API using industry-standard libraries (e.g., `okhttp`, `gson`). Create a `TelegramApiClient` wrapper class to abstract API communication and enable easier testing through mocking. Implement rate limiting and retry logic with exponential backoff for network resilience.
+* **Data Mapping Layer:** Develop a `ContactMapper` utility class to handle bidirectional conversion between `Person` objects and external service contact formats. Implement field mapping strategies (name, phone, email, handle) with validation to ensure data consistency. Handle missing or incompatible fields gracefully with appropriate default values or user prompts.
+* **Import/Export System:** Extend the `Storage` component with import/export capabilities supporting multiple formats (CSV via `opencsv`, JSON via existing `Jackson` infrastructure, vCard via `ez-vcard` library). Create `ImportCommand` and `ExportCommand` in the `Logic` component following existing command patterns. Implement format validation and error reporting for malformed import files.
+* **Conflict Resolution:** Design a conflict resolution strategy interface allowing users to choose resolution policies (manual, prefer local, prefer remote, merge). Implement conflict detection by comparing unique identifiers (phone, email, Telegram handle as per current `Person` uniqueness constraints). Create UI dialogs for interactive conflict resolution when needed.
+* **Security and Privacy:** Implement secure credential storage using platform-specific keychains/keystores. Ensure all API communications use HTTPS/TLS encryption. Add user consent mechanisms for data synchronization and provide clear privacy notices. Implement data encryption for sensitive contact information stored locally.
+
+**Testing Strategy:** Develop comprehensive unit tests for data mapping and format conversion logic. Create integration tests using mock API responses to verify synchronization workflows. Implement end-to-end tests for import/export functionality with various file formats. Conduct security testing for credential storage and API communication.

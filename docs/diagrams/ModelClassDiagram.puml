@@ -22,6 +22,8 @@ Class Tag
 Class TelegramHandle
 Class ProfilePicture
 Class Closeness
+Class NameContainsKeywordsPredicate
+Class TagContainsKeywordPredicate
 
 Class I #FFFFFF
 }
@@ -48,6 +50,8 @@ Person *--> "*" Tag
 Person *--> TelegramHandle
 Person *--> Closeness
 Person *--> ProfilePicture
+Person *--> NameContainsKeywordsPredicate
+Person *--> TagContainsKeywordPredicate
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
