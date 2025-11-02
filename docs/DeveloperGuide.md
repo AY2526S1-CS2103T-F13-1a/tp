@@ -5,6 +5,44 @@ title: Developer Guide
 * Table of Contents
 {:toc}
 
+1. [Acknowledgements](#acknowledgements)
+2. [Setting up, getting started](#setting-up-getting-started)
+3. [Design](#design)
+   - [Architecture](#architecture)
+   - [UI component](#ui-component)
+   - [Logic component](#logic-component)
+   - [Model component](#model-component)
+   - [Storage component](#storage-component)
+   - [Common classes](#common-classes)
+4. [Implementation](#implementation)
+   - [[Proposed] Undo/redo feature](#proposed-undoredo-feature)
+5. [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+6. [Appendix: Requirements](#appendix-requirements)
+   - [Product scope](#product-scope)
+   - [User stories](#user-stories)
+   - [Use cases](#use-cases)
+   - [Non-Functional Requirements](#non-functional-requirements)
+   - [Glossary](#glossary)
+7. [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
+   - [Launch and shutdown](#launch-and-shutdown)
+   - [Finding contacts by name](#finding-contacts-by-name)
+   - [Filtering contacts by tag](#filtering-contacts-by-tag)
+   - [Deleting contacts](#deleting-contacts)
+   - [Sorting by closeness](#sorting-by-closeness)
+   - [Adding/updating a profile picture](#addingupdating-a-profile-picture)
+   - [Saving data](#saving-data)
+8. [Appendix: Effort](#appendix-effort)
+   - [Project Difficulty and Challenges](#project-difficulty-and-challenges)
+   - [Major Effort Spent](#major-effort-spent)
+   - [Reuse and Adaptation](#reuse-and-adaptation)
+   - [Effort Estimate](#effort-estimate)
+   - [Achievements](#achievements)
+9. [Appendix: Planned Enhancements](#appendix-planned-enhancements)
+   - [ZhengHao: UI Component Refinement and User Experience Enhancement](#zhenghao-ui-component-refinement-and-user-experience-enhancement)
+   - [He Yue: Undo/Redo Feature Implementation](#he-yue-undoredo-feature-implementation)
+   - [Gokul: SortByCloseness Feature Enhancement and Closeness Validation](#gokul-sortbycloseness-feature-enhancement-and-closeness-validation)
+   - [Max: External Integration and Contact Synchronization](#max-external-integration-and-contact-synchronization)
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
@@ -23,6 +61,11 @@ title: Developer Guide
 - **Gradle Shadow Plugin** ([https://github.com/johnrengelman/shadow]) — Used for building fat/uber jar files.
 
 - **Jekyll** ([https://jekyllrb.com/]) — Used for static website generation and documentation.
+
+- **AI-Assisted Development Tools** (e.g., GitHub Copilot, Cursor AI, Chatgpt)
+  - Used to increase productivity in code writing through intelligent auto-completion and code suggestions.
+  - Employed to generate alternative implementations of algorithms and code patterns for comparison and learning purposes, helping improve coding skills through iterative refinement.
+  - Utilized for troubleshooting and debugging assistance to help locate problems and suggest solutions during development.
 
 - **JavaFX 8 Tutorial by Marco Jakob**
   - Some code adapted for UI components: [JavaFX 8 Tutorial](http://code.makery.ch/library/javafx-8-tutorial/).
@@ -271,12 +314,6 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -310,31 +347,31 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice to have) - `*`
 
-| Priority | As a …           | I want to …                                                        | So that I can …                                                     |
-|----------|------------------|--------------------------------------------------------------------|----------------------------------------------------------------------|
-| * * *    | user             | search for a contact by name or tag                                | quickly find the contact I need                                     |
-| * * *    | user             | view the contact list                                              | see all my contacts at a glance                                     |
-| * * *    | user             | add a contact                                                      | keep new people I meet in my address book                           |
-| * * *    | user             | delete a contact                                                   | remove entries I no longer need                                     |
-| * * *    | user             | edit a contact                                                     | keep contact details up to date                                     |
-| * *      | user             | filter my contacts by tag                                          | find people in specific groups easily                               |
-| * *      | user             | create a new tag                                                   | categorize my contacts the way I want                               |
-| * *      | user             | delete an existing tag                                             | clean up tags I no longer use                                       |
-| * *      | student          | search for coursemates in the same tutorial                        | find group mates for a project                                      |
-| * *      | user             | sort in alphabetical order and search by first letter of name      | find my friends quicker                                             |
-| * *      | user             | merge duplicate contacts                                           | organize my list by combining duplicates                            |
-| * *      | user             | assign multiple tags to each contact                               | find them via multiple categories                                   |
-| *        | new user         | view the user guide easily                                         | learn more about the product whenever I need                        |
-| *        | experienced user | pin important contacts to the top of my address book               | access them quickly                                                 |
-| *        | student          | add a profile picture to my profile or another contact's profile   | recognize and recall people more easily                             |
-| *        | user             | add notes about a person                                           | remember details about where and when I met them                    |
-| *        | user             | indicate how close a person is to me                               | make efforts to contact closer friends more regularly               |
-| *        | user             | log interactions with a contact                                    | keep track of how often I connect with them                         |
-| *        | user             | sort my contacts by date added                                     | catch up with old or new friends                                    |
-| *        | user             | import contacts from my phone and email                            | avoid typing them manually                                          |
-| *        | user             | export (filtered) contact list as a CSV file                       | share and store it externally                                       |
-| *        | user             | be reminded to maintain connections                                | catch up with friends I haven’t talked to for ~2 months             |
-| *        | user             | create and switch between custom themes                            | customize the app’s appearance to my liking                         |
+| Priority | As a …           | I want to …                                                      | So that I can …                                                     |
+|----------|------------------|------------------------------------------------------------------|----------------------------------------------------------------------|
+| * * *    | user             | search for a contact by name or tag                              | quickly find the contact I need                                     |
+| * * *    | user             | view the contact list                                            | see all my contacts at a glance                                     |
+| * * *    | user             | add a contact                                                    | keep new people I meet in my address book                           |
+| * * *    | user             | delete a contact                                                 | remove entries I no longer need                                     |
+| * * *    | user             | edit a contact                                                   | keep contact details up to date                                     |
+| * *      | user             | filter my contacts by tag                                        | find people in specific groups easily                               |
+| * *      | user             | create a new tag                                                 | categorize my contacts the way I want                               |
+| * *      | user             | delete an existing tag                                           | clean up tags I no longer use                                       |
+| * *      | student          | search for coursemates in the same tutorial                      | find group mates for a project                                      |
+| * *      | user             | search by first few characters of name                           | find my friends quicker                                             |
+| * *      | user             | merge duplicate contacts                                         | organize my list by combining duplicates                            |
+| * *      | user             | assign multiple tags to each contact                             | find them via multiple categories                                   |
+| *        | new user         | view the user guide easily                                       | learn more about the product whenever I need                        |
+| *        | experienced user | pin important contacts to the top of my address book             | access them quickly                                                 |
+| *        | student          | add a profile picture to my profile or another contact's profile | recognize and recall people more easily                             |
+| *        | user             | add notes about a person                                         | remember details about where and when I met them                    |
+| *        | user             | indicate how close a person is to me                             | make efforts to contact closer friends more regularly               |
+| *        | user             | log interactions with a contact                                  | keep track of how often I connect with them                         |
+| *        | user             | sort my contacts by date added                                   | catch up with old or new friends                                    |
+| *        | user             | import contacts from my phone and email                          | avoid typing them manually                                          |
+| *        | user             | export (filtered) contact list as a CSV file                     | share and store it externally                                       |
+| *        | user             | be reminded to maintain connections                              | catch up with friends I haven’t talked to for ~2 months             |
+| *        | user             | create and switch between custom themes                          | customize the app’s appearance to my liking                         |
 
 
 ### Use cases
@@ -567,8 +604,6 @@ testers are expected to do more *exploratory* testing.
       - Launch the app.<br>
         Expected: App handles the error gracefully and starts with an empty list (no crash). Consider checking logs for a warning about corrupted storage.
 
-1. _{ more test cases …​ }_
-
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -608,14 +643,54 @@ This appendix summarizes the total effort and achievements for UniContactsPro, t
 
 ## Appendix: Planned Enhancements
 
-- ZhengHao
-ToBeDone
+### **ZhengHao: UI Component Refinement and User Experience Enhancement**
 
-- He Yue
-ToBeDone
+**Objective:** Enhance the UI component architecture and improve user experience through systematic UI/UX improvements while maintaining separation of concerns between the UI, Logic, and Model layers.
 
-- Gokul
-ToBeDone
+**Implementation Scope:**
+* **Component-Level Improvements:** Refactor existing `UiPart` subclasses (`MainWindow`, `PersonListPanel`, `CommandBox`, `ResultDisplay`) to implement responsive layout constraints using JavaFX `Bindings` API for dynamic resizing. Integrate ObservableList listeners to provide real-time visual feedback when `Model` data changes.
+* **Accessibility Enhancements:** Implement keyboard navigation handlers in `MainWindow` to support accessibility standards, and extend `UserPrefs` storage to persist user-defined font size preferences. Create a `ThemeManager` utility class following the Singleton pattern to manage theme switching while ensuring proper resource cleanup.
+* **Visual Feedback Mechanisms:** Add loading indicators and command execution status visualization by extending the `CommandResult` class to include execution metadata (success/failure states, execution time). Implement toast notifications using JavaFX `Tooltip` or custom `NotificationPane` components.
+* **Code Quality:** Ensure all UI enhancements follow the existing dependency injection pattern where UI components depend on `Logic` and `Model` interfaces, not concrete implementations. Maintain backward compatibility with existing FXML layouts while introducing enhanced CSS styling.
 
-- Max
-ToBeDone
+**Testing Strategy:** Develop unit tests for UI component behavior using `TestFX` framework, and create integration tests verifying UI-Model synchronization through observable list updates.
+
+### **He Yue: Undo/Redo Feature Implementation**
+
+**Objective:** Complete the implementation of the version control mechanism for address book state management as outlined in the proposed undo/redo feature specification.
+
+**Implementation Scope:**
+* **Core Architecture:** Implement the `VersionedAddressBook` class extending `AddressBook` to maintain an `addressBookStateList` (using `ArrayList<AddressBook>`) and `currentStatePointer` (integer index). Implement state management operations: `commit()`, `undo()`, `redo()`, `canUndo()`, and `canRedo()` with proper bounds checking.
+* **Model Integration:** Integrate `VersionedAddressBook` into the `Model` component through the `Model` interface. Ensure `ModelManager` wraps a `VersionedAddressBook` instance and properly delegates state management methods. Implement `Model#commitAddressBook()`, `Model#undoAddressBook()`, and `Model#redoAddressBook()` with appropriate exception handling for invalid operations.
+* **Command Integration:** Audit all `Command` subclasses in the `Logic` component that modify address book state (e.g., `AddCommand`, `DeleteCommand`, `EditCommand`, `ClearCommand`) to invoke `Model#commitAddressBook()` upon successful execution. Ensure commands that fail execution (throw `CommandException`) do not commit state changes.
+* **Memory Optimization:** Implement state pruning mechanism to limit history size (e.g., maximum 50 states) to prevent excessive memory consumption. Consider implementing shallow copy strategies or immutable state snapshots using builder patterns to reduce memory footprint for large address books.
+* **Error Handling:** Add comprehensive validation in `UndoCommand` and `RedoCommand` parsers to check state availability before execution. Implement user-friendly error messages through `CommandResult` when undo/redo operations are not possible.
+
+**Testing Strategy:** Develop comprehensive unit tests for `VersionedAddressBook` covering state transitions, edge cases (empty history, maximum history reached), and memory management. Create integration tests verifying undo/redo functionality across multiple command sequences.
+
+### **Gokul: SortByCloseness Feature Enhancement and Closeness Validation**
+
+**Objective:** Enhance the sorting functionality and ensure robustness of the closeness rating system through comprehensive improvements and testing.
+
+**Implementation Scope:**
+* **Enhanced Sorting Logic:** Extend `SortByClosenessCommand` and its associated `Comparator<Person>` implementation to support composite sorting (primary: closeness value, secondary: name alphabetically) when multiple contacts share identical closeness ratings. Refactor the comparator to use `Comparator.comparingInt()` and `thenComparing()` for maintainable multi-criteria sorting.
+* **Closeness Rating System:** Enhance the `Closeness` value object class in the `Model` component to support more granular rating levels if needed, ensuring immutability and proper validation through the constructor. Implement `Closeness#isValid()` method to enforce business rules (e.g., valid range checks) and add corresponding validation in `PersonBuilder` and parser classes.
+* **Data Consistency:** Implement validation in `Person#setCloseness()` and ensure persistence layer (`JsonAdaptedPerson`) correctly serializes/deserializes closeness values. Add defensive checks in `SortByClosenessCommandParser` to handle null or invalid closeness values gracefully.
+* **Model Integration:** Verify that `Model#updateSortComparator()` correctly applies sorting to the filtered person list and maintains sort order across subsequent operations. Ensure UI components (`PersonListPanel`) reactively update when sort comparator changes through proper `ObservableList` bindings.
+* **Testing and Debugging:** Develop comprehensive unit tests for `SortByClosenessCommand`, `SortByClosenessCommandParser`, and `Closeness` class covering edge cases (null values, equal closeness values, boundary conditions). Create integration tests validating sort persistence across multiple operations and ensuring UI updates correctly reflect sort state.
+
+**Testing Strategy:** Achieve high code coverage (>90%) for all closeness-related classes through unit tests. Perform manual testing with various closeness value distributions and verify sorting behavior matches expected results. Add logging statements for debugging sort operations in production.
+
+### **Max: External Integration and Contact Synchronization**
+
+**Objective:** Implement secure, bidirectional contact synchronization with external services, starting with Telegram integration, while maintaining data integrity and user privacy.
+
+**Implementation Scope:**
+* **Architecture Design:** Create a new `Integration` component following the same architectural pattern as existing components (separate interface and manager classes). Implement `TelegramIntegrationManager` as the concrete implementation, with proper dependency injection through the `MainApp` initialization sequence. Follow the Command pattern for sync operations to ensure testability and maintainability.
+* **API Integration:** Implement secure OAuth 2.0 authentication flow for Telegram API using industry-standard libraries (e.g., `okhttp`, `gson`). Create a `TelegramApiClient` wrapper class to abstract API communication and enable easier testing through mocking. Implement rate limiting and retry logic with exponential backoff for network resilience.
+* **Data Mapping Layer:** Develop a `ContactMapper` utility class to handle bidirectional conversion between `Person` objects and external service contact formats. Implement field mapping strategies (name, phone, email, handle) with validation to ensure data consistency. Handle missing or incompatible fields gracefully with appropriate default values or user prompts.
+* **Import/Export System:** Extend the `Storage` component with import/export capabilities supporting multiple formats (CSV via `opencsv`, JSON via existing `Jackson` infrastructure, vCard via `ez-vcard` library). Create `ImportCommand` and `ExportCommand` in the `Logic` component following existing command patterns. Implement format validation and error reporting for malformed import files.
+* **Conflict Resolution:** Design a conflict resolution strategy interface allowing users to choose resolution policies (manual, prefer local, prefer remote, merge). Implement conflict detection by comparing unique identifiers (phone, email, Telegram handle as per current `Person` uniqueness constraints). Create UI dialogs for interactive conflict resolution when needed.
+* **Security and Privacy:** Implement secure credential storage using platform-specific keychains/keystores. Ensure all API communications use HTTPS/TLS encryption. Add user consent mechanisms for data synchronization and provide clear privacy notices. Implement data encryption for sensitive contact information stored locally.
+
+**Testing Strategy:** Develop comprehensive unit tests for data mapping and format conversion logic. Create integration tests using mock API responses to verify synchronization workflows. Implement end-to-end tests for import/export functionality with various file formats. Conduct security testing for credential storage and API communication.
