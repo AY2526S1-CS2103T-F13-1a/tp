@@ -751,9 +751,29 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Activity Diagram**: A UML diagram that represents the flow of control from one activity to another, used to model workflows and business processes.
+* **Actor**: In use case modeling, an external entity (user, system, or device) that interacts with the system to achieve a goal.
+* **API (Application Programming Interface)**: A contract that defines how components interact with each other through well-defined interfaces.
+* **Class Diagram**: A UML diagram that shows the static structure of a system by displaying classes, attributes, methods, and relationships between classes.
 * **CLI (Command Line Interface)**: A text-based interface where users type commands (e.g., `add`, `list`, `delete`) to interact with the app.
-* **Contact**: An individual entry in the address book, typically containing a name, phone number, email, and optional tags.
+* **Command**: An executable instruction that performs an action on the address book (e.g., `AddCommand`, `DeleteCommand`).
+* **Dependency Injection**: A design pattern where objects receive their dependencies from external sources rather than creating them internally, promoting loose coupling and testability.
+* **FXML**: A markup language used to define JavaFX UI layouts declaratively, stored in `.fxml` files.
+* **JavaFX**: A Java library used for building desktop application user interfaces.
+* **JSON (JavaScript Object Notation)**: A lightweight data-interchange format used for storing address book data and user preferences.
+* **JUnit**: A unit testing framework for Java that provides annotations and assertions for writing and running tests.
+* **Lifeline**: In sequence diagrams, a vertical dashed line that represents the existence of an object or actor over time.
+* **Logic Component**: The command executor component that parses and executes user commands.
+* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Model Component**: The component that holds the address book data in memory and manages the application's state.
+* **MSS (Main Success Scenario)**: The primary path through a use case that describes the normal, successful execution flow without any errors or exceptions.
+* **Observer Pattern**: A behavioral design pattern where an object maintains a list of dependents and notifies them automatically of any state changes.
+* **OOP (Object-Oriented Programming)**: A programming paradigm based on the concept of objects, which contain data and methods that operate on that data.
+* **PlantUML**: An open-source tool that uses simple textual descriptions to generate UML diagrams, including sequence, class, and activity diagrams.
+* **Sequence Diagram**: A UML diagram that shows how objects interact in a particular sequence of messages, illustrating the dynamic behavior of a system.
+* **Singleton Pattern**: A creational design pattern that ensures a class has only one instance and provides global access to that instance.
+* **UI Component**: The user interface component that displays the application and handles user interactions.
+* **UML (Unified Modeling Language)**: A standardized modeling language used to visualize the design of a system through various diagram types.
 
 --------------------------------------------------------------------------------------------------------------------
 
