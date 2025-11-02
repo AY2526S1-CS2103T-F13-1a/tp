@@ -685,7 +685,7 @@ Priorities: High (must have) - `* * *`, Medium (should have) - `* *`, Low (nice 
 
 **MSS**
 
-1.  User requests to create a person based on their name, phone number, email address, date, profile picture (optional)
+1.  User requests to create a person with their name, phone number, email address, address, Telegram handle, closeness rating, and optionally tags
 2.  UniContactsPro adds a person
 3.  UniContactsPro displays the updated list of contacts
     Use case ends.
