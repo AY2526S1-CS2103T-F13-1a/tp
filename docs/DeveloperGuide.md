@@ -9,8 +9,6 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-## Acknowledgements
-
 - **AddressBook-Level3 (AB3) by SE-EDU** ([GitHub](https://github.com/se-edu/addressbook-level3), [Documentation](https://se-education.org/))
   - UniContactsPro is adapted from AB3, with extensive additions and customizations.
   - Documentation and diagrams (such as sequence/activity/class diagrams) and setup instructions were adapted from AB3 and SE-EDU documentation guides.
@@ -59,7 +57,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -91,7 +89,7 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
@@ -108,7 +106,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -129,6 +127,14 @@ How the `Logic` component works:
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
+Here are some other sequence diagrams that illustrates the interactions within `Logic` component:
+
+`sortByCloseness o/desc` Command
+![Interactions Inside the Logic Component for the `sortByCloseness o/desc` Command](images/SortByClosenessDiagram.png)
+
+`AutocompleteSequenceDiagram` Command
+![Interactions Inside the Logic Component for the `AutocompleteSequenceDiagram` Command](images/AutocompleteSequenceDiagram.png)
+
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
 <img src="images/ParserClasses.png" width="600"/>
@@ -137,10 +143,13 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
-### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+In summary, this is how the sequence of each command looks like within `Logic` component:
+![LogicSequenceDiagram](images/LogicSequenceDiagram.png)
 
-<img src="images/ModelClassDiagram.png" width="450" />
+### Model component
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/model/Model.java)
+
+<img src="images/ModelClassDiagram.png" width="800" />
 
 
 The `Model` component,
@@ -152,14 +161,16 @@ The `Model` component,
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
 
-<img src="images/BetterModelClassDiagram.png" width="450" />
+<img src="images/BetterModelClassDiagram.png" width="800" />
+
+**Note**: A person is uniquely identified with **phone, email, and Telegram handle**.
 
 </div>
 
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F13-1a/tp/blob/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
