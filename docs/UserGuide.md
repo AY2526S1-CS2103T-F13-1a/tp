@@ -58,7 +58,7 @@ Get up and running with UniContactsPro in minutes! Let's go through a few simple
 * **Operating System:** Windows, macOS, or Linux
 * **Java Version:** Java 17 or above
 
-<details>
+<details markdown="block">
 <summary>How to check your Java version?</summary>
 
 1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
@@ -66,7 +66,7 @@ Get up and running with UniContactsPro in minutes! Let's go through a few simple
 3.  Ensure the output shows a version number of `17` or higher.
 </details>
 
-<details>
+<details markdown="block">
 <summary>How to open your command terminal?</summary>
 
 ***For Linux users***
@@ -85,7 +85,7 @@ Get up and running with UniContactsPro in minutes! Let's go through a few simple
 After doing these steps, the command terminal window will open
 </details>
 
-<details>
+<details markdown="block">
 <summary>How to install Java 17?</summary>
 If your version of Java is not 17 or above, follow these steps to install Java 17 in your device.
 
@@ -112,7 +112,7 @@ Follow the Windows Java 17 Installation Guide [here](https://se-education.org/gu
         java -jar UniContactsPro.jar
         ```
 
-<details>
+<details markdown="block">
 <summary>How to navigate to the folder using the cd command?</summary>
 
 The `cd` command stands for "change directory". It has the same functionality as when you manually click on a folder in your file explorer.
@@ -175,7 +175,7 @@ Once the app is open, try these commands in the command box:
 ### Contact Card Details
 
 Each contact shows:
-- **Index:** Position in list (for commands)
+- **Index:** Position in list (useful for commands)
 - **Name:** Contact's full name
 - **Phone:** 8-digit number
 - **Email:** Email address
@@ -246,6 +246,8 @@ Prefixes have several variations with different notations:
 | Not variadic | prefix/ARGUMENT | 	[prefix/ARGUMENT] |
 | Variadic | prefix/ARGUMENT... | [prefix/ARGUMENT]... |
 
+Variadic prefixes refer to prefixes which can appear multiple times in one command. The only such prefix in UniContactsPro is `t/`.
+
 ### Valid Prefixes
 
 | Prefix | Meaning | Format | Mandatory Field|
@@ -261,7 +263,7 @@ Prefixes have several variations with different notations:
 ### Parameter Rules
 
 **Name (`n/`):**
-- Alphabets, numerical digits, spaces, and hyphens only
+- Alphabets, numerical digits, spaces, hyphens (`-`), apostrophes (`'` or `’`), or periods (`.`) only
 - Automatically capitalized
 - Extra spaces trimmed
 
@@ -299,16 +301,22 @@ Prefixes have several variations with different notations:
 
 ## 5. Features
 
+<div markdown="block" class="alert alert-warning">
+
+**:book: Note**
+If the user has typed in the correct `command_word` for an argument but has missed at least one missing mandatory parameter, the **"Invalid Command Format!"** error message will be displayed. Each command has its own such error message.
+</div>
+
 ### Adding Contacts
 
-**Command:** `add n/NAME p/PHONE e/EMAIL a/ADDRESS h/TELEGRAM HANDLE [t/TAG]..`
+**Command:** `add n/NAME p/PHONE e/EMAIL a/ADDRESS h/TELEGRAM HANDLE [t/TAG]... c/CLOSENESS`
 
 **Example:**
 ```
-add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
+add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend c/5
 ```
 **Name formatting** :
-- Name is not case-sensitive.  The first character of each word is captalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
+- Name is not case-sensitive.  The first character of each word is capitalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
 - When the name starts with the digit, the digit will remain while the rest of the characters are set to lower case (eg. `1JOhN dOE` will be set to `1john Doe`)
 - Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed
 
@@ -320,16 +328,61 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
 
 **Success:** Contact added with confirmation message:
 :::success
-<pre> New person added: Mary; Phone: 98765432; Email: marylim@gmail.com; Address: Ang Mo Kio; Tags: </pre>
+<pre> New person added: John Doe; Phone: 91234567; Email: john@example.com; Address: 123 Street; Closeness: 5; Tags: [friend]</pre>
 :::
 
 **Errors:**
-- `Invalid name` - Contains special characters that is not a hyphen
-- `Invalid phone number`
-- `Invalid email format`
-- `Invalid telegram handle`
-- `Invalid tag format`
-- `This person already exists`
+
+The following error message is the **"Invalid command format!"** error message for this command:
+```
+Invalid command format! Check command convention!
+add: Adds a person to the address book. Parameters: n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]... h/TELEGRAM HANDLE 
+Example: add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney h/@johndoe c/5
+```
+
+The following error messages are printed when the user input does not adhere to the [paramater rules](#parameter-rules). If the user's input has multiple such parameter-related issues present, the error message corresponding to the tag that the user first types is printed.
+
+- **Invalid name** 
+```
+Names should only contain letters (including accents and non-English characters), 
+ numbers, spaces, hyphens (-), apostrophes (' or ’), and periods (.). They must begin and end with a letter,
+ and cannot contain special symbols like @ or #.
+```
+
+- **Invalid phone number**
+```
+Phone numbers should start with 8 or 9, 
+should only contain numbers, and it should be exactly 8 digits long. White space is not allowed.
+```
+
+- **Invalid email format**
+```
+Emails should be of the format local-part@domain and adhere to the following constraints:
+1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (+_.-). The local-part may not start or end with any special characters.
+2. This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
+The domain name must:
+    - end with a domain label at least 2 characters long
+    - have each domain label start and end with alphanumeric characters
+    - have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
+```
+
+- **Invalid telegram handle**
+```
+Telegram handles must start with '@'. 
+It should only contain alphanumeric characters and underscores,
+though the first character must be an alphabet.
+It must be between 5 and 32 characters long and it should not be blank
+```
+
+- **Invalid tag format**
+```
+Tags names should be alphanumeric
+```
+
+The following error message occurs if the person already exists:
+```
+This person already exists in the address book
+```
 
 ---
 
@@ -342,7 +395,11 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend
 edit 1 p/98765432 e/newemail@example.com
 ```
 
-**Note:** At least one field must be provided. Tags replace all existing tags.
+<div markdown="block" class="alert alert-warning">
+
+**:book: Note**
+At least one field must be provided. Tags replace all existing tags.
+</div>
 
 ---
 
