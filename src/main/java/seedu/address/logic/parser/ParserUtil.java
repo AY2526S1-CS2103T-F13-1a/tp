@@ -75,6 +75,9 @@ public class ParserUtil {
             } else {
                 sb.append(Character.toLowerCase(c));
             }
+            if (c == ' ' || c == '-' || c == '\'' || c == '’') {
+                capitaliseNext = true;
+            }
         }
         return sb.toString();
     }

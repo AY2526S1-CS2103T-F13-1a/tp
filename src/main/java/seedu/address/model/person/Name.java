@@ -11,9 +11,9 @@ public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
             "Names should only contain letters (including accents and non-English characters), "
-                    + "\n spaces, hyphens (-), apostrophes (' or ’), and periods (.). "
-                    + "They must begin and end with a letter, and cannot contain numbers "
-                    + "\n or special symbols like @ or #.";
+                    + "\n numbers, spaces, hyphens (-), apostrophes (' or ’), and periods (.). "
+                    + "They must begin and end with a letter,"
+                    + "\n and cannot contain special symbols like @ or #.";
 
     /*
      * The first character of the address must not be a whitespace,
@@ -34,7 +34,7 @@ public class Name {
         requireNonNull(name);
         String normalized = name.trim().replaceAll("\\p{Zs}+", " ");
         checkArgument(isValidName(normalized), MESSAGE_CONSTRAINTS);
-        fullName = name;
+        fullName = normalized;
     }
 
     /**
