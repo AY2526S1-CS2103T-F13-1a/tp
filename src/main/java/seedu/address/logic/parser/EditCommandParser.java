@@ -74,6 +74,9 @@ public class EditCommandParser implements Parser<EditCommand> {
             if (profilePictureValue.contains("~")) {
                 throw new ParseException(EditCommand.MESSAGE_PROFILE_PICTURE_WITH_TILDE);
             }
+            if (!profilePictureValue.isEmpty()) {
+                validatePicturePath(profilePictureValue);
+            }
             editPersonDescriptor.setProfilePicture(profilePictureValue);
         }
         if (argMultimap.getValue(PREFIX_CLOSENESS).isPresent()) {
@@ -102,6 +105,37 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
+    }
+
+    private void validatePicturePath(String pp) throws ParseException {
+        assert !pp.isEmpty();
+
+        java.nio.file.Path candidate;
+        if (!pp.contains("/") && !pp.contains("\\")) {
+            candidate = java.nio.file.Paths.get(System.getProperty("user.dir"),
+                    "docs", "images", pp);
+            if (!java.nio.file.Files.exists(candidate)) {
+                throw new ParseException("Image '" + pp + "' has not been added to UniContactsPro yet. \n"
+                        + "Please add it using the addProfilePic command.");
+            }
+        } else {
+            try {
+                candidate = java.nio.file.Paths.get(pp);
+            } catch (Exception e) {
+                throw new ParseException("Invalid file path: " + pp);
+            }
+            if (!java.nio.file.Files.exists(candidate)) {
+                throw new ParseException("Image file not found at path: " + candidate.toString());
+            }
+        }
+
+        checkNotDirectory(candidate);
+    }
+
+    private void checkNotDirectory(java.nio.file.Path candidate) throws ParseException {
+        if (java.nio.file.Files.isDirectory(candidate)) {
+            throw new ParseException("The specified path is a directory, not a file: " + candidate.toString());
+        }
     }
 
 }
