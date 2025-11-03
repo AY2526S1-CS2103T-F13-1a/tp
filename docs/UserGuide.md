@@ -1,6 +1,6 @@
 ---
 layout: default.md
-title: "User Guide"
+title: User Guide
 ---
 
 # User Guide
