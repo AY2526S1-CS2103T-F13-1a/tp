@@ -2,8 +2,17 @@
 layout: page
 title: User Guide
 ---
+## Table of Contents
 
-# User Guide
+1. [Welcome to UniContactsPro!](#1-welcome-to-unicontactspro)
+2. [Quick Start](#2-quick-start)
+3. [Understanding the Interface](#3-understanding-the-interface)
+4. [Command Basics](#4-command-basics)
+5. [Features](#5-features)
+6. [FAQ](#6-faq)
+7. [Glossary](#7-glossary)
+8. [Acknowledgements](#8-acknowledgements)
+
 ## 1. Welcome to UniContactsPro!
 
 Welcome to **UniContactsPro**! We built this desktop app specifically for you, an undergraduate student, to finally get your school contacts organized and accessible.
@@ -34,18 +43,7 @@ All you need is a Mac, Window or Linux laptop with around 50MB of storage space!
 **For experienced users...**
 - Head over to our Command Summary table to quickly find the command format you are looking for!
 
-If you are looking for a specific section of the guide, have a look at our [Table of Contents](#table-of-contents) below.
-
-## Table of Contents
-
-1. [Welcome to UniContactsPro!](#1-welcome-to-unicontactspro)
-2. [Quick Start](#2-quick-start)
-3. [Understanding the Interface](#3-understanding-the-interface)
-4. [Command Basics](#4-command-basics)
-5. [Features](#5-features)
-6. [FAQ](#6-faq)
-7. [Glossary](#7-glossary)
-8. [Acknowledgements](#8-acknowledgements)
+If you are looking for a specific section of the guide, have a look at our [Table of Contents](#table-of-contents).
 
 ---
 
@@ -58,16 +56,20 @@ Get up and running with UniContactsPro in minutes! Let's go through a few simple
 * **Operating System:** Windows, macOS, or Linux
 * **Java Version:** Java 17 or above
 
-<details markdown="block">
-<summary>How to check your Java version?</summary>
+<div markdown="block" class="alert alert-info">
+
+**:question: Question**
+***How to check your Java version?***
 
 1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
 2.  Type `java -version` and press `Enter`.
 3.  Ensure the output shows a version number of `17` or higher.
-</details>
+</div>
 
-<details markdown="block">
-<summary>How to open your command terminal?</summary>
+<div markdown="block" class="alert alert-info">
+
+**:question: Question**
+***How to open your command terminal?***
 
 ***For Linux users***
 1. Press `Ctrl` + `Alt` + `T`.
@@ -82,11 +84,14 @@ Get up and running with UniContactsPro in minutes! Let's go through a few simple
 2. Type cmd or Command Prompt.
 3. Press Enter.
 
-After doing these steps, the command terminal window will open
-</details>
+After doing these steps, the command terminal window will open.
+</div>
 
-<details markdown="block">
-<summary>How to install Java 17?</summary>
+<div markdown="block" class="alert alert-info">
+
+**:question: Question**
+***How to install Java 17?***
+
 If your version of Java is not 17 or above, follow these steps to install Java 17 in your device.
 
 ***For Linux users***
@@ -97,7 +102,7 @@ Follow the macOS Java 17 Installataion Guide [here](https://se-education.org/gui
 
 ***For Windows users***
 Follow the Windows Java 17 Installation Guide [here](https://se-education.org/guides/tutorials/javaInstallationWindows.html).
-</details>
+</div>
 
 ### Installation & Launch
 
@@ -111,9 +116,10 @@ Follow the Windows Java 17 Installation Guide [here](https://se-education.org/gu
         ```bash
         java -jar UniContactsPro.jar
         ```
+<div markdown="block" class="alert alert-info">
 
-<details markdown="block">
-<summary>How to navigate to the folder using the cd command?</summary>
+**:question: Question**
+***How to navigate to the folder using the cd command?***
 
 The `cd` command stands for "change directory". It has the same functionality as when you manually click on a folder in your file explorer.
 
@@ -123,7 +129,7 @@ Let's assume the folder `UniContactsPro`is in Desktop. Executing the following c
 ```bash
 cd Desktop/UniContactsPro
 ```
-</details>
+</div>
 
 <div markdown="block" class="alert alert-info">
 
@@ -252,7 +258,7 @@ Variadic prefixes refer to prefixes which can appear multiple times in one comma
 
 | Prefix | Meaning | Format | Mandatory Field|
 |--------|---------|--------|--------|
-| `n/` | Name | Alphabets, numbers, spaces, hyphens | Yes |
+| `n/` | Name | Alphabets, numbers, spaces, hyphens, apostrophes | Yes |
 | `p/` | Phone | 8 digits, starts with 8 or 9 | Yes |
 | `e/` | Email | Valid email format | Yes |
 | `a/` | Address | Any text | Yes |
@@ -260,12 +266,14 @@ Variadic prefixes refer to prefixes which can appear multiple times in one comma
 |`c/`| Closeness | Numbers from 1 to 5 (inclusive) | Yes
 | `t/` | Tag | Alphanumeric, max 15 characters | No |
 
+Format rules will be discussed in more detail in the next section, [Parameter Rules](#parameter-rules).
+
 ### Parameter Rules
 
 **Name (`n/`):**
 - Alphabets, numerical digits, spaces, hyphens (`-`), apostrophes (`'` or `’`), or periods (`.`) only
 - Must begin with a alphabet
-- Automatically capitalized
+- First letter and letters after aforementioned special characters are automatically capitalised (`josh o'connor` will be reflected as `Josh O'Connor`)
 - Extra spaces trimmed
 
 **Phone (`p/`):**
@@ -321,7 +329,7 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend c/
 - The character following a non-alphabet character or a space will be capitalised (eg. `L'oreal` will be saved as `L'Oreal`, `E-shin` will be saved as `E-Shin`, `j.k. rowling` will be saved as `J.K. Rowling`)
 - Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed
 
-**Email formatting** : 
+**Email formatting** :
 - Email is not case-sensitive. All characters will be saved in lower case (eg. `jOhNdOe@gmAiL.cOm`, `JOHNDOE@GMAIL.COM` will both be saved as `johndoe@gmail.com`)
 - Periods(.) in the local part (text before the `@`) are ignored (eg. `ter.e.s.ata.n@gmail.com` will be saved as `teresatan@gmail.com`)
 - Suffixes of `+` are ignored in the local part, since regardless of the plus suffixes, emails still go to the same inbox (eg. `teresatan+amazon@gmail.com` will be saved as `teresatan@gmail.com`)
@@ -340,55 +348,32 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend c/
 **Errors:**
 
 The following error message is the **"Invalid command format!"** error message for this command:
-```
+:::danger
+<pre>
 Invalid command format! Check command convention!
 add: Adds a person to the address book. Parameters: n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]... h/TELEGRAM HANDLE 
 Example: add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney h/@johndoe c/5
-```
+</pre>
+:::
 
-The following error messages are printed when the user input does not adhere to the [paramater rules](#parameter-rules). If the user's input has multiple such parameter-related issues present, the error message corresponding to the tag that the user first types is printed.
+Even with correct command format, the following errors are possible if the user input does not adhere to the [paramater rules](#parameter-rules).
 
-- **Invalid name** 
-```
-Names should only contain letters (including accents and non-English characters), 
- numbers, spaces, hyphens (-), apostrophes (' or ’), and periods (.). They must begin and end with a letter,
- and cannot contain special symbols like @ or #.
-```
+- Invalid name
+- Invalid phone number
+- Invalid email format
+- Invalid telegram handle
+- Invalid tag format
+- Invalid closeness rating
 
-- **Invalid phone number**
-```
-Phone numbers should start with 8 or 9, 
-should only contain numbers, and it should be exactly 8 digits long. White space is not allowed.
-```
+If the user's input has multiple such parameter-related issues present, the error message corresponding to the first erratic prefix is printed.
 
-- **Invalid email format**
-```
-Emails should be of the format local-part@domain and adhere to the following constraints:
-1. The local-part should only contain alphanumeric characters and these special characters, excluding the parentheses, (+_.-). The local-part may not start or end with any special characters.
-2. This is followed by a '@' and then a domain name. The domain name is made up of domain labels separated by periods.
-The domain name must:
-    - end with a domain label at least 2 characters long
-    - have each domain label start and end with alphanumeric characters
-    - have each domain label consist of alphanumeric characters, separated only by hyphens, if any.
-```
-
-- **Invalid telegram handle**
-```
-Telegram handles must start with '@'. 
-It should only contain alphanumeric characters and underscores,
-though the first character must be an alphabet.
-It must be between 5 and 32 characters long and it should not be blank
-```
-
-- **Invalid tag format**
-```
-Tags names should be alphanumeric
-```
-
-The following error message occurs if the person already exists:
-```
+Finally, the error message for trying to add a duplicate person is as follows:
+:::danger
+<pre>
 This person already exists in the address book
-```
+</pre>
+:::
+
 
 ---
 
@@ -404,8 +389,40 @@ edit 1 p/98765432 e/newemail@example.com
 <div markdown="block" class="alert alert-warning">
 
 **:book: Note**
-At least one field must be provided. Tags replace all existing tags.
+At least one field must be provided.
 </div>
+
+:::danger
+:warning: **WARNING**
+Editing tags replaces all existing tags!
+:::
+
+**Success:** Contact edited with confirmation message:
+:::success
+<pre>
+Edited Person: John Doe; Phone: 98765432; Email: newemail@example.com; Address: 123 Street; Closeness: 5; Tags: [friend]
+</pre>
+:::
+
+**Errors:**
+The following error message is the **"Invalid command format!"** error message for this command:
+:::danger
+<pre>
+Invalid command format! Check command convention!
+edit: Edits the details of the person identified by the index number used in the displayed person list. Existing values will be overwritten by the input values.
+Parameters: INDEX (must be a positive integer) [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...[h/HANDLE] [pp/PROFILE_PICTURE] [c/CLOSENESS]
+Example: edit 1 p/91234567 e/johndoe@example.com
+</pre>
+:::
+
+If the `INDEX` provided by the user is invalid, the following error message is produced:
+:::danger
+<pre>
+The person index provided is invalid
+</pre>
+:::
+
+Last but not least, the ***invalid prefix argument*** errors, as well as the ***duplicate person*** error from the `add` command are also possible for this command. The error messages are the same as well.
 
 ---
 
@@ -420,8 +437,10 @@ Adding a new image with a from a local file path
 addProfilePic 1 pp/~Downloads/example.png
 ```
 
-**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
-
+**Success:**
+:::success
+![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+:::
 
 Adding an existing image with with file name
 
@@ -432,9 +451,15 @@ Adding an existing image with with file name
 addProfilePic 1 pp/example.png
 ```
 
-**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+**Success:**
+:::success
+![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+:::
 
-**Note:** Only .png images can be added
+:::warning
+**:book: Note**
+Only .png images can be added
+:::
 
 ---
 
@@ -454,10 +479,26 @@ delete all t/friends
 ```
 
 **Success:**
-Single Deletion: Shows deleted contact(s) details
-Multiple Deletion: Shows number of deleted contats
+Single Deletion: Shows deleted contact(s) details. For example...
+:::success
+<pre>
+Deleted Person: Harry Kane; Phone: 91115432; Email: kane@example.com; Address: 210, Clarke Ave 3, #02-36; Closeness: 5; Tags: [friends]
+</pre>
+:::
+
+Multiple Deletion: Shows number of deleted contacts. For example...
+:::success
+<pre>
+Deleted 2 People:
+Homie; Phone: 88965432; Email: honnd@example.com; Address: 23, Clementi Ave 7, #02-25; Closeness: 5; Tags: [friends]
+Lionel Messi; Phone: 98768888; Email: messid@example.com; Address: 31, Clementi Ave 2, #02-15; Closeness: 5; Tags: [friendsssssssssssss]
+</pre>
+:::
 
 **Errors:**
+
+If there is no contact found corresponding to a specified `INDEX`, the same error ***invalid index*** from the `edit` command occurs.
+
 - No contact found with index: `The person index provided is invalid`
 - No contact found with delete all tag: `No persons found with tag: <TAG>`
 
@@ -467,7 +508,7 @@ Multiple Deletion: Shows number of deleted contats
 
 **Command:** `list`
 
-Shows all contacts in order added (newest first).
+Shows all contacts in order added (oldest first).
 
 ---
 
@@ -475,7 +516,7 @@ Shows all contacts in order added (newest first).
 
 The `find` command allows users to search for contacts according to their names. Even partial matches to the `KEYWORD` are supported.
 
-**Command:** `find KEYWORD`
+**Command:** `find KEYWORD [MORE KEYWORDS]...`
 
 **Example:**
 
@@ -487,14 +528,28 @@ All of the following commands should result in only `Alex` being displayed:
 find Al
 find Alex
 find ex
+find Al ex
 ```
 
 **Success:**
 
-Shows the list of contacts with name matching the keyword. Successful execution message also states number of contacts displayed.
+Shows the list of contacts with name matching the keyword. Successful execution message also states number of contacts displayed. For example...
+:::success
+<pre>
+1 persons listed!
+</pre>
+:::
 
 **Errors:**
-- No keyword input: "Invalid command format" message is shown
+If no `KEYWORD` is input by user, the follwoing "Invalid command format" message is shown:
+:::danger
+<pre>
+Invalid command format! Check command convention!
+find: Finds all persons whose names contain any of the specified keywords (case-insensitive) and displays them as a list with index numbers.
+Parameters: KEYWORD [MORE_KEYWORDS]...
+Example: find alice bob charlie
+</pre>
+:::
 
 ---
 
@@ -516,12 +571,20 @@ filter t/friends
 
 **Success:**
 
-Shows the list of contacts with the respective tag. Successful execution message also states number of contacts displayed.
+Shows the list of contacts with the respective tag. Successful execution message also states number of contacts displayed, similar to `find`.
 
 **Errors:**
-- Empty tag input: "Invalid command format" message is shown
-- No prefix `t/`: "Invalid command format" message is shown
-- Invalid tag: Tag specifications message is shown
+The "invalid command format" message is shown when the user either misses the prefix `t/`. The message is as such:
+:::danger
+<pre>
+Invalid command format! Check command convention!
+filter: Filters and lists all persons who have at least one of the specified tags (case-insensitive) 
+Parameters: t/KEYWORD [t/MORE_KEYWORDS]... 
+Example: filter t/friends t/colleagues
+</pre>
+:::
+
+If any of the user's `TAG` arguments are invalid, the ***invalid tag*** error message is shown, similar to `delete` and `edit`.
 
 ---
 
@@ -545,38 +608,43 @@ results in the contact book looking like this:
 
 **Success:**
 
-Shows . Successful execution message states order in which sort has been performed.
+Shows successful execution message stating order in which sort has been performed as shown below:
+:::success
+<pre>
+Sorted contact list by closeness (descending)
+</pre>
+:::
 
 **Errors:**
-- Empty order input: "Invalid command format" message is shown
-- No prefix `o/`: "Invalid command format" message is shown
-- Invalid order: "Invalid order" message is shown
 
+If the user does not input any order after the prefix `o/`, does not specify the prefix at all, or enters and invalid `ORDER` argument, the following "Invalid command format" message is shown:
+:::danger
+<pre>
+Invalid command format! Check command convention!
+sortByCloseness: Sorts the contact list by closeness rating.
+Parameters: o/{asc|desc}
+Example: sortByCloseness o/desc
+</pre>
+:::
 
-**Note:** Order arguments are case-insensitive
+:::warning
+**:book: Note:**
+Order arguments are case-insensitive (e.g. `sortByCloseness o/ASC` is accepted)
+:::
 
-
-### Managing Tags
-
-**Add tags when creating:**
-```
-add n/John p/91234567 e/john@example.com a/123 h/@john123 St t/friend t/CS2103T
-```
-
-**Update tags:**
-```
-edit 1 t/bestfriend t/CCA
-```
-
-**Note:** Editing tags replaces ALL existing tags.
-
----
+**Note:**
 
 ### Clearing All Contacts
 
 **Command:** `clear`
 
-**Warning:** Permanent and cannot be undone.
+This command clears all the contacts in UniContactsPro.
+
+:::danger
+**:warning: WARNING**
+
+Permanent and cannot be undone.
+:::
 
 ---
 
@@ -584,7 +652,7 @@ edit 1 t/bestfriend t/CCA
 
 **Command:** `help`
 
-Opens help window with command reference and User Guide link.
+Opens help window with the User Guide link.
 
 ---
 
@@ -617,7 +685,7 @@ A: Keep regular backups of `addressbook.json`. The app will start with an empty 
 A: No, undo is not currently supported. Be careful with `delete` and `clear`.
 
 **Q: Are commands case-sensitive?**
-A: Command words are not case-sensitive, but `asc`/`desc` must be lowercase.
+A: Command words are not case-sensitive.
 
 **Q: Why does editing tags replace all existing tags?**
 A: This is intentional. To keep existing tags, specify them along with new ones.
@@ -637,6 +705,9 @@ A: Keep regular backups of `addressbook.json`. The app will start with an empty 
 
 ### CLI (Command Line Interface)
 A text-based way of interacting with software by typing commands.
+
+### Closeness
+How close the user perceives him or herself to be in relation to the contact.
 
 ### Command Box
 The text input field where you type commands. Press `Enter` to execute.
