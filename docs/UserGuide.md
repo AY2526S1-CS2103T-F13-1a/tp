@@ -1,14 +1,44 @@
-## About This Guide
+---
+layout: default.md
+title: "User Guide"
+---
 
-This guide is designed for undergraduate student who:
+# User Guide
+## 1. Welcome to UniContactsPro!
+
+Welcome to **UniContactsPro**! We built this desktop app specifically for you, an undergraduate student, to finally get your school contacts organized and accessible.
+
+Think of it as your personal digital address book for university. Whether you're managing project groupmates, classmates for a single module, or your CCA contacts, UniContactsPro is here to help. Our goal is to make sure you never lose touch, especially with those people you aren't close to but still need to contact.
+
+
+### Target Users
+
+UniContactsPro targets undergraduate students who:
 - Need to organize and manage university-related contacts, such as project groupmates, classmates, and CCA members.
 - Are comfortable using a Command Line Interface (CLI) for efficient data entry and management.
 - Prefer a keyboard-driven workflow for speed.
 - Want a dedicated, local desktop application to keep track of connections.
 
+### What you need
+
+All you need is a Mac, Window or Linux laptop with around 50MB of storage space! Have these and you are good to go!
+
+### Using this guide
+
+**For new users...**
+- We suggest that you start from the [Quick Start](#2-quick-start) section, to learn how to set up and learn about UniContactsPro from scratch
+
+**For existing users...**
+- Head over to [Features](#5-features) to learn or refresh yourself with the features we have in store
+
+**For experienced users...**
+- Head over to our Command Summary table to quickly find the command format you are looking for!
+
+If you are looking for a specific section of the guide, have a look at our [Table of Contents](#table-of-contents) below.
+
 ## Table of Contents
 
-1. [Introduction](#1-introduction)
+1. [Welcome to UniContactsPro!](#1-welcome-to-unicontactspro)
 2. [Quick Start](#2-quick-start)
 3. [Understanding the Interface](#3-understanding-the-interface)
 4. [Command Basics](#4-command-basics)
@@ -19,61 +49,87 @@ This guide is designed for undergraduate student who:
 
 ---
 
-## 1. Introduction
-
-Welcome to **UniContactsPro**! We built this desktop app specifically for you, an undergraduate student, to finally get your school contacts organized and accessible.
-
-Think of it as your personal digital address book for university. Whether you're managing project groupmates, classmates for a single module, or your CCA contacts, UniContactsPro is here to help. Our goal is to make sure you never lose touch, especially with those people you aren't close to but still need to contact.
-
-We've optimized it for however you work best—whether you're a fan of keyboard commands (CLI) or prefer using a mouse, you'll find it combines efficiency with simplicity for managing all your university connections.
-
----
-
 ## 2. Quick Start
 
-Get up and running with UniContactsPro in minutes.
+Get up and running with UniContactsPro in minutes! Let's go through a few simple steps to get you there...
 
 ### System Requirements
 
 * **Operating System:** Windows, macOS, or Linux
 * **Java Version:** Java 17 or above
 
-> **How to check your Java version:**
-> 1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
-> 2.  Type `java -version` and press `Enter`.
-> 3.  Ensure the output shows a version number of `17` or higher.
+<details>
+<summary>How to check your Java version?</summary>
 
+1.  Open your command terminal (e.g., Command Prompt on Windows, Terminal on macOS/Linux).
+2.  Type `java -version` and press `Enter`.
+3.  Ensure the output shows a version number of `17` or higher.
+</details>
 
 <details>
-<summary>How to open your command terminal</summary>
+<summary>How to open your command terminal?</summary>
 
-***Linux***
+***For Linux users***
 1. Press `Ctrl` + `Alt` + `T`.
 
-***macOS***
+***For Mac users***
 1. Press `F4` or press `Command (⌘) + Space` to open Spotlight.
 2. Type "Terminal" and click the terminal app.
 
 
-***Windows***
+***For Windows users***
 1. Press Windows key or click the Start menu.
 2. Type cmd or Command Prompt.
 3. Press Enter.
 
-After doing these steps, a black window will open, that is the command terminal
+After doing these steps, the command terminal window will open
+</details>
+
+<details>
+<summary>How to install Java 17?</summary>
+If your version of Java is not 17 or above, follow these steps to install Java 17 in your device.
+
+***For Linux users***
+Follow the Linux Java 17 Installation Guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
+
+***For macOS users***
+Follow the macOS Java 17 Installataion Guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+
+***For Windows users***
+Follow the Windows Java 17 Installation Guide [here](https://se-education.org/guides/tutorials/javaInstallationWindows.html).
 </details>
 
 ### Installation & Launch
 
-1.  **Download:** Get the latest `UniContactsPro.jar` from the [GitHub releases page](https://github.com/AY2526S1-CS2103T-F13-1a/tp/releases).
-2.  **Store:** Create a new folder for the application and place the downloaded `.jar` file inside it.
+1.  **Download:** Go to our [GitHub releases page](https://github.com/AY2526S1-CS2103T-F13-1a/tp/releases). In the most recent release, scroll down to the `Assets` section and download `UniContactsPro.jar` by clicking on the file.
+    ![image](https://hackmd.io/_uploads/S1NaEMS1be.png)
+2.  **Store:** Create a new folder, named `UniContactsPro` for the application and place the downloaded `.jar` file inside it.
 3.  **Run:**
-    * Open a command terminal.
+    * Open a command terminal (instructions for this is in previous section).
     * Navigate (using `cd`) to the folder you created in step 2.
     * Execute the following command:
-        ```
+        ```bash
         java -jar UniContactsPro.jar
         ```
+
+<details>
+<summary>How to navigate to the folder using the cd command?</summary>
+
+The `cd` command stands for "change directory". It has the same functionality as when you manually click on a folder in your file explorer.
+
+***Example usage***
+Let's assume the folder `UniContactsPro`is in Desktop. Executing the following command in your terminal will bring you to the folder.
+
+```bash
+cd Desktop/UniContactsPro
+```
+</details>
+
+<div markdown="block" class="alert alert-info">
+
+**:bulb: Pro Tip**
+After typing `cd` (with a space), you can often drag and drop the folder directly from your file explorer onto the terminal window. This will paste the full, correct path for you.
+</div>
 
 The application will launch, pre-filled with sample data for you to explore.
 
@@ -84,13 +140,13 @@ The application will launch, pre-filled with sample data for you to explore.
 
 Once the app is open, try these commands in the command box:
 
-1.  **See all commands:**
+1.  **Get directed to the User Guide:**
     ```
     help
     ```
 2.  **Add a new contact:**
     ```
-    add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe
+    add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe c/5
     ```
 3.  **View all contacts:**
     ```
@@ -128,7 +184,7 @@ Each contact shows:
 - **Closeness:** Closeness rating
 - **Tags:** Categories/labels (if any)
 
-![photo_6057644066834418469_y](https://hackmd.io/_uploads/B1Ti85A0ge.jpg)
+![image](https://hackmd.io/_uploads/HJckA9B1Wg.png)
 
 
 ### Navigating Command History
@@ -138,7 +194,11 @@ Each contact shows:
 | `↑` | Previous command in history |
 | `↓` | Next command in history |
 
-**Note** : The last input typed by the user (before pressing enter) will be shown if there are no more stored commands after pressing `↓`
+<div markdown="block" class="alert alert-warning">
+
+**:book: Note**
+The last input typed by the user (before pressing enter) will be shown if there are no more stored commands after pressing `↓`
+</div>
 
 ### Using Command Autocomplete
 UniContactsPro uses an autocomplete system to help you type commands faster and reduce errors
@@ -169,20 +229,22 @@ As you type in the command box, a dropdown box will appear with recognized comma
 
 ### Command Structure
 
+Commands in UniContactsPro are simple to follow! Below is the typical command format...
+
 ```
-command_word PREFIX/VALUE [PREFIX/VALUE]...
+command_word prefix/ARGUMENT [prefix/ARGUMENT]...
 ```
 
 **Prefixes** are in the format:
 
-`prefix/Value`
+`prefix/ARGUMENT`
 
 Prefixes have several variations with different notations:
 
 || Mandatory | Optional |
 |--------|---------|--------|
-| Not variadic | prefix/Value | 	[prefix/Value] |
-| Variadic | prefix/Value... | [prefix/Value]... |
+| Not variadic | prefix/ARGUMENT | 	[prefix/ARGUMENT] |
+| Variadic | prefix/ARGUMENT... | [prefix/ARGUMENT]... |
 
 ### Valid Prefixes
 
