@@ -112,11 +112,23 @@ public class ParserUtil {
      */
     public static Email parseEmail(String email) throws ParseException {
         requireNonNull(email);
-        String trimmedEmail = email.trim();
-        if (!Email.isValidEmail(trimmedEmail)) {
+        String trimmedEmail = email.trim().toLowerCase();
+        int atIndex = trimmedEmail.indexOf('@');
+        if (atIndex == -1) {
             throw new ParseException(Email.MESSAGE_CONSTRAINTS);
         }
-        return new Email(trimmedEmail);
+        String localPart = trimmedEmail.substring(0, atIndex);
+        String domainPart = trimmedEmail.substring(atIndex + 1);
+        int plusIndex = localPart.indexOf('+');
+        if (plusIndex != -1) {
+            localPart = localPart.substring(0, plusIndex);
+        }
+        localPart = localPart.replace(".", "");
+        String normalisedEmail = localPart + "@" + domainPart;
+        if (!Email.isValidEmail(normalisedEmail)) {
+            throw new ParseException(Email.MESSAGE_CONSTRAINTS);
+        }
+        return new Email(normalisedEmail);
     }
 
     /**
@@ -156,7 +168,7 @@ public class ParserUtil {
      */
     public static Handle parseHandle(String handle) throws ParseException {
         requireNonNull(handle);
-        String trimmedHandle = handle.trim(); // trims the trailing white space
+        String trimmedHandle = handle.trim().toLowerCase(); // trims the trailing white space
         // tells the user she/he entered the wrong input
         if (!Handle.isValidHandle(trimmedHandle)) {
             throw new ParseException(Handle.MESSAGE_CONSTRAINTS);
