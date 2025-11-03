@@ -114,6 +114,9 @@ public class ParserUtil {
         requireNonNull(email);
         String trimmedEmail = email.trim().toLowerCase();
         int atIndex = trimmedEmail.indexOf('@');
+        if (atIndex == -1) {
+            throw new ParseException(Email.MESSAGE_CONSTRAINTS);
+        }
         String localPart = trimmedEmail.substring(0, atIndex);
         String domainPart = trimmedEmail.substring(atIndex + 1);
         int plusIndex = localPart.indexOf('+');
