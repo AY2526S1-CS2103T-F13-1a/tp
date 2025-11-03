@@ -10,15 +10,18 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphanumeric characters, hyphens, slashes and spaces, "
-                    + "and it should not be blank";
+            "Names should only contain letters (including accents and non-English characters), "
+                    + "\n spaces, hyphens (-), apostrophes (' or ’), and periods (.). "
+                    + "They must begin and end with a letter, and cannot contain numbers "
+                    + "\n or special symbols like @ or #.";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      * The name can contain hyphens or slashes
      */
-    public static final String VALIDATION_REGEX = "^[\\p{Alnum}][\\p{Alnum} /-]*$";
+    private static final String VALIDATION_REGEX =
+            "^(?=.{1,80}$)[\\p{L}\\p{M}\\p{N}]+(?:[\\p{Zs}\\-.'’][\\p{L}\\p{M}\\p{N}]+)*$";
 
     public final String fullName;
 
@@ -29,7 +32,8 @@ public class Name {
      */
     public Name(String name) {
         requireNonNull(name);
-        checkArgument(isValidName(name), MESSAGE_CONSTRAINTS);
+        String normalized = name.trim().replaceAll("\\p{Zs}+", " ");
+        checkArgument(isValidName(normalized), MESSAGE_CONSTRAINTS);
         fullName = name;
     }
 
