@@ -52,7 +52,8 @@ public class AddProfilePicCommandParser implements Parser<AddProfilePicCommand> 
             candidate = java.nio.file.Paths.get(System.getProperty("user.dir"),
                     "docs", "images", pp);
             if (!java.nio.file.Files.exists(candidate)) {
-                throw new ParseException("Image '" + pp + "' not found in docs/images");
+                throw new ParseException("Image '" + pp + "' has not been added to UniContactsPro yet. \n"
+                        + "Please add it using the addProfilePic command.");
             }
         } else {
             try {

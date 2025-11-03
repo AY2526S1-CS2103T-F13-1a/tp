@@ -132,7 +132,8 @@ public class AddProfilePicCommandParserTest {
     @Test
     public void parse_nonExistentImageInDocs_throwsParseException() {
         String userInput = INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_PROFILE_PICTURE + "nonexistent.png";
-        String expectedMessage = "Image 'nonexistent.png' not found in docs/images";
+        String expectedMessage = "Image '" + "nonexistent.png" + "' has not been added to UniContactsPro yet. \n"
+                + "Please add it using the addProfilePic command.";
         CommandParserTestUtil.assertParseFailure(parser, userInput, expectedMessage);
     }
 
@@ -227,7 +228,8 @@ public class AddProfilePicCommandParserTest {
     @Test
     public void parse_imageWithSpaces_throwsParseException() {
         String userInput = INDEX_FIRST_PERSON.getOneBased() + " " + PREFIX_PROFILE_PICTURE + "image with spaces.png";
-        String expectedMessage = "Image 'image with spaces.png' not found in docs/images";
+        String expectedMessage = "Image '" + "image with spaces.png" + "' has not been added to UniContactsPro yet. \n"
+                + "Please add it using the addProfilePic command.";;
         CommandParserTestUtil.assertParseFailure(parser, userInput, expectedMessage);
     }
 
