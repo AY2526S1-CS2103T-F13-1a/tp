@@ -172,6 +172,19 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseTag_tagLengthExactly15_success() throws Exception {
+        String tag15Chars = "a".repeat(15);
+        Tag expectedTag = new Tag(tag15Chars);
+        assertEquals(expectedTag, ParserUtil.parseTag(tag15Chars));
+    }
+
+    @Test
+    public void parseTag_tagLength16_throwsParseException() {
+        String tag16Chars = "a".repeat(16);
+        assertThrows(ParseException.class, "Tag names should be at most 15 characters long", ()
+                -> ParserUtil.parseTag(tag16Chars));
+    }
+    @Test
     public void parseTags_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTags(null));
     }
