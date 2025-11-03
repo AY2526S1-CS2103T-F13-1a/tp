@@ -264,6 +264,7 @@ Variadic prefixes refer to prefixes which can appear multiple times in one comma
 
 **Name (`n/`):**
 - Alphabets, numerical digits, spaces, hyphens (`-`), apostrophes (`'` or `’`), or periods (`.`) only
+- Must begin with a alphabet
 - Automatically capitalized
 - Extra spaces trimmed
 
@@ -317,13 +318,18 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend c/
 ```
 **Name formatting** :
 - Name is not case-sensitive.  The first character of each word is capitalised, leaving the rest of the characters in lower case (eg. `JOHN DOE`, `jOhN dOe` will all be recorded as `John Doe`)
-- When the name starts with the digit, the digit will remain while the rest of the characters are set to lower case (eg. `1JOhN dOE` will be set to `1john Doe`)
+- The character following a non-alphabet character or a space will be capitalised (eg. `L'oreal` will be saved as `L'Oreal`, `E-shin` will be saved as `E-Shin`, `j.k. rowling` will be saved as `J.K. Rowling`)
 - Additional spaces between two words will be trimmed to one, trailing white spaces are trimmed
+
+**Email formatting** : 
+- Email is not case-sensitive. All characters will be saved in lower case (eg. `jOhNdOe@gmAiL.cOm`, `JOHNDOE@GMAIL.COM` will both be saved as `johndoe@gmail.com`)
+- Periods(.) in the local part (text before the `@`) are ignored (eg. `ter.e.s.ata.n@gmail.com` will be saved as `teresatan@gmail.com`)
+- Suffixes of `+` are ignored in the local part, since regardless of the plus suffixes, emails still go to the same inbox (eg. `teresatan+amazon@gmail.com` will be saved as `teresatan@gmail.com`)
 
 **Duplicates**
 - Two people are considered duplicates if they have either of the same fields :
     - Phone number
-    - Email address
+    - Email address (after email formatting)
     - Telegram handle
 
 **Success:** Contact added with confirmation message:
