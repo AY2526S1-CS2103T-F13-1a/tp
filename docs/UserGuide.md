@@ -3,7 +3,6 @@ layout: page
 title: User Guide
 ---
 
-# User Guide
 ## 1. Welcome to UniContactsPro!
 
 Welcome to **UniContactsPro**! We built this desktop app specifically for you, an undergraduate student, to finally get your school contacts organized and accessible.
@@ -411,13 +410,10 @@ Adding a new image with a from a local file path
 
 **Example:**
 ```
-addProfilePic 1 pp/~Downloads/example.png
+addProfilePic 1 pp/~/Downloads/example.png
 ```
 
-**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
-
-
-Adding an existing image with with file name
+Adding an existing image with ONLY the file name
 
 **Command:** `addProfilePic INDEX pp/imagename.png`
 
@@ -426,7 +422,9 @@ Adding an existing image with with file name
 addProfilePic 1 pp/example.png
 ```
 
-**Success:** ![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
+**Success:** 
+
+![Updated profile picture](images/Screenshot.png)
 
 **Note:** Only .png images can be added
 
