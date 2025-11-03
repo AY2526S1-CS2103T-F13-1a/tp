@@ -66,12 +66,20 @@ public class ParserUtil {
             return "";
         }
         String normalised = name.trim().replaceAll("\\s+", " ");
-        String[] words = normalised.split(" ");
-        for (int i = 0; i < words.length; i++) {
-            words[i] = words[i].substring(0, 1).toUpperCase()
-                        + words[i].substring(1).toLowerCase();
+        StringBuilder sb = new StringBuilder();
+        boolean capitaliseNext = true;
+        for (char c : normalised.toCharArray()) {
+            if (capitaliseNext && Character.isLetter(c)) {
+                sb.append(Character.toUpperCase(c));
+                capitaliseNext = false;
+            } else {
+                sb.append(Character.toLowerCase(c));
+            }
+            if (c == ' ' || c == '-' || c == '\'' || c == '’') {
+                capitaliseNext = true;
+            }
         }
-        return String.join(" ", words);
+        return sb.toString();
     }
 
     /**
