@@ -11,7 +11,8 @@ title: User Guide
 5. [Features](#5-features)
 6. [FAQ](#6-faq)
 7. [Glossary](#7-glossary)
-8. [Acknowledgements](#8-acknowledgements)
+8. [Known Issues](#8-known-issues)
+9. [Acknowledgements](#9-acknowledgements)
 
 ## 1. Welcome to UniContactsPro!
 
@@ -729,7 +730,37 @@ A command or prefix that can accept multiple values, entered one after another�
 
 ---
 
-## 8. Acknowledgements
+## 8. Known Issues
+
+**Invalid address book file**  
+  *Description:* If the addressbook file is corrupted with missing or incorrect fields (as a result of external tampering of the addressbook file), the app may show an empty contact list but won’t alert you.
+  **Note:** Keep regular backups, and only edit the addressbook file with the app. Restore from backup or contact support if data disappears unexpectedly.
+
+**Image not deleted with contact**  
+  *Description:* When deleting a contact, their attached photo remains in the images folder, causing unnecessary storage use over time.  
+  **Note:** Manually remove unused images from the folder when deleting contacts.
+
+**Intermittent loading issues**  
+  *Description:* Contacts may fail to load or show incomplete data after restarting; issue is not consistent and may be due to sync errors.  
+  **Note:** Save and exit fully before closing the app. If issue persists, check the addressbook file or restart again.
+
+**Unclear email errors**  
+  *Description:* Invalid emails cause ambiguous error messages, making it hard to know which part is wrong.  
+  **Note:** Check both local-part and domain formatting. Refer to the Parameter Rules for correct format.
+
+**Multiple app instances**  
+  *Description:* Running multiple windows of the app creates conflicts, as data does not sync and there are no warnings.  
+  **Note:** Only use one app window at a time. Restore from backup if changes are lost.
+
+**Silent data loss on JSON corruption**  
+  *Description:* Corrupt addressbook.json files cause the app to start with an empty list, with no warnings about lost data.  
+  **Note:** Backup data regularly. Restore from backup or sample data if contacts disappear.
+
+**Delete command message missing closeness**  
+  *Description:* The delete command’s success message shows contact details but omits the "closeness" value.  
+  **Note:** Closeness information may need to be checked manually if needed after deletion.
+
+## 9. Acknowledgements
 
 UniContactsPro is developed as part of the CS2103T Software Engineering module at the National University of Singapore.
 
