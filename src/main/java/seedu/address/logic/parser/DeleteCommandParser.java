@@ -41,7 +41,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 throw new ParseException(String.format(
                         MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
             }
-            return new DeleteCommand(tags); // ✅ pass Set<Tag>
+            return new DeleteCommand(tags);
         }
 
         List<Index> indexes = parseIndexes(preamble);
@@ -52,15 +52,12 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         return new DeleteCommand(indexes);
     }
 
-    /* ---------------- helpers (each < 30 LOC) ---------------- */
-
     private static boolean isAllDelete(String preamble) {
         // allow "all", or "all " followed by anything (tags are read from PREFIX_TAG)
         return preamble.equals("all") || preamble.startsWith("all ");
     }
 
     private static Set<Tag> parseTags(ArgumentMultimap map) throws ParseException {
-        // collect all t/ values; preserve order for nicer error strings
         List<String> raw = map.getAllValues(PREFIX_TAG);
         Set<Tag> tags = new LinkedHashSet<>();
         for (String t : raw) {
@@ -68,7 +65,11 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             if (trimmed.isEmpty()) {
                 continue;
             }
-            tags.add(new Tag(trimmed));
+            try {
+                tags.add(new Tag(trimmed));
+            } catch (IllegalArgumentException e) {
+                throw new ParseException("Invalid tag format! Tags should contain only alphanumeric characters.");
+            }
         }
         return tags;
     }

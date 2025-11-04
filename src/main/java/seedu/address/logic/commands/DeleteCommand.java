@@ -38,6 +38,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted %d People:\n%2$s";
     public static final String NO_PERSONS_FOUND_WITH_TAGS = "No persons found with tag(s): %s";
+    public static final String INVALID_INDEXES_MESSAGE = "Invalid index(es): %s";
 
     /**
      * Deletion modes for DeleteCommand
@@ -144,26 +145,33 @@ public class DeleteCommand extends Command {
 
     private CommandResult executeByIndex(Model model) throws CommandException {
         List<Person> visible = model.getSortedPersonList();
-        validateIndices(visible.size(), targetIndexes);
-        List<Person> toDelete = collectPersonsByIndices(visible, targetIndexes);
+        List<String> invalids = findInvalidIndices(visible.size(), targetIndexes);
+        List<Person> toDelete = collectValidPersonsByIndices(visible, targetIndexes);
         deletePersons(model, toDelete);
-        return successListResult(toDelete);
+        CommandResult result = successListResult(toDelete);
+        if (!invalids.isEmpty()) {
+            String invalidsMessage = String.format(INVALID_INDEXES_MESSAGE, String.join(", ", invalids));
+            result = new CommandResult(result.getFeedbackToUser() + "\n" + invalidsMessage);
+        }
+        return result;
     }
 
-    private static void validateIndices(int size, List<Index> indexes) throws CommandException {
+    private static List<String> findInvalidIndices(int size, List<Index> indexes) throws CommandException {
+        List<String> invalids = new ArrayList<>();
         for (Index id : indexes) {
-            if (id.getZeroBased() >= size) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            if (id.getZeroBased() < 0 || id.getZeroBased() >= size) {
+                invalids.add(String.valueOf(id.getOneBased()));
             }
         }
+        return invalids;
     }
 
-    private static List<Person> collectPersonsByIndices(List<Person> visible, List<Index> indexes) {
+    private static List<Person> collectValidPersonsByIndices(List<Person> visible, List<Index> indexes) {
         return indexes.stream()
-                .sorted((a, b) -> Integer.compare(b.getZeroBased(), a.getZeroBased()))
-                .map(i -> visible.get(i.getZeroBased()))
-                .distinct()
-                .toList();
+                    .filter(index -> index.getZeroBased() >= 0 && index.getZeroBased() < visible.size())
+                    .map(index -> visible.get(index.getZeroBased())) // collect valid persons
+                    .distinct()
+                    .collect(Collectors.toList());
     }
 
     private static void deletePersons(Model model, List<Person> people) {
