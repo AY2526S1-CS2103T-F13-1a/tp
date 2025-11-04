@@ -434,15 +434,10 @@ Adding a new image with a from a local file path
 
 **Example:**
 ```
-addProfilePic 1 pp/~Downloads/example.png
+addProfilePic 1 pp/~/Downloads/example.png
 ```
 
-**Success:**
-:::success
-![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
-:::
-
-Adding an existing image with with file name
+Adding an existing image with ONLY the file name
 
 **Command:** `addProfilePic INDEX pp/imagename.png`
 
@@ -451,10 +446,9 @@ Adding an existing image with with file name
 addProfilePic 1 pp/example.png
 ```
 
-**Success:**
-:::success
-![image](https://hackmd.io/_uploads/ryVW0KRCxl.png)
-:::
+**Success:** 
+
+![Updated profile picture](images/Screenshot.png)
 
 :::warning
 **:book: Note**
