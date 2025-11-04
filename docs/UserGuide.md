@@ -342,20 +342,24 @@ add n/John Doe p/91234567 e/john@example.com a/123 Street h/@johndoe t/friend c/
     - Telegram handle
 
 **Success:** Contact added with confirmation message:
-:::success
-<pre> New person added: John Doe; Phone: 91234567; Email: john@example.com; Address: 123 Street; Closeness: 5; Tags: [friend]</pre>
-:::
+<div markdown="block" class="alert alert-success">
+
+```
+New person added: John Doe; Phone: 91234567; Email: john@example.com; Address: 123 Street; Closeness: 5; Tags: [friend]
+```
+</div>
 
 **Errors:**
 
 The following error message is the **"Invalid command format!"** error message for this command:
-:::danger
-<pre>
+<div markdown="block" class="alert alert-danger">
+
+```
 Invalid command format! Check command convention!
 add: Adds a person to the address book. Parameters: n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]... h/TELEGRAM HANDLE 
 Example: add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney h/@johndoe c/5
-</pre>
-:::
+```
+</div>
 
 Even with correct command format, the following errors are possible if the user input does not adhere to the [paramater rules](#parameter-rules).
 
@@ -369,12 +373,12 @@ Even with correct command format, the following errors are possible if the user 
 If the user's input has multiple such parameter-related issues present, the error message corresponding to the first erratic prefix is printed.
 
 Finally, the error message for trying to add a duplicate person is as follows:
-:::danger
-<pre>
-This person already exists in the address book
-</pre>
-:::
+<div markdown="block" class="alert alert-danger">
 
+```
+This person already exists in the address book
+```
+</div>
 
 ---
 
@@ -393,35 +397,39 @@ edit 1 p/98765432 e/newemail@example.com
 At least one field must be provided.
 </div>
 
-:::danger
-:warning: **WARNING**
+<div markdown="block" class="alert alert-danger">
+
+**:warning: WARNING**
 Editing tags replaces all existing tags!
-:::
+</div>
 
 **Success:** Contact edited with confirmation message:
-:::success
-<pre>
+<div markdown="block" class="alert alert-success">
+
+```
 Edited Person: John Doe; Phone: 98765432; Email: newemail@example.com; Address: 123 Street; Closeness: 5; Tags: [friend]
-</pre>
-:::
+```
+</div>
 
 **Errors:**
 The following error message is the **"Invalid command format!"** error message for this command:
-:::danger
-<pre>
+<div markdown="block" class="alert alert-danger">
+
+```
 Invalid command format! Check command convention!
 edit: Edits the details of the person identified by the index number used in the displayed person list. Existing values will be overwritten by the input values.
 Parameters: INDEX (must be a positive integer) [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]...[h/HANDLE] [pp/PROFILE_PICTURE] [c/CLOSENESS]
 Example: edit 1 p/91234567 e/johndoe@example.com
-</pre>
-:::
+```
+</div>
 
 If the `INDEX` provided by the user is invalid, the following error message is produced:
-:::danger
-<pre>
+<div markdown="block" class="alert alert-danger">
+
+```
 The person index provided is invalid
-</pre>
-:::
+```
+</div>
 
 Last but not least, the ***invalid prefix argument*** errors, as well as the ***duplicate person*** error from the `add` command are also possible for this command. The error messages are the same as well.
 
@@ -447,14 +455,18 @@ Adding an existing image with ONLY the file name
 addProfilePic 1 pp/example.png
 ```
 
-**Success:** 
+**Success:**
+<div markdown="block" class="alert alert-success">
 
 ![Updated profile picture](images/Screenshot.png)
+</div>
 
-:::warning
+
+<div markdown="block" class="alert alert-warning">
+
 **:book: Note**
 Only .png images can be added
-:::
+</div>
 
 ---
 
@@ -475,27 +487,26 @@ delete all t/friends
 
 **Success:**
 Single Deletion: Shows deleted contact(s) details. For example...
-:::success
-<pre>
+<div markdown="block" class="alert alert-success">
+
+```
 Deleted Person: Harry Kane; Phone: 91115432; Email: kane@example.com; Address: 210, Clarke Ave 3, #02-36; Closeness: 5; Tags: [friends]
-</pre>
-:::
+```
+</div>
 
 Multiple Deletion: Shows number of deleted contacts. For example...
-:::success
-<pre>
+<div markdown="block" class="alert alert-success">
+
+```
 Deleted 2 People:
 Homie; Phone: 88965432; Email: honnd@example.com; Address: 23, Clementi Ave 7, #02-25; Closeness: 5; Tags: [friends]
 Lionel Messi; Phone: 98768888; Email: messid@example.com; Address: 31, Clementi Ave 2, #02-15; Closeness: 5; Tags: [friendsssssssssssss]
-</pre>
-:::
+```
+</div>
 
 **Errors:**
 
-If there is no contact found corresponding to a specified `INDEX`, the same error ***invalid index*** from the `edit` command occurs.
-
-- No contact found with index: `The person index provided is invalid`
-- No contact found with delete all tag: `No persons found with tag: <TAG>`
+If there is no contact found corresponding to a specified `INDEX`, the same ***invalid index*** error from the `edit` command occurs.
 
 ---
 
@@ -529,22 +540,24 @@ find Al ex
 **Success:**
 
 Shows the list of contacts with name matching the keyword. Successful execution message also states number of contacts displayed. For example...
-:::success
-<pre>
+<div markdown="block" class="alert alert-success">
+
+```
 1 persons listed!
-</pre>
-:::
+```
+</div>
 
 **Errors:**
-If no `KEYWORD` is input by user, the follwoing "Invalid command format" message is shown:
-:::danger
-<pre>
+If no `KEYWORD` is input by user, the following "Invalid command format" message is shown:
+<div markdown="block" class="alert alert-danger">
+
+```
 Invalid command format! Check command convention!
 find: Finds all persons whose names contain any of the specified keywords (case-insensitive) and displays them as a list with index numbers.
 Parameters: KEYWORD [MORE_KEYWORDS]...
 Example: find alice bob charlie
-</pre>
-:::
+```
+</div>
 
 ---
 
@@ -570,14 +583,15 @@ Shows the list of contacts with the respective tag. Successful execution message
 
 **Errors:**
 The "invalid command format" message is shown when the user either misses the prefix `t/`. The message is as such:
-:::danger
-<pre>
+<div markdown="block" class="alert alert-danger">
+
+```
 Invalid command format! Check command convention!
 filter: Filters and lists all persons who have at least one of the specified tags (case-insensitive) 
 Parameters: t/KEYWORD [t/MORE_KEYWORDS]... 
 Example: filter t/friends t/colleagues
-</pre>
-:::
+```
+</div>
 
 If any of the user's `TAG` arguments are invalid, the ***invalid tag*** error message is shown, similar to `delete` and `edit`.
 
@@ -604,28 +618,31 @@ results in the contact book looking like this:
 **Success:**
 
 Shows successful execution message stating order in which sort has been performed as shown below:
-:::success
-<pre>
+<div markdown="block" class="alert alert-success">
+
+```
 Sorted contact list by closeness (descending)
-</pre>
-:::
+```
+</div>
 
 **Errors:**
 
 If the user does not input any order after the prefix `o/`, does not specify the prefix at all, or enters and invalid `ORDER` argument, the following "Invalid command format" message is shown:
-:::danger
-<pre>
+<div markdown="block" class="alert alert-danger">
+
+```
 Invalid command format! Check command convention!
 sortByCloseness: Sorts the contact list by closeness rating.
 Parameters: o/{asc|desc}
 Example: sortByCloseness o/desc
-</pre>
-:::
+```
+</div>
 
-:::warning
+<div markdown="block" class="alert alert-danger">
+
 **:book: Note:**
 Order arguments are case-insensitive (e.g. `sortByCloseness o/ASC` is accepted)
-:::
+</div>
 
 **Note:**
 
@@ -635,11 +652,11 @@ Order arguments are case-insensitive (e.g. `sortByCloseness o/ASC` is accepted)
 
 This command clears all the contacts in UniContactsPro.
 
-:::danger
-**:warning: WARNING**
+<div markdown="block" class="alert alert-danger">
 
+**:warning: WARNING**
 Permanent and cannot be undone.
-:::
+</div>
 
 ---
 
@@ -733,8 +750,8 @@ A command or prefix that can accept multiple values, entered one after another�
 ## 8. Known Issues
 
 **Invalid address book file**  
-  *Description:* If the addressbook file is corrupted with missing or incorrect fields (as a result of external tampering of the addressbook file), the app may show an empty contact list but won’t alert you.
-  **Note:** Keep regular backups, and only edit the addressbook file with the app. Restore from backup or contact support if data disappears unexpectedly.
+  *Description:* If the `addressbook.json` file is corrupted with missing or incorrect fields (as a result of external tampering it), the app may show an empty contact list but won’t alert you.
+  **Note:** Keep regular backups, do not directly edit `addressbook.json`. Restore from backup or contact support if data disappears unexpectedly.
 
 **Image not deleted with contact**  
   *Description:* When deleting a contact, their attached photo remains in the images folder, causing unnecessary storage use over time.  
