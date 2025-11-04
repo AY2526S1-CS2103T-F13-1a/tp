@@ -2,6 +2,10 @@
 layout: page
 title: User Guide
 ---
+
+_For full usability and interactive features (if you are reading this as a PDF), view this guide online:  
+[https://ay2526s1-cs2103t-f13-1a.github.io/tp/UserGuide.html](https://ay2526s1-cs2103t-f13-1a.github.io/tp/UserGuide.html)_
+
 ## Table of Contents
 
 1. [Welcome to UniContactsPro!](#1-welcome-to-unicontactspro)
