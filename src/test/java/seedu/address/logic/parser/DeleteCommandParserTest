@@ -1,0 +1,72 @@
+package seedu.address.logic.parser;
+
+import org.junit.jupiter.api.Test;
+import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.tag.Tag;
+
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class DeleteCommandParserTest {
+    private final DeleteCommandParser parser = new DeleteCommandParser();
+
+    @Test
+    public void parse_singleIndex_success() throws Exception {
+        DeleteCommand cmd = parser.parse("1");
+        assertEquals(List.of(), cmd.getTagsToDelete());
+        assertEquals(List.of(ParserUtil.parseIndex("1")), cmd.getIndexes());
+    }
+
+    @Test
+    public void parse_multipleIndices_duplicates() throws Exception {
+        DeleteCommand cmd = parser.parse("2 2 3");
+        List<?> indexes = cmd.getIndexes();
+        assertEquals(2, indexes.size());
+        assertEquals(ParserUtil.parseIndex("2"), indexes.get(0));
+        assertEquals(ParserUtil.parseIndex("3"), indexes.get(1));
+    }
+
+    @Test
+    public void parse_indices_invalidIndex_fails() {
+        assertThrows(ParseException.class, () -> parser.parse("0"));
+        assertThrows(ParseException.class, () -> parser.parse("-1"));
+    }
+
+    @Test
+    public void parse_tagDelete_success() throws Exception {
+        DeleteCommand cmd = parser.parse("all t/friend t/test");
+        assertTrue(cmd.getTagsToDelete().contains(new Tag("friend")));
+        assertTrue(cmd.getTagsToDelete().contains(new Tag("test")));
+        assertTrue(cmd.getIndexes().isEmpty());
+    }
+
+    @Test
+    public void parse_tagDelete_emptyAndInvalidTags() {
+        assertThrows(ParseException.class, () -> parser.parse("all t/ "));
+        assertThrows(ParseException.class, () -> parser.parse("all t/@@@"));
+    }
+
+    @Test
+    public void parse_tagDelete_noTags_fails() {
+        assertThrows(ParseException.class, () -> parser.parse("all"));
+        assertThrows(ParseException.class, () -> parser.parse("all t/  "));
+    }
+
+    @Test
+    public void parse_invalidFormat_fails() {
+        assertThrows(ParseException.class, () -> parser.parse(""));
+        assertThrows(ParseException.class, () -> parser.parse("t/friend"));
+        assertThrows(ParseException.class, () -> parser.parse("random garbage"));
+    }
+
+    @Test
+    public void parse_duplicates_tagsAndIndexes() throws Exception {
+        DeleteCommand cmd = parser.parse("2 3 3  t/hello t/hello");
+        // Duplicates should be deduped, tags should be ignored without 'all'
+        assertEquals(List.of(ParserUtil.parseIndex("2"), ParserUtil.parseIndex("3")), cmd.getIndexes());
+        assertTrue(cmd.getTagsToDelete().isEmpty());
+    }
+}
